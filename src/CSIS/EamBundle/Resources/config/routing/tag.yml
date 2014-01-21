@@ -1,0 +1,34 @@
+tag:
+    pattern:  /{onglet}/{page}
+    defaults: { _controller: "CSISEamBundle:Tag:index", onglet: list, page: 1 }
+    requirements:
+        page: \d+
+        onglet: list|edit
+
+tag_create:
+    pattern:  /create
+    defaults: { _controller: "CSISEamBundle:Tag:create" }
+    requirements: { _method: post }
+
+tag_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CSISEamBundle:Tag:edit" }
+
+tag_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "CSISEamBundle:Tag:update" }
+    requirements: { _method: post }
+
+tag_ask_delete:
+    pattern:  /{id}/ask_delete
+    defaults: { _controller: "CSISEamBundle:Tag:askDelete" }
+
+tag_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CSISEamBundle:Tag:delete" }
+
+tag_autocomplete:
+    pattern:  /autocomplete
+    defaults: { _controller: "CSISEamBundle:Tag:autocomplete", _format: json }
+    requirements:
+        _method: post

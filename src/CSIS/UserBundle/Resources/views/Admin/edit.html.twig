@@ -1,0 +1,28 @@
+{% extends 'CSISUserBundle::layout.html.twig' %}
+
+{% import 'CSISEamBundle:Eam:pagination.html.twig' as pagination %}
+
+{% block fos_user_content %}
+<div class="span12">
+  <h2>Modifier un utilisateur</h2>
+
+  <form action="{{ path('csis_user_edit', {'username': user.username}) }}" {{ form_enctype(form) }} method="POST">
+    {{ form_row(form.firstname) }}
+    {{ form_row(form.lastname) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.plainPassword) }}
+    {{ form_row(form.roles) }}
+    {{ form_rest(form) }}
+    <br />
+    <p>
+      <a href="{{ path('csis_user_show', {'username': user.username}) }}" class="btn">
+        <i class="icon-chevron-left"></i>&nbsp;annuler
+      </a>
+      <button type="submit" class="btn btn-success">
+        <i class="icon-edit icon-white"></i>&nbsp;modifier
+      </button>
+    </p>
+  </form>
+</div>
+{% endblock %}

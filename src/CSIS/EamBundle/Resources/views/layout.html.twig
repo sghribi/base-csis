@@ -1,0 +1,81 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Collège des Sciences de l&#039;Ingénierie et des Systèmes{% endblock %}
+
+{% block stylesheets %}
+  {# <link rel="stylesheet" type="text/css" href="{{ asset("css/main.css") }}"> #}
+<link rel="stylesheet" type="text/css" href="{{ asset("css/bootstrap-2.3.1.min.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("css/smoothness/jquery-ui-1.10.3.min.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("css/main.css") }}">
+{% endblock %}
+
+{% block javascripts %}
+  {# <script type="text/javascript" src="{{ asset("js/script.js") }}"></script> #}
+<script type="text/javascript" src="{{ asset("js/jquery-1.9.1.min.js") }}"></script>
+<script type="text/javascript" src="{{ asset("js/jquery-ui-1.10.3.min.js") }}"></script>
+<script type="text/javascript" src="{{ asset("js/bootstrap-2.3.1.min.js") }}"></script>
+<script>$("[data-toggle='tooltip']").tooltip();</script>
+{% block page_js %}{% endblock %}
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+  <div class="row">
+    <div class="span12">
+      
+      <a href="{{ path('csis_eam_homepage') }}" ><img alt="banniere" src="{{ asset("img/ban_CSIS.jpg") }}" /></a>
+      
+      <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav">
+            <li><a href="http://csissaclay.wordpress.com/">&larr; Retour au site du CSIS</a></li>
+            <li><a href="{{ path('vitrine') }}">Vitrine</a></li>
+			<li><a href="{{ path('supersearch') }}">Recherche</a></li> 
+          </ul>
+          <div class="pull-right">
+            <ul class="nav">
+              {% if is_granted("ROLE_USER") %}
+                <li><a href="{{ path("csis_eam_admin_index") }}">Administration</a></li>
+              {% endif %}
+              {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <li><a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
+              {% else %}
+                <li><a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="span12">
+      {% include 'CSISEamBundle:Eam:mainflash.html.twig' %}
+    </div>
+  </div>
+    
+  {% block csis_body %}{% endblock %}
+      
+  <div class="row">
+    <div class="span12">
+      <hr />
+      <div class="pull-center" style="padding-bottom: 30px">
+        <img alt="sponsors" src="{{ asset("img/sponsors.jpg") }}" /><br /><br />
+        <p class="muted">
+          Portail réalisé par des 
+          <span data-toggle="tooltip" title="Julien BEAUSSIER, Cédric BOULET-KESSLER, Stéphanie CHOU, Céline DANGLET, Vaïk DUHAUTOIS, Faouzi GAZZAH">
+            <u>apprentis</u>
+          </span> 
+          en informatique de Polytech Paris-Sud
+        </p>
+      </div>
+    </div>
+  </div>
+      
+</div>
+
+{% endblock %}

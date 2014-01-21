@@ -1,0 +1,17 @@
+<form class="well span4 offset2" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+    <fieldset>
+      <legend>Créer un nouveau utilisateur</legend>
+      {{ form_row(form.firstname) }}
+      {{ form_row(form.lastname) }}
+      {{ form_row(form.username) }}
+      {{ form_row(form.email) }}
+      {{ form_row(form.plainPassword) }}
+      {{ form_row(form.roles) }}
+      {{ form_rest(form) }}
+      <br />
+      <div>
+          <input class="btn btn-success" type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
+          <a href="{{ url('csis_eam_admin_index') }}" class="btn">Annuler</a>
+      </div>
+    </fieldset>
+</form>

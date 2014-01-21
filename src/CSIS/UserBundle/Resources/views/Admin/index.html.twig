@@ -1,0 +1,55 @@
+{% extends 'CSISUserBundle::layout.html.twig' %}
+
+{% import 'CSISEamBundle:Eam:pagination.html.twig' as pagination %}
+
+{% block csis_body %}
+<div class="row">
+  <div class="span12">
+      
+    <h2>Liste des utilisateurs</h2>
+
+    <table class="table table-hover table-striped table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nom</th>
+          <th>login</th>
+          <th>Email</th>
+          <th colspan="2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for user in users %}
+        <tr>
+          <td>{{ loop.index}}</td>
+          <td>{{ user.lastname }} {{ user.firstname }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <a href="{{ path('csis_user_show', {'username' : user.username}) }}" data-toggle="tooltip" title="Voir">
+              <i class="icon-eye-open"></i>
+            </a>
+          </td>
+          <td>
+            <a href="{{ path('csis_user_edit', {'username' : user.username}) }}" data-toggle="tooltip" title="Modifier">
+              <i class="icon-edit"></i>
+            </a>
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="6">
+            <strong>Vous n'avez aucun utilisateur à afficher pour cette page !</strong><br />
+            <a href="{{ path('csis_user_index') }}">Retour</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    {{ pagination.pagination('csis_user_index', page, nbPages) }}
+      
+  </div>
+</div>
+  
+{% endblock %}

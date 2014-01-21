@@ -1,0 +1,20 @@
+{% for institution in institutions %}
+    <ul class="nav nav-list">
+        <li class="nav-title_1" {% if card == "institution" and institution.id == id %} class="active" {% endif %}><i class="icon-plus icn"></i><i class="icon-minus icn" style="display:none"></i>&nbsp;<span><a id="institution_{{ institution.id }}" class="ajax_refresh" href="{{ path('vitrine', { 'vitrine' : vitrine, 'card' : 'institution', 'id': institution.id }) }}">{{ institution.acronym }}</a></span></li>
+        <li class="divider"></li>
+        <ul class="nav nav-list nav-content_1">
+        {% for laboratory in institution.laboratories %}
+        <div>
+            <li class="nav-title_2" {% if card == "laboratory" and laboratory.id == id %} class="active" {% endif %}><i class="icon-minus icn"></i><i class="icon-plus icn" style="display:none"></i>&nbsp;<span><a id="laboratory_{{ laboratory.id }}" class="ajax_refresh" href="{{ path('vitrine', { 'vitrine' : vitrine, 'card' : 'laboratory', 'id': laboratory.id }) }}">{{ laboratory.acronym }}</a></span></li>
+            <li class="divider"></li>
+            <ul class="nav nav-list nav-content_2">
+            {% for equipment in laboratory.equipments %}
+                <li  {% if card == "equipment" and equipment.id == id %} class="active" {% endif %}><a id="equipment_{{ equipment.id }}" class="ajax_refresh" href="{{ path('vitrine', { 'vitrine' : vitrine, 'card' : 'equipment', 'id': equipment.id }) }}#equipment_{{ equipment.id}}">{{ equipment.designation }}</a></li>
+                <li class="divider"></li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+        </ul>
+    </ul>
+{% endfor %}

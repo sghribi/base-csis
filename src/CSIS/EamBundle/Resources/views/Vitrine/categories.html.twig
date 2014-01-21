@@ -1,0 +1,12 @@
+{% for category in categories %}
+    <ul class="nav nav-list">
+        <li class="nav-title_1" {% if card == "category" and category.id == id %} class="active" {% endif %}><i class="icon-plus icn"></i><i class="icon-minus icn" style="display:none"></i>&nbsp;<span><a id="category_{{ category.id }}" class="ajax_refresh" href="{{ path('vitrine', { 'vitrine' : vitrine, 'card' : 'category', 'id': category.id }) }}">{{ category.name }}</a></span></li>
+        <li class="divider"></li>
+        <ul class="nav nav-list nav-content_1">
+        {% for equipment in category.equipments %}
+            <li {% if card == "equipment" and equipment.id == id %} class="active" {% endif %}><a id="equipment_{{ equipment.id }}" class="ajax_refresh" href="{{ path('vitrine', { 'vitrine' : vitrine, 'card' : 'equipment', 'id': equipment.id }) }}#equipment_{{ equipment.id}}">{{ equipment.designation }}</a></li>
+            <li class="divider"></li>
+        {% endfor %}
+        </ul>
+    </ul>
+{% endfor %}

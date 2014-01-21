@@ -1,0 +1,32 @@
+{% extends 'CSISUserBundle::layout.html.twig' %}
+
+{% import 'CSISEamBundle:Eam:pagination.html.twig' as pagination %}
+
+{% block fos_user_content %}
+<div class="span12">
+  <h2>Utilisateur</h2>
+
+  <div>
+    <p>Prénom : {{ user.firstName }}</p>
+    <p>Nom de famille : {{ user.lastName }}</p>
+    <p>{{ 'profile.show.username'|trans({}, 'FOSUserBundle') }}: {{ user.username }}</p>
+    <p>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}: {{ user.email }}</p>
+    <p>Rôles : {{ user.formatedRoles|join(', ') }}</p>
+    <p>Laboratoire : {{ user.lab }}</p>
+    <p>Etablissement : {{ user.institution }}</p>
+  </div>
+
+  <form action="{{ path('csis_user_delete', {'username': user.username}) }}" {{ form_enctype(delete_form) }} method="POST">
+    <a href="{{ path('csis_user_index') }}" class="btn">
+      <i class="icon-chevron-left"></i>&nbsp;retour
+    </a>
+    <a href="{{ path('csis_user_edit', {'username': user.username}) }}" class="btn btn-success">
+      <i class="icon-edit icon-white"></i>&nbsp;modifier
+    </a>
+    <button type="submit" class="btn btn-warning">
+      <i class="icon-trash icon-white"></i>&nbsp;supprimer
+    </button>
+    {{ form_rest(delete_form) }}
+  </form>
+</div>
+{% endblock %}

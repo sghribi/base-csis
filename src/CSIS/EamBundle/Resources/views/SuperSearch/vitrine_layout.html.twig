@@ -1,0 +1,71 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{% block csis_body %}
+<h2>Vitrine des équipements</h2>
+
+<div class="row">
+    <div class="span4">
+        <div class="well" style="max-width: 340px; padding: 8px 0;">
+            <ul class="nav nav-list">
+                <li class="nav-header">Arborescence :</li>
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle span3" style="margin-left: 10px" data-toggle="dropdown" href="#">{{ vitrine }}  <span class="caret pull-right"></span></a>
+                    <ul class="dropdown-menu span3" style="margin-left: 10px">
+                        <li><a href="{{ path('search_vitrine', { 'vitrine' : 'alphabetique' }) }}">alphabetique</a></li>                       
+                    </ul>
+                </div>
+                <li class="divider"></li>
+            </ul>
+                 
+            <div style="height:400px;overflow:auto">
+
+            {% if vitrine ==  "alphabetique" %}    
+
+                {% include 'CSISEamBundle:SuperSearch:alphabetique.html.twig' %}          
+                
+            {% endif %}
+                
+            </div>
+        </div>
+    </div>
+        
+    <div class="span8">
+        <div class="well">
+            
+            {% if card ==  "equipment" %}
+
+                {% include 'CSISEamBundle:SuperSearch:card_equipment.html.twig' %}
+                
+            {% else %}
+
+                {% include 'CSISEamBundle:SuperSearch:card_vide.html.twig' %}
+
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script>
+    $().ready(function() 
+    {
+        menu_init();
+    });
+
+    function menu_init() 
+    {
+        $('.nav-content_1').hide();
+        $('.nav-title_1').click(function() 
+                              {
+                                  $(".nav-content_1", this.parentNode).toggle();
+                              });
+        $('.nav-content_2').hide();
+        $('.nav-title_2').click(function() 
+                              {
+                                  $(".nav-content_2", this.parentNode).toggle();
+                              });
+    }
+</script>  
+{% endblock %}

@@ -1,0 +1,240 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{% block csis_body %}
+
+<div class="row">
+  <div class="span10 offset1">
+    <div class="well">
+      
+      <form action="{{ path('supersearch') }}" method="post" {{ form_enctype(form) }}>
+        <fieldset>
+          <legend><h2>Recherche</h2></legend>
+          <p style="color:red"> {{ error }} </p>
+          <div id="fields-container">
+            <div style="margin-left: 190px">
+              {{ form_label(form.form1.open, '(', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form1.open) }}
+              {{ form_widget(form.form1.open) }}
+
+              {{ form_label(form.form1.tag, 'Tag', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form1.tag) }}
+              {{ form_widget(form.form1.tag) }}
+
+              {{ form_label(form.form1.close, ')', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form1.close) }}
+              {{ form_widget(form.form1.close) }}
+            </div>
+            <div>
+              {{ form_label(form.form2.booleans[0], 'ET', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form2.booleans[0]) }}
+              {{ form_widget(form.form2.booleans[0]) }}
+
+              {{ form_label(form.form2.booleans[1], 'OU', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form2.booleans[1]) }}
+              {{ form_widget(form.form2.booleans[1]) }}
+
+              {{ form_label(form.form2.booleans[2], 'NON', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form2.booleans[2]) }}
+              {{ form_widget(form.form2.booleans[2]) }}
+
+              {{ form_label(form.form2.open, '(', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form2.open) }}
+              {{ form_widget(form.form2.open) }}
+
+              {{ form_label(form.form2.tag, 'Tag', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form2.tag) }}
+              {{ form_widget(form.form2.tag) }}
+
+              {{ form_label(form.form2.close, ')', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form2.close) }}
+              {{ form_widget(form.form2.close) }}
+            </div>
+            <div>
+              {{ form_label(form.form3.booleans[0], 'ET', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form3.booleans[0]) }}
+              {{ form_widget(form.form3.booleans[0]) }}
+
+              {{ form_label(form.form3.booleans[1], 'OU', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form3.booleans[1]) }}
+              {{ form_widget(form.form3.booleans[1]) }}
+
+              {{ form_label(form.form3.booleans[2], 'NON', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form3.booleans[2]) }}
+              {{ form_widget(form.form3.booleans[2]) }}
+
+              {{ form_label(form.form3.open, '(', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form3.open) }}
+              {{ form_widget(form.form3.open) }}
+
+              {{ form_label(form.form3.tag, 'Tag', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form3.tag) }}
+              {{ form_widget(form.form3.tag) }}
+
+              {{ form_label(form.form3.close, ')', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form3.close) }}
+              {{ form_widget(form.form3.close) }}
+            </div>
+            <div>
+              {{ form_label(form.form4.booleans[0], 'ET', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form4.booleans[0]) }}
+              {{ form_widget(form.form4.booleans[0]) }}
+
+              {{ form_label(form.form4.booleans[1], 'OU', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form4.booleans[1]) }}
+              {{ form_widget(form.form4.booleans[1]) }}
+
+              {{ form_label(form.form4.booleans[2], 'NON', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form4.booleans[2]) }}
+              {{ form_widget(form.form4.booleans[2]) }}
+
+              {{ form_label(form.form4.open, '(', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form4.open) }}
+              {{ form_widget(form.form4.open) }}
+
+              {{ form_label(form.form4.tag, 'Tag', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form4.tag) }}
+              {{ form_widget(form.form4.tag) }}
+
+              {{ form_label(form.form4.close, ')', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form4.close) }}
+              {{ form_widget(form.form4.close) }}
+            </div>
+            <div>
+              {{ form_label(form.form5.booleans[0], 'ET', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form5.booleans[0]) }}
+              {{ form_widget(form.form5.booleans[0]) }}
+
+              {{ form_label(form.form5.booleans[1], 'OU', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form5.booleans[1]) }}
+              {{ form_widget(form.form5.booleans[1]) }}
+
+              {{ form_label(form.form5.booleans[2], 'NON', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form5.booleans[2]) }}
+              {{ form_widget(form.form5.booleans[2]) }}
+
+              {{ form_label(form.form5.open, '(', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form5.open) }}
+              {{ form_widget(form.form5.open) }}
+
+              {{ form_label(form.form5.tag, 'Tag', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form5.tag) }}
+              {{ form_widget(form.form5.tag) }}
+
+              {{ form_label(form.form5.close, ')', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form5.close) }}
+              {{ form_widget(form.form5.close) }}
+            </div>
+            <div>
+              {{ form_label(form.form6.booleans[0], 'ET', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form6.booleans[0]) }}
+              {{ form_widget(form.form6.booleans[0]) }}
+
+              {{ form_label(form.form6.booleans[1], 'OU', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form6.booleans[1]) }}
+              {{ form_widget(form.form6.booleans[1]) }}
+
+              {{ form_label(form.form6.booleans[2], 'NON', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form6.booleans[2]) }}
+              {{ form_widget(form.form6.booleans[2]) }}
+
+              {{ form_label(form.form6.open, '(', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form6.open) }}
+              {{ form_widget(form.form6.open) }}
+
+              {{ form_label(form.form6.tag, 'Tag', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form6.tag) }}
+              {{ form_widget(form.form6.tag) }}
+
+              {{ form_label(form.form6.close, ')', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form6.close) }}
+              {{ form_widget(form.form6.close) }}
+            </div>
+            <div>
+              {{ form_label(form.form7.booleans[0], 'ET', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form7.booleans[0]) }}
+              {{ form_widget(form.form7.booleans[0]) }}
+
+              {{ form_label(form.form7.booleans[1], 'OU', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form7.booleans[1]) }}
+              {{ form_widget(form.form7.booleans[1]) }}
+
+              {{ form_label(form.form7.booleans[2], 'NON', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form7.booleans[2]) }}
+              {{ form_widget(form.form7.booleans[2]) }}
+
+              {{ form_label(form.form7.open, '(', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form7.open) }}
+              {{ form_widget(form.form7.open) }}
+
+              {{ form_label(form.form7.tag, 'Tag', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form7.tag) }}
+              {{ form_widget(form.form7.tag) }}
+
+              {{ form_label(form.form7.close, ')', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form7.close) }}
+              {{ form_widget(form.form7.close) }}
+            </div>
+            <div>
+              {{ form_label(form.form8.booleans[0], 'ET', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form8.booleans[0]) }}
+              {{ form_widget(form.form8.booleans[0]) }}
+
+              {{ form_label(form.form8.booleans[1], 'OU', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form8.booleans[1]) }}
+              {{ form_widget(form.form8.booleans[1]) }}
+
+              {{ form_label(form.form8.booleans[2], 'NON', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form8.booleans[2]) }}
+              {{ form_widget(form.form8.booleans[2]) }}
+
+              {{ form_label(form.form8.open, '(', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form8.open) }}
+              {{ form_widget(form.form8.open) }}
+
+              {{ form_label(form.form8.tag, 'Tag', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form8.tag) }}
+              {{ form_widget(form.form8.tag) }}
+
+              {{ form_label(form.form8.close, ')', {'label_attr': {'class' : 'radio inline'}}) }}
+              {{ form_errors(form.form8.close) }}
+              {{ form_widget(form.form8.close) }}
+            </div>
+          </div>
+        </fieldset>
+        <br />
+        <div class="pull-right" style="padding-right: 105px">
+          <button type="submit" class="btn btn-success">
+            <i class="icon-search icon-white"></i>&nbsp;Rechercher
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block page_js %}
+<script>
+  jQuery(document).ready(function() {
+    {% for i in 1..8 %}
+    $('#csis_eambundle_supersearchtype_form{{ i }}_tag').autocomplete({
+        source: function(requete, reponse) {
+          $.ajax({
+            url: '{{ url('tag_autocomplete') }}',
+            dataType: 'json',
+            type: 'POST',
+            data: {
+              input: $('#csis_eambundle_supersearchtype_form{{ i }}_tag').val()
+            },
+            success: function(donnee) {
+              reponse(donnee);
+            }
+          });
+        }
+    });
+    {% endfor %}
+  });
+</script>
+{% endblock %}

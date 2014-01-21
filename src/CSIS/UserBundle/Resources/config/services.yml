@@ -1,0 +1,28 @@
+parameters:
+#    csis_user.example.class: CSIS\UserBundle\Example
+
+services:
+    csis.profile.form.type:
+        class: CSIS\UserBundle\Form\Type\ProfileFormType
+        arguments: [%fos_user.model.user.class%]
+        tags: [{ name: "form.type", alias: "csis_user_profile" }]
+
+    csis.registration.form.type:
+        class: CSIS\UserBundle\Form\Type\RegistrationFormType
+        arguments: 
+            - %fos_user.model.user.class%
+            - "@security.context"
+            - "@security.role_hierarchy"
+            - "@fos_user.util.user_manipulator"
+        tags: [{ name: "form.type", alias: "csis_user_registration" }]
+    
+    csis.user.form:
+        class: CSIS\UserBundle\Form\Type\RegistrationFormType
+        arguments: 
+            - %fos_user.model.user.class%
+            - "@security.context"
+            - "@security.role_hierarchy"
+            - "@fos_user.util.user_manipulator"
+            - false
+        tags: [{ name: "form.type", alias: "csis_user_registration" }]
+            

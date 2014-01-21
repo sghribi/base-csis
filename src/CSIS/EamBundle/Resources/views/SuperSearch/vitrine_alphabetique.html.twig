@@ -1,0 +1,14 @@
+<ul class="nav nav-list">
+    {% for letter, equipements in equipements %}
+        <div>
+            <li class="nav-header nav-title_1">{{letter}} : <span class="caret pull-right"></span></li>
+            <ul class="nav nav-list nav-content_1">
+                {% for equipment in equipements %}
+                    <li id="equipment.id"><a href="{{ path('search_vitrine', { 'vitrine' : vitrine, 'card' : 'equipment', 'id': equipment.id }) }}">{{ equipment.designation }}</a></li>
+                {% endfor %}
+            </ul>
+            <li class="divider"></li>
+        </div>   
+    {% endfor %}
+</ul>
+

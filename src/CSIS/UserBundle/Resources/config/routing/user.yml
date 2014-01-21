@@ -1,0 +1,33 @@
+csis_user_index:
+    pattern:  /users/{page}
+    defaults: { _controller: CSISUserBundle:User:Index, page:1 }
+    requirements:
+        page: \d+
+        
+csis_user_edit:
+    pattern:  /users/{username}/edit
+    defaults: { _controller: CSISUserBundle:User:Edit }
+  
+csis_user_show:
+    pattern:  /users/{username}
+    defaults: { _controller: CSISUserBundle:User:Show }
+    
+csis_user_delete:
+    pattern:  /users/{username}/delete
+    defaults: { _controller: CSISUserBundle:User:Delete }
+
+csis_user_edit_lab:
+    pattern: /users/{username}/editLab
+    defaults: { _controller: CSISUserBundle:User:editLaboratoryDependance }
+
+csis_user_edit_institution:
+    pattern: /users/{username}/editInstitution
+    defaults: { _controller: CSISUserBundle:User:editInstitutionDependance }
+
+csis_user_add_lab:
+    pattern: /register/addLab
+    defaults: { _controller: CSISUserBundle:Registration:addLaboratoryDependance }
+
+csis_user_add_institution:
+    pattern: /register/addInstitution
+    defaults: { _controller: CSISUserBundle:Registration:addInstitutionDependance }

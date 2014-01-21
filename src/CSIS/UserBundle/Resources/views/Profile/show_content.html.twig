@@ -1,0 +1,8 @@
+<div class="well span6 offset1">
+    <p class="pull-right"><a href="{{ path("fos_user_profile_edit") }}">Modifier</a></p>
+    <h4>Vos informations :</h4><br />
+    <p>Prénom : {{ user.firstName }}</p>
+    <p>Nom de famille : {{ user.lastName }}</p>
+    <p>{{ 'profile.show.username'|trans({}, 'FOSUserBundle') }}: {{ user.username }}</p>
+    <p>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}: {{ user.email }}</p>
+</div>

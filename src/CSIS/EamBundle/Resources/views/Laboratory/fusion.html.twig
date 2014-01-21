@@ -1,0 +1,82 @@
+{% extends "CSISEamBundle::layout.html.twig" %}
+
+{% block csis_body %}
+
+<div class="row">
+  <div class="span10 offset1">
+    <div class="well">
+      <form action="{{ url('laboratory_fusion', {'id': lab.id}) }}" method="post" {{ form_enctype(form) }} >
+        <fieldset>
+          <legend>Fusion avec le laboratoire : {{ lab.acronym }} {{ lab.nameFr }}</legend>
+          <div id="laboratories" data-prototype="{{ form_widget(form.laboratories.vars.prototype)|e }}">
+            {% for form_lab in form.laboratories %}
+              {{ form_row(form_lab) }}
+            {% endfor %}
+          </div>
+          <br />
+          <button id="add_new_lab" class="btn btn-primary">
+              <i class="icon-plus icon-white"></i>
+              &nbsp;Ajouter un laboratoire à la fusion
+          </button>
+          <div class="pull-right">
+            <button type="submit" class="btn btn-success">
+              <i class="icon-resize-small icon-white"></i>&nbsp;Fusionner
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block page_js %}
+<script>
+  jQuery(document).ready(function() {
+    // Récupère le div qui contient la collection des contacts
+    var collectionHolderLabs = $('div#laboratories');
+    var add_buttonLab = $('#add_new_lab');
+    // ajoute un lien de suppression à tous les éléments li de
+    // formulaires de contacts existants
+    collectionHolderLabs.children('div').each(function() {
+      addLabFormDeleteLink($(this));
+    });
+
+    add_buttonLab.on('click', function(e) {
+      // ajoute un nouveau formulaire contact (voir le prochain bloc de code)
+      e.preventDefault();
+      addLabForm(collectionHolderLabs);
+    });
+
+  });
+
+  function addLabForm(collectionHolder) {
+    // Récupère l'élément ayant l'attribut data-prototype
+    var prototype = collectionHolder.attr('data-prototype');
+    var length = collectionHolder.children().length;
+    // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+    // la longueur de la collection courante
+    var $newForm = $('<div><label>Laboratoire à fusionner :</label>' + prototype.replace(/__name__/g, length) + '</div>');
+
+    // Affiche le formulaire dans la page dans un div, avant le lien "ajouter un contact"
+    collectionHolder.append($newForm);
+    // ajoute un lien de suppression au nouveau formulaire
+    addLabFormDeleteLink($newForm);
+  }
+
+  function addLabFormDeleteLink($tagForm) {
+    var $removeFormButton = $('<button class="btn btn-warning"><i class="icon-trash icon-white"></i></button>');
+    var $select = $tagForm.children('select');
+
+    $select.wrap('<div class="input-append" />');
+    $select.parent().append($removeFormButton);
+
+    $removeFormButton.on('click', function(e) {
+      // supprime l'élément div pour le formulaire de contact
+      e.preventDefault();
+      $tagForm.remove();
+    });
+  }
+</script>
+{% endblock %}

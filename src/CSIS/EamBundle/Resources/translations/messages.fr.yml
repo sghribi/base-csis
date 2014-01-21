@@ -1,0 +1,5 @@
+form:
+    error:
+        tag:
+            min: "Au moins %limit% caractère|Au moins %limit% caractères"
+            max: "Pas plus de %limit% caractère|Pas plus de %limit% caractères"

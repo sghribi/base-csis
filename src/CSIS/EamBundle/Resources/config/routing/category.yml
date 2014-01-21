@@ -1,0 +1,35 @@
+category:
+    pattern:  /{page}
+    defaults: { _controller: "CSISEamBundle:Category:index", page: "1" }
+    requirements:
+        page: \d+
+        
+category_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "CSISEamBundle:Category:show" }
+
+category_new:
+    pattern:  /new
+    defaults: { _controller: "CSISEamBundle:Category:new" }
+
+category_create:
+    pattern:  /create
+    defaults: { _controller: "CSISEamBundle:Category:create" }
+    requirements: { _method: post }
+
+category_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CSISEamBundle:Category:edit" }
+
+category_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "CSISEamBundle:Category:update" }
+    requirements: { _method: post }
+    
+category_ask_delete:
+    pattern:  /{id}/ask_delete
+    defaults: { _controller: "CSISEamBundle:Category:askDelete" }
+
+category_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CSISEamBundle:Category:delete" }

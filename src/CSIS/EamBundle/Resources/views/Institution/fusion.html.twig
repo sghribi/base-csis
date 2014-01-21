@@ -1,0 +1,82 @@
+{% extends "CSISEamBundle::layout.html.twig" %}
+
+{% block csis_body %}
+
+<div class="row">
+  <div class="span10 offset1">
+    <div class="well">
+      <form action="{{ url('institution_fusion', {'id': institution.id}) }}" method="post" {{ form_enctype(form) }} >
+        <fieldset>
+          <legend>Fusion avec l'établissement : {{ institution.acronym }} - {{ institution.name }}</legend>
+          <div id="institutions" data-prototype="{{ form_widget(form.institutions.vars.prototype)|e }}">
+            {% for form_institution in form.institutions %}
+              {{ form_row(form_institution) }}
+            {% endfor %}
+          </div>
+          <br />
+          <button id="add_new_institution" class="btn btn-primary">
+              <i class="icon-plus icon-white"></i>
+              &nbsp;Ajouter un établissement à la fusion
+          </button>
+          <div class="pull-right">
+            <button type="submit" class="btn btn-success">
+              <i class="icon-resize-small icon-white"></i>&nbsp;Fusionner
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block page_js %}
+<script>
+  jQuery(document).ready(function() {
+    // Récupère le div qui contient la collection des établissements
+    var collectionHolderInstitutions = $('div#institutions');
+    var add_buttonInsitution = $('#add_new_institution');
+    // ajoute un lien de suppression à tous les éléments li de
+    // formulaires de contacts existants
+    collectionHolderInstitutions.children('div').each(function() {
+      addInsitutionFormDeleteLink($(this));
+    });
+
+    add_buttonInsitution.on('click', function(e) {
+      // ajoute un nouveau formulaire contact (voir le prochain bloc de code)
+      e.preventDefault();
+      addInsitutionForm(collectionHolderInstitutions);
+    });
+
+  });
+
+  function addInsitutionForm(collectionHolder) {
+    // Récupère l'élément ayant l'attribut data-prototype
+    var prototype = collectionHolder.attr('data-prototype');
+    var length = collectionHolder.children().length;
+    // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+    // la longueur de la collection courante
+    var $newForm = $('<div><label>Etablissement à fusionner :</label>' + prototype.replace(/__name__/g, length) + '</div>');
+
+    // Affiche le formulaire dans la page dans un div, avant le lien "ajouter une institution"
+    collectionHolder.append($newForm);
+    // ajoute un lien de suppression au nouveau formulaire
+    addInstitutionFormDeleteLink($newForm);
+  }
+
+  function addInstitutionFormDeleteLink($institutionForm) {
+    var $removeFormButton = $('<button class="btn btn-warning"><i class="icon-trash icon-white"></i></button>');
+    var $select = $institutionForm.children('select');
+
+    $select.wrap('<div class="input-append" />');
+    $select.parent().append($removeFormButton);
+
+    $removeFormButton.on('click', function(e) {
+      // supprime l'élément div pour le formulaire de contact
+      e.preventDefault();
+      $institutionForm.remove();
+    });
+  }
+</script>
+{% endblock %}

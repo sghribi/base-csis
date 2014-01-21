@@ -1,0 +1,31 @@
+ 
+{# Propritétés du contact sélectionné #}
+<table>
+    <tbody>
+        {# Affiche tous les contacts par ordre alphabétique #}
+        <tr><th class="pull-right">Nom :</th><td>{{ people.name }}</td></tr> {# Nom du contact #}
+        <tr><th class="pull-right">Prénom :</th><td>{{ people.firstname }}</td></tr> {# Prénom du contact #}
+        <tr><th class="pull-right">Téléphone :</th><td>{{ people.phoneNumber }}</td></tr> {# téléphone du contact #}
+        <tr><th class="pull-right">e-mail :</th><td>{{ people.email }}</td></tr> {# e-mail du contact #}
+    </tbody>
+</table>
+
+{# Definition des bouttons #}
+{% if is_granted("ROLE_GEST_LAB") %}
+    <div class="pull-right">
+        <div class="span2">
+            <a href="{{ path('people_edit', { 'id': people.id }) }}" class="btn btn-success btn-block" data-toggle="tooltip" title="Modifier le contact">
+                <i class="icon-edit icon-white"></i>
+                Modifier
+            </a>
+        </div>
+
+        <div class="span2">
+            <a href="{{ path('people_ask_delete', { 'id': people.id }) }}" class="btn btn-danger btn-block" data-toggle="tooltip" title="Supprimer le contact">
+                <i class="icon-trash icon-white"></i>
+                Supprimer
+            </a>
+        </div>
+    </div>
+{% endif %}
+<p><br/></p>

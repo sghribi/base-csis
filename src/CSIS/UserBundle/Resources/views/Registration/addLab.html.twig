@@ -1,0 +1,16 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+
+<form class="well span9 offset1" action="{{ path('csis_user_add_lab') }}" {{ form_enctype(form) }} method="POST">
+    <fieldset>
+      <legend>Ajouter un laboratoire à l'utilisateur {{ user.lastname}} {{ user.firstname }}</legend>
+      {{ form_widget(form) }}
+      <br />
+      <div>
+          <input class="btn btn-success" type="submit" value="Continuer" />
+      </div>
+    </fieldset>
+</form>
+
+{% endblock %}

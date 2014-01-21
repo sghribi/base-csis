@@ -1,0 +1,59 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{% block csis_body %}
+
+<div class="row">
+  <div class="span12">
+    {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <div class="well">
+      <h4>Fiche de l'équipement : {{ equipment.designation }}
+        <div class="pull-right">
+          <div class="span1">
+            <a href="{{ path('equipment') }}" class="btn btn-info btn-block" data-toggle="tooltip" title="Retour à la liste des équipments">
+              <i class="icon-list-alt icon-white"></i> Liste
+            </a>
+          </div>
+        </div>
+      </h4>
+   
+      {% include 'CSISEamBundle:Equipment:profilCard.html.twig' %}
+      
+      {% if is_granted("ROLE_GEST_EQUIP") %}
+      <div class="pull-right">
+        <div class="btn-group">
+          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            Actions
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="{{ path('equipment_edit', { 'id': equipment.id }) }}">
+                <i class="icon-edit"></i> Modifier
+              </a>
+            </li>
+            <li>
+              <a href="{{ path('equipment_ask_delete', { 'id': equipment.id }) }}">
+                <i class="icon-trash"></i> Supprimer
+              </a>
+            </li>
+            <li>
+              <a href="{{ path('equipment_credentials', { 'id': equipment.id }) }}">
+                <i class="icon-user"></i> Gestion des droits d'accès
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <br />
+      {% endif %}
+      
+    </div>
+  </div>  
+</div>
+
+{% endblock %}

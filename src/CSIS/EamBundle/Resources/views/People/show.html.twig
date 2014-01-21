@@ -1,0 +1,35 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{% block csis_body %}
+
+    <div class="row">
+        <div class="span12">
+            {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+            {% include 'CSISEamBundle:Eam:mainflash.html.twig' %}
+        </div>
+    </div>
+
+<div class="row">
+    
+    {# Propritétés du contact sélectionné #}
+    <div class="span12">
+        <div class="well">
+            <h4>Fiche d'un contact
+                {# Definition des bouttons #}
+                <div class="pull-right">
+                    <div class="span1">
+                        <a href="{{ path('people', { 'id': people.id }) }}" class="btn btn-info btn-block" data-toggle="tooltip" title="Retour à la liste des Contacts">
+                            <i class="icon-list-alt icon-white"></i>
+                            Liste
+                        </a>
+                    </div>
+                </div>
+            </h4>
+            <p><br/></p>
+   
+            {# Insertion de la carte de profil #}
+            {% include 'CSISEamBundle:People:profilCard.html.twig' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

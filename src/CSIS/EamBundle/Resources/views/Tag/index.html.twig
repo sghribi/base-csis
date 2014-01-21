@@ -1,0 +1,33 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+{% import 'CSISEamBundle:Eam:pagination.html.twig' as pagination %}
+{% block csis_body %}
+<div class="row">
+
+    {# Partie gauche #}
+    <div class="span4">
+        <div class="well">
+            <fieldset>
+                <legend>Créer un nouveau Tag</legend>
+
+                {# Flash message #}
+                {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+
+                {# Formulaire de création #}
+                <form action="{{ path('tag_create') }}" method="post" {{ form_enctype(form) }}>
+                    {{ form_widget(form) }}  
+                    <button type="submit" class="btn btn-success">
+                        <i class="icon-plus icon-white"></i>
+                        Créer
+                    </button>
+                </form>
+            </fieldset>
+        </div>
+    </div>
+    {# Fin partie gauche #}
+
+    {# Partie droite #}
+    {% include 'CSISEamBundle:Tag:show.html.twig' %}
+    {# Fin partie droite #}
+    </div>
+
+{% endblock %}

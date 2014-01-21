@@ -1,0 +1,30 @@
+/* 
+    Document   : main
+    Created on : 9 mai 2013, 15:38:24
+    Author     : Cedric
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body {
+  background-color: #e2e2e2;
+  margin-top: 20px;
+}
+
+.container {
+  background-color: white;
+  border-top: 2px solid #bbb;
+  padding: 5px;
+}
+
+.pull-center {
+  text-align: center;
+}
+
+.parenthese {
+  width: 40px;
+  height : 10px;
+}
+
+
+

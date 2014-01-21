@@ -1,0 +1,34 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{% block csis_body %}
+
+<div class="row">
+  <div class="span12">
+    {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+  </div>
+</div>
+
+<div class="row">
+  {# Notifications #}
+  {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+  
+  {# Formulaire de création d'équipement #}
+  <form action="{{ path('equipment_create') }}" method="post" {{ form_enctype(form) }}>
+  
+  {% include "CSISEamBundle:Equipment:form_content.html.twig" with 
+      {
+        'title': 'Création d\'un équipement',
+        'icon_type'  : 'icon-plus icon-white',
+        'button_name': 'Ajout',
+        'button_back_name': 'Annuler'
+      }
+    %}
+    
+  </form>
+</div>
+
+{% endblock %}
+
+{% block page_js %}
+  {% include "CSISEamBundle:Equipment:form_js.html.twig" %}
+{% endblock %}

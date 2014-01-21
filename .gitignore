@@ -1,0 +1,14 @@
+/web/bundles/
+/app/bootstrap*
+/app/cache/*
+/app/logs/*
+/vendor/
+/app/config/parameters.yml
+/src**.php~
+/*.sublime-*
+/web/files/
+/bin/
+/composer.phar
+*.swp
+*.swo
+/csis_sql/

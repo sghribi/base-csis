@@ -1,0 +1,9 @@
+{# Propritétés du laboratoire sélectionné #}
+<h3>{{ laboratory.acronym }}</h3>
+<p><span class="muted">Nom : </span> {{ laboratory.nameFr }}</p>
+<p><span class="muted">Name : </span> {{ laboratory.nameEn }}</p>
+<p><span class="muted">Etablissement : </span> {{ laboratory.institution.name }}</p>
+<p><span class="muted">Laboratoire du CSIS : </span> {% if laboratory.belongToCSIS=='0' %} Non {% else %} Oui {% endif %}</p>
+<p><span class="muted">Laboratoire de recherche : </span> {% if laboratory.researchLaboratory=='0' %} Non {% else %} Oui {% endif %}</p>
+
+{# Definition des bouttons #}

@@ -1,0 +1,133 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{% block csis_body %}
+<div class="row">
+    
+  <div class="span5 offset1">
+    <h4>Actions</h4>
+     <ul>
+      <li><a href="{{ path("fos_user_profile_show") }}">Voir mes informations</a></li>
+      <li><a href="{{ path("fos_user_resetting_request") }}">Changer mon mot de passe</a></li>
+     </ul>
+    
+    {% if is_granted("ROLE_GEST_USER") %}
+    <ul>
+      <li><a href="{{ path("fos_user_registration_register") }}">Créer un nouvel utilisateur</a></li>
+      <li><a href="{{ path("csis_user_index") }}">Administrer mes utilisateurs</a></li>
+    </ul>
+    {% endif %}
+    
+    <hr />
+    <h4>Tags</h4>
+    <ul>
+      <li><a href="{{ path("tag") }}">Gestion des tags Tag</a></li>
+    {% if is_granted("ROLE_GEST_TAGS") %}
+      <li><a href="{{ path("tag", {'onglet' : 'edit'}) }}">Demandes de Tags en attentes ({{ waiting_tags }})</a></li>    
+    {% endif %}
+    </ul>
+    
+  {% if is_granted("ROLE_GEST_CATEGORY") %}
+    <hr />
+    <h4>Familles</h4>
+    <ul>
+      <li><a href="{{ path('category') }}">Accéder à la liste des Familles</a></li>
+      <li><a href="{{ path('category_new') }}">Créer une nouvelle Famille</a></li>
+    </ul>
+
+    <ul>
+    {% for category in categories %}
+      <li><a href="{{ path('category_show', { 'id': category.id }) }}">{{ category.name }}</a></li>
+    {% else %}
+      <li>Aucun(s)</li>
+    {% endfor %}
+    {% if categories_sup %}
+      <li><a href="{{ path('category') }}">Suite ...</a></li>
+    {% endif %}
+    </ul>
+  {% endif %}
+      
+  {% if is_granted("ROLE_GEST_PEOPLE") %}
+    <hr />
+    <h4>Contacts</h4>
+    <ul>
+      <li><a href="{{ path('people') }}">Accéder à la liste des Contacts</a></li>
+      <li><a href="{{ path('people_new') }}">Créer un nouveau contact</a></li>
+    </ul>
+
+    <ul>
+    {% for people in peoples %}
+      <li><a href="{{ path('people_show', { 'id': people.id }) }}">{{ people }}</a></li>
+    {% else %}
+      <li>Aucun(s)</li>
+    {% endfor %}
+    {% if peoples_sup %}
+      <li><a href="{{ path('people') }}">Suite ...</a></li>
+    {% endif %}
+    </ul>
+
+  {% endif %}
+  </div>
+
+  <div class="span5">
+  {% if is_granted("ROLE_GEST_ESTAB") %}
+    <h4>Mes Etablissements</h4>
+    <ul>
+      <li><a href="{{ path('institution') }}">Accéder à la liste de mes établissements</a></li>
+      <li><a href="{{ path('institution_new') }}">Créer un nouvel établissement</a></li>
+    </ul>
+
+    <ul>
+    {% for institution in institutions %}
+      <li><a href="{{ path('institution_show', { 'id': institution.id }) }}">{{ institution.acronym }}</a></li>
+    {% else %}
+      <li>Aucun(s)</li>
+    {% endfor %}
+    {% if institutions_sup %}
+      <li><a href="{{ path('institution') }}">Suite ...</a></li>
+    {% endif %}
+    </ul>
+    {% endif %}
+
+  {% if is_granted("ROLE_GEST_LAB") %}
+    {% if is_granted("ROLE_GEST_ESTAB") %}<hr />{% endif %}
+    <h4>Mes Laboratoires</h4>
+    <ul>
+      <li><a href="{{ path('laboratory') }}">Accéder à la liste de mes laboratoires</a></li>
+      <li><a href="{{ path('laboratory_new') }}">Créer un nouveau laboratoire</a></li>
+    </ul>
+
+    <ul>
+    {% for lab in labs %}
+      <li><a href="{{ path('laboratory_show', { 'id': lab.id }) }}">{{ lab.acronym }}</a></li>
+    {% else %}
+      <li>Aucun(s)</li>
+    {% endfor %}
+    {% if labs_sup %}
+      <li><a href="{{ path('laboratory') }}">Suite ...</a></li>
+    {% endif %}
+    </ul>
+  {% endif %}
+
+  {% if is_granted("ROLE_GEST_EQUIP") %}
+    {% if is_granted("ROLE_GEST_ESTAB") or is_granted("ROLE_GEST_LAB") %}<hr />{% endif %}
+    <h4>Mes Equipements</h4>
+    <ul>
+      <li><a href="{{ path('equipment') }}">Accéder à la liste de mes équipements</a></li>
+      <li><a href="{{ path('equipment_new') }}">Créer un nouvel équipement</a></li>
+    </ul>
+
+    <ul>
+    {% for equipment in equipments %}
+      <li><a href="{{ path('equipment_show', { 'id': equipment.id }) }}">{{ equipment.designation }}</a></li>
+    {% else %}
+      <li>Aucun(s)</li>
+    {% endfor %}
+    {% if equipments_sup %}
+      <li><a href="{{ path('equipment') }}">Suite...</a></li>
+    {% endif %}
+    </ul>
+  {% endif %}
+  </div>
+    
+</div>
+{% endblock csis_body %}

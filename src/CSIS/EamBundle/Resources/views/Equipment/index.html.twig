@@ -1,0 +1,71 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+{% import 'CSISEamBundle:Eam:pagination.html.twig' as pagination %}
+
+{% block csis_body %}
+<div class="row">
+  <div class="span12">
+    {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+  </div>
+</div>
+
+<div class="row">        
+  <div class="span12">
+    <div class="well">
+      
+      <h4 class="span11">Liste des Equipements
+        {# Definition des bouttons #}
+        <div class="pull-right">       
+            <a class="btn btn-success" href="{{ path('equipment_new') }}" data-toggle="tooltip" title="Créer un nouvel Equipement">
+                <i class="icon-plus icon-white"></i>
+                Ajouter
+            </a>
+        </div>
+      </h4>
+      
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Designation</th>
+            <th style="text-align:center;">Laboratoire</th>
+            <th style="text-align:center;">Bâtiment</th>
+            <th style="text-align:center;">Etage</th>
+            <th style="text-align:center;">Salle</th>
+            <th style="text-align:center;">Disponible</th>
+            {% if is_granted("ROLE_GEST_EQUIP") %}
+              <th colspan="3">Actions</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+          <tr>
+            <td>{{ entity.designation }}</td>
+            <td style="text-align:center;">{{ entity.laboratory.acronym }}</td>
+            <td style="text-align:center;">{{ entity.building }}</td>
+            <td style="text-align:center;">{{ entity.floor }}</td>
+            <td style="text-align:center;">{{ entity.room }}</td>
+            <td style="text-align:center;">{% if entity.shared=='0' %}Oui{% else %}Non{% endif %}</td>
+            {% if is_granted("ROLE_GEST_EQUIP") %}
+                <td><a href="{{ path('equipment_show', { 'id': entity.id }) }}" class="icon-eye-open" data-toggle="tooltip" title="Afficher" ></a></td> {# Modifier #}
+                <td><a href="{{ path('equipment_edit', { 'id': entity.id }) }}" class="icon-edit" data-toggle="tooltip" title="Modifier" ></a></td> {# Modifier #}
+                <td><a href="{{ path('equipment_ask_delete', { 'id': entity.id }) }}" class="icon-trash" data-toggle="tooltip" title="Supprimer" ></a></td> {# Supprimer #}
+            {% endif %}
+          </tr>
+         {% else %}
+            <tr>
+              <td colspan="8">
+                <strong>Il n'y a aucun équipement à afficher pour la page {{ page }} !</strong><br />
+                <a href="{{ path('equipment') }}">Retour</a>
+              </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+     
+    {{ pagination.pagination('equipment', page, nbPages) }}
+      
+  </div>  
+</div>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+parameters:
+    csis_vitrine: alphabetique|laboratories|categories
+    csis_vitrine_default: alphabetique
+    csis_card: equipment|laboratory|institution|category
+    csis_card_default: vide
+    csis_id_default: 0
+    
+    csis_admin_index_max_in_lists : 5
+    csis_admin_views_max_in_lists : 20
+    
+    # if you want to change csis_max_in_pagination value check the app/config/parameters.yml

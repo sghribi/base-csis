@@ -1,0 +1,74 @@
+institution:
+    pattern:  /{page}
+    defaults: { _controller: "CSISEamBundle:Institution:index", page: "1" }
+    requirements:
+        page: \d+
+
+institution_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "CSISEamBundle:Institution:show" }
+    requirements:
+        id: \d+
+
+institution_new:
+    pattern:  /new
+    defaults: { _controller: "CSISEamBundle:Institution:new" }
+    requirements:
+        id: \d+
+
+institution_create:
+    pattern:  /create
+    defaults: { _controller: "CSISEamBundle:Institution:create" }
+    requirements: 
+        _method: post
+        id: \d+
+
+institution_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CSISEamBundle:Institution:edit" }
+    requirements:
+        id: \d+
+
+institution_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "CSISEamBundle:Institution:update" }
+    requirements: 
+        _method: post
+        id: \d+
+
+institution_ask_delete:
+    pattern:  /{id}/ask_delete
+    defaults: { _controller: "CSISEamBundle:Institution:askDelete" }
+    requirements:
+        id: \d+
+    
+institution_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CSISEamBundle:Institution:delete" }
+    requirements:
+        id: \d+
+    
+institution_credentials:
+    pattern:  /{id}/credentials
+    defaults: { _controller: "CSISEamBundle:Institution:credentials" }
+    requirements:
+        id: \d+
+
+institution_credentials_remove:
+    pattern: /{id}/credentials/{owner}/remove
+    defaults: { _controller: "CSISEamBundle:Institution:credentialsRemove" }
+    requirements:
+        id: \d+
+        owner: \d+
+        
+institution_credentials_add:
+    pattern: /{id}/credentials/add
+    defaults: { _controller: "CSISEamBundle:Institution:credentialsAdd" }
+    requirements:
+        id: \d+
+
+institution_fusion:
+    pattern:  /{id}/fusion
+    defaults: { _controller: "CSISEamBundle:Institution:fusion" }
+    requirements:
+        id: \d+

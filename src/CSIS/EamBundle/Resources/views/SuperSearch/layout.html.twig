@@ -1,0 +1,134 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{% block csis_body %}
+<h2>Résultats de la recherche</h2>
+
+<div class="row">
+    <div class="span4">
+        <div class="well" style="max-width: 340px; padding: 8px 0;">
+            <ul class="nav nav-list">
+                <li class="nav-header">Arborescence :</li>
+                
+                <li class="divider"></li>
+            </ul>
+                 
+            <div style="height:400px;overflow:auto">
+
+            {% if vitrine ==  "alphabetique" %}    
+
+                {% include 'CSISEamBundle:SuperSearch:alphabetique.html.twig' %}
+                
+            {% elseif vitrine ==  "categories" %}  
+                
+                {% include 'CSISEamBundle:Vitrine:categories.html.twig' %}
+            
+            {% elseif vitrine ==  "laboratories" %} 
+                
+                {% include 'CSISEamBundle:Vitrine:laboratories.html.twig' %}
+                
+            {% endif %}
+                
+            </div>
+        </div>
+    </div>
+        
+    <div class="span8">
+        <div class="well" id="card_container">
+            
+            {% if card ==  "equipment" %}
+
+                {% include 'CSISEamBundle:Vitrine:card_equipment.html.twig' %}
+
+            {% elseif card ==  "laboratory" %}
+
+                {% include 'CSISEamBundle:Vitrine:card_laboratory.html.twig' %}
+
+            {% elseif card ==  "institution" %}
+
+                {% include 'CSISEamBundle:Vitrine:card_institution.html.twig' %}
+
+            {% elseif card ==  "category" %}
+
+                {% include 'CSISEamBundle:Vitrine:card_category.html.twig' %}
+                
+            {% else %}
+
+                {% include 'CSISEamBundle:Vitrine:card_vide.html.twig' %}
+
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+<script>
+    $().ready(function() 
+    {
+        menu_init();
+        arborescence_init();
+        $(".ajax_refresh").each(function(){
+                        attachAJAX($(this));
+                    });
+    });
+
+    function menu_init() 
+    {
+        $('.nav-content_1').hide();
+        $('.nav-title_1').click(function() 
+                              {
+                                  $('.nav-content_1', this.parentNode).toggle();
+                                  $(".icn", this.parentNode).toggle();
+                              });
+        $('.nav-content_2').hide();
+        $('.nav-title_2').click(function() 
+                              {
+                                  $('.nav-content_2', this.parentNode).toggle();
+                                  $(".icn", this.parentNode).toggle();
+                              });
+    }
+    
+    function arborescence_init()
+    {
+        if({{ id }} !== 0)
+        {
+            var card = '{{ card }}';
+            
+            switch(card)
+            {
+                case 'equipment' :
+                    var entity = $('#equipment_{{ id }}');
+                break;
+                
+                case 'category' :
+                    var entity = $('#category_{{ id }}');
+                break;
+                
+                case 'laboratory' :
+                    var entity = $('#laboratory_{{ id }}');
+                break;
+                
+                case 'institution' :
+                    var entity = $('#institution_{{ id }}');
+                break;
+            }
+            
+            $(entity.parents()).show();
+        }
+    }
+    
+    function attachAJAX(balise)
+    {
+        balise.on("click", function(event){
+                    event.preventDefault();
+                    var link = "{{ url("vitrine_card") }}/";
+                    var suffixe = $(this).attr('id');
+                    $.get(link + suffixe, function(data){
+                                    $("#card_container").html(data);
+                                })
+                    });
+    }
+    
+</script>  
+{% endblock %}

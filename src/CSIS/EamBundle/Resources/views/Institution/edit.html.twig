@@ -1,0 +1,51 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{% block csis_body %}
+    <div class="row">
+        <div class="span12">
+            {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+            {% include 'CSISEamBundle:Eam:mainflash.html.twig' %}
+        </div>
+    </div>
+
+    <div class="row">
+        <form action="{{ path('institution_update', { 'id': institution.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+            <div class="span12">
+                <div class="span8">
+                    <div class="well">
+                        <fieldset>
+                            <legend>
+                              Modification d'un Etablissement
+                                <div class="pull-right">
+                                    {# Definition des bouttons #}
+                                    <span class="span1">
+                                        <a href="{{ path('institution') }}" class="btn btn-info btn-block" data-toggle="tooltip" title="Retour à la liste des Etablissements">
+                                            <i class="icon-list-alt icon-white"></i>                                            
+                                            Liste
+                                        </a>
+                                    </span> 
+                                    <span class="span2">
+                                        <a href="{{ path('institution_ask_delete', { 'id': institution.id }) }}" class="btn btn-danger btn-block" data-toggle="tooltip" title="Supprimer l'Etablissement">
+                                            <i class="icon-trash icon-white"></i>
+                                            Supprimer
+                                        </a>
+                                    </span>
+                                </div>
+                            </legend>
+                            {{ form_widget(edit_form) }}
+                            <div class="pull-right">
+                                {# Definition des bouttons #}
+                                <span class="span2">
+                                    <button type="submit" class="btn btn-success btn-block" data-toggle="tooltip" title="Appliquer les modifications">
+                                        <i class="icon-share-alt icon-white"></i>
+                                        Appliquer
+                                    </button>
+                                </span>
+                            </div>      
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

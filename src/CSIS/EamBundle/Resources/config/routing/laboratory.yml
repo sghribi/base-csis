@@ -1,0 +1,71 @@
+laboratory:
+    pattern:  /{page}
+    defaults: { _controller: "CSISEamBundle:Laboratory:index", page: "1" }
+    requirements:
+        page: \d+
+
+laboratory_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "CSISEamBundle:Laboratory:show" }
+    requirements:
+        id: \d+
+        
+laboratory_new:
+    pattern:  /new
+    defaults: { _controller: "CSISEamBundle:Laboratory:new" }
+
+laboratory_create:
+    pattern:  /create
+    defaults: { _controller: "CSISEamBundle:Laboratory:create" }
+    requirements: { _method: post }
+
+laboratory_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CSISEamBundle:Laboratory:edit" }
+    requirements:
+        id: \d+
+
+laboratory_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "CSISEamBundle:Laboratory:update" }
+    requirements: 
+        _method: post
+        id: \d+
+    
+    
+laboratory_ask_delete:
+    pattern:  /{id}/ask_delete
+    defaults: { _controller: "CSISEamBundle:Laboratory:askDelete" }
+    requirements:
+        id: \d+
+
+laboratory_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CSISEamBundle:Laboratory:delete" }
+    requirements:
+        id: \d+
+
+laboratory_credentials:
+    pattern:  /{id}/credentials
+    defaults: { _controller: "CSISEamBundle:Laboratory:credentials" }
+    requirements:
+        id: \d+
+
+laboratory_credentials_remove:
+    pattern: /{id}/credentials/{owner}/remove
+    defaults: { _controller: "CSISEamBundle:Laboratory:credentialsRemove" }
+    requirements:
+        id: \d+
+        owner: \d+
+        
+laboratory_credentials_add:
+    pattern: /{id}/credentials/add
+    defaults: { _controller: "CSISEamBundle:Laboratory:credentialsAdd" }
+    requirements:
+        id: \d+
+
+laboratory_fusion:
+    pattern:  /{id}/fusion
+    defaults: { _controller: "CSISEamBundle:Laboratory:fusion" }
+    requirements:
+        id: \d+

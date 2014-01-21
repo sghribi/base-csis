@@ -1,0 +1,33 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+{% import 'CSISEamBundle:Eam:pagination.html.twig' as pagination %}
+{% block csis_body %}
+<div class="row">
+
+    {# Partie gauche #}
+    <div class="span4">
+        <div class="well">
+            <fieldset>
+            <legend>Gestion d'un tag</legend>
+
+            {# Flash message #}
+            {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+
+            {# Formulaire de modification #} {# Lien retour #}
+            <form action="{{ path('tag_update', { 'id': tag.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+                {{ form_widget(edit_form) }}
+                <button type="submit" class="btn btn-success"><i class="icon-refresh icon-white"></i>Mise à jour</button>
+                <a href="{{ path("tag") }}" class="btn"><i class="icon-arrow-left icon-white"></i>Retour</a>
+            </form>
+
+            </fieldset>
+       </div>
+    </div>
+    {# Fin partie gauche #}
+
+    {# Partie droite #}
+    {% include 'CSISEamBundle:Tag:show.html.twig' %}
+     
+    {# Fin partie droite #}
+</div>
+
+{% endblock %}

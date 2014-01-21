@@ -1,0 +1,11 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+<div class="span10 offset1">
+  <div class="well">
+    <p>
+      {{ 'registration.check_email'|trans({'%email%': user.email}, 'FOSUserBundle') }}
+    </p>
+  </div>
+</div>
+{% endblock fos_user_content %}

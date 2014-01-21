@@ -1,0 +1,15 @@
+supersearch:
+    pattern:  /
+    defaults: { _controller: "CSISEamBundle:SuperSearch:index" }
+
+supersearch_vitrine:
+    pattern:  /{vitrine}/{card}/{id}
+    defaults: { _controller: CSISEamBundle:SearchVitrine:index, vitrine: %csis_vitrine_default%,  card: %csis_card_default%, id: %csis_id_default%}
+    requirements:
+      vitrine: %csis_vitrine%
+      card: %csis_card%
+      id: \d+
+  
+supersearch_test:
+    pattern:  /{vitrine}/{card}/{id}
+    defaults: { _controller: "CSISEamBundle:SearchVitrine:index" }	  

@@ -1,0 +1,31 @@
+services:
+    csis.type.people_selector:
+        class: CSIS\EamBundle\Form\Type\PeopleSelectorType
+        arguments: 
+            - "@doctrine.orm.entity_manager"
+            - "@session"
+            - "@router"
+        tags:
+            - { name: form.type, alias: csis_people_selector }
+            
+    csis.type.tag_selector:
+        class: CSIS\EamBundle\Form\Type\TagSelectorType
+        arguments: ["@doctrine.orm.entity_manager", "@session"]
+        tags:
+            - { name: form.type, alias: csis_tag_selector }
+    
+    csis.type.laboratory_selector:
+        class: CSIS\EamBundle\Form\Type\LaboratorySelectorType
+        arguments: 
+            - "@doctrine.orm.entity_manager"
+            - "@security.context"
+        tags:
+            - { name: form.type, alias: csis_laboratory_selector }
+
+    csis.type.institution_selector:
+        class: CSIS\EamBundle\Form\Type\InstitutionSelectorType
+        arguments: 
+            - "@doctrine.orm.entity_manager"
+            - "@security.context"
+        tags:
+            - { name: form.type, alias: csis_institution_selector }

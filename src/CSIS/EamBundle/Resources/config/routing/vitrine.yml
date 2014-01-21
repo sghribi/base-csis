@@ -1,0 +1,14 @@
+vitrine:
+    pattern:  /{vitrine}/{card}/{id}
+    defaults: { _controller: CSISEamBundle:Vitrine:index, vitrine: %csis_vitrine_default%,  card: %csis_card_default%, id: %csis_id_default%}
+    requirements:
+        vitrine: %csis_vitrine%
+        card: %csis_card%
+        id: \d+
+
+vitrine_card:
+    pattern: /card/{card}_{id}
+    defaults: { _controller: CSISEamBundle:Vitrine:card, card: %csis_card_default%, id: %csis_id_default%}
+    requirements:
+        card: %csis_card%
+        id:   \d+

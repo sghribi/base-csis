@@ -1,0 +1,15 @@
+{# On affiche tous les messages flash dont le nom est « error » #}
+{% for message in app.session.flashbag.get('error') %}
+<div class="alert alert-error">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+{{ message|raw }}
+</div>
+{% endfor %}
+
+{# On affiche tous les messages flash dont le nom est « valid » #}
+{% for message in app.session.flashbag.get('valid') %}
+<div class="alert">
+<button type="button" class="close" data-dismiss="alert">&times;</button>
+{{ message|raw }}
+</div>
+{% endfor %}

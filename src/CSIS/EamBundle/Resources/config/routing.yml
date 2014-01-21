@@ -1,0 +1,45 @@
+csis_eam_homepage:
+    pattern:  /
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: vitrine
+        permanent: true
+
+CSISEamBundle_admin:
+    resource: "@CSISEamBundle/Resources/config/routing/admin.yml"
+    prefix:   /admin
+
+CSISEamBundle_category:
+    resource: "@CSISEamBundle/Resources/config/routing/category.yml"
+    prefix:   /categories
+
+CSISEamBundle_equipment:
+    resource: "@CSISEamBundle/Resources/config/routing/equipment.yml"
+    prefix:   /equipments
+
+CSISEamBundle_institution:
+    resource: "@CSISEamBundle/Resources/config/routing/institution.yml"
+    prefix:   /institutions
+
+CSISEamBundle_laboratory:
+    resource: "@CSISEamBundle/Resources/config/routing/laboratory.yml"
+    prefix:   /laboratories
+
+CSISEamBundle_people:
+    resource: "@CSISEamBundle/Resources/config/routing/people.yml"
+    prefix:   /peoples
+
+CSISEamBundle_tag:
+    resource: "@CSISEamBundle/Resources/config/routing/tag.yml"
+    prefix:   /tags
+
+CSISEamBundle_vitrine:
+    resource: "@CSISEamBundle/Resources/config/routing/vitrine.yml"
+    prefix:   /vitrine
+
+CSISEamBundle_supersearch:
+    resource: "@CSISEamBundle/Resources/config/routing/supersearch.yml"
+    prefix:   /search
+
+
+

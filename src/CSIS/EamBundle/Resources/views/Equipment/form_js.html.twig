@@ -1,0 +1,164 @@
+<script>
+  jQuery(document).ready(function() {
+
+    // Récupère le div qui contient la collection des contacts
+    var collectionHolderContact = $('div.contacts');
+    var add_buttonContact = $('#add_new_contact');
+    // Récupère le div qui contient la collection des tags
+    var collectionHolderTag = $('div.tags');
+    var add_buttonTag = $('#add_new_tag');
+
+    var buttonRefreshProposals = $('#link-proposition-tags');
+
+    // ajoute un lien de suppression à tous les éléments li de
+    // formulaires de contacts existants
+    collectionHolderContact.children('div').each(function() {
+      attachAjax($(this).children('input'), '{{ url('people_autocomplete') }}');
+      addContactFormDeleteLink($(this));
+    });
+
+    // ajoute un lien de suppression à tous les éléments li de
+    // formulaires de tags existants
+    collectionHolderTag.children('div').each(function() {
+      attachAjax($(this).children('input'), '{{ url('tag_autocomplete') }}');
+      addTagFormDeleteLink($(this));
+    });
+
+    add_buttonContact.on('click', function(e) {
+      // ajoute un nouveau formulaire contact (voir le prochain bloc de code)
+      e.preventDefault();
+      addContactForm(collectionHolderContact);
+    });
+
+    add_buttonTag.on('click', function(e) {
+      // ajoute un nouveau formulaire tag (voir le prochain bloc de code)
+      e.preventDefault();
+      addTagForm(collectionHolderTag);
+    });
+
+    buttonRefreshProposals.on('click', function(e) {
+      e.preventDefault();
+      refreshProposals();
+    });
+    
+    refreshProposals();
+  });
+
+  function addContactForm(collectionHolder) {
+    // Récupère l'élément ayant l'attribut data-prototype
+    var prototype = collectionHolder.attr('data-prototype');
+    var length = collectionHolder.children().length;
+    // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+    // la longueur de la collection courante
+    var $newForm = $('<div><label>Adresse email du contact :</label>' + prototype.replace(/__name__/g, length) + '</div>');
+
+    // Affiche le formulaire dans la page dans un div, avant le lien "ajouter un contact"
+    collectionHolder.append($newForm);
+    attachAjax($newForm.children('input'), '{{ url('people_autocomplete') }}');
+    // ajoute un lien de suppression au nouveau formulaire
+    addContactFormDeleteLink($newForm);
+  }
+
+  function addContactFormDeleteLink($tagForm) {
+    var $removeFormButton = $('<button class="btn btn-warning"><i class="icon-trash icon-white"></i></button>');
+    var $input = $tagForm.children('input');
+
+    $input.wrap('<div class="input-append" />');
+    $input.parent().append($removeFormButton);
+
+    $removeFormButton.on('click', function(e) {
+      // supprime l'élément div pour le formulaire de contact
+      e.preventDefault();
+      $tagForm.remove();
+    });
+  }
+
+  function attachAjax($input, url) {
+    $input.autocomplete({
+      source: function(requete, reponse) {
+        $.ajax({
+          url: url,
+          dataType: 'json',
+          type: 'POST',
+          data: {
+            input: $input.val()
+          },
+          success: function(donnee) {
+            reponse(donnee);
+          }
+        });
+      }
+    });
+  }
+  
+  function addTagForm(collectionHolder) {
+    // Récupère l'élément ayant l'attribut data-prototype
+    var prototype = collectionHolder.attr('data-prototype');
+    var length = collectionHolder.children().length;
+    // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+    // la longueur de la collection courante
+    var $newForm = $('<div><label>Nom du tag :</label>' + prototype.replace(/__name__/g, length) + '</div>');
+
+    // Affiche le formulaire dans la page dans un div, avant le lien "ajouter un tag"
+    collectionHolder.append($newForm);
+    attachAjax($newForm.children('input'), '{{ url('tag_autocomplete') }}');
+    // ajoute un lien de suppression au nouveau formulaire
+    addTagFormDeleteLink($newForm);
+  }
+
+  function addTagFormDeleteLink($tagForm) {
+    var $removeFormButton = $('<button class="btn btn-warning"><i class="icon-trash icon-white"></i></button>');
+    var $input = $tagForm.children('input');
+
+    $input.wrap('<div class="input-append" />');
+    $input.parent().append($removeFormButton);
+
+    $removeFormButton.on('click', function(e) {
+      // supprime l'élément div pour le formulaire de tag
+      e.preventDefault();
+      $tagForm.remove();
+    });
+  }
+
+  // Refresh the lists of propositional tags
+  function refreshProposals() {
+    var values = {};
+    $.each( $('form').serializeArray(), function(i, field) {
+      values[field.name] = field.value;
+    });
+    
+    $.ajax({
+      url: '{{ url('equipment_relatives_tag') }}',
+      dataType: 'json',
+      type: 'POST',
+      data: values,
+      success: function(donnees) {
+        $('#proposition-tags tbody').empty();
+        $.each(donnees['tags'], function(i, tag) {  
+          addPropositionalTag(tag);
+        });
+      }
+    });
+  }
+  
+  // Add a tag with its add link
+  function addPropositionalTag( tag ) {
+    var $add = $('<a href="#"><i class="icon-plus"></i></a>');
+    var $label = $('<td>' + tag + '</td>');
+    var $tr = $('<tr></tr>');
+
+    $add.wrap('<td />');
+    $tr.append($label);
+    $tr.append($add);
+
+    $('#proposition-tags tbody').append($tr);
+
+    $add.on('click', function(e) {
+      e.preventDefault();
+      addTagForm($('div.tags'));
+      $('div.tags').children().last().find('input').val(tag);
+      $(this).parent().remove();
+    });
+  }
+
+  </script>

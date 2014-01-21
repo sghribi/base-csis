@@ -1,0 +1,116 @@
+<div class="span6">
+  <div class="well">
+    <fieldset>
+      <legend>
+        {{ title }}
+      </legend>
+      {{ form_row(form.designation) }}
+      {{ form_row(form.brand) }}  
+      {{ form_row(form.type) }}
+      {{ form_row(form.url) }}
+      {{ form_row(form.description) }}
+      {{ form_row(form.shared) }}
+      {{ form_row(form.laboratory) }}
+    </fieldset>
+    <br />
+    <fieldset>
+      <legend>Emplacement</legend>
+      {{ form_row(form.building) }}
+      {{ form_row(form.floor) }}
+      {{ form_row(form.room) }}
+    </fieldset>
+    <br />
+    <div class="pull-right">
+      <a class="btn" href="{{ path('equipment_show', {'id': equipment.id}) }}">
+        <i class="icon-chevron-left"></i>&nbsp;{{ button_back_name }}
+      </a>
+      <button type="submit" class="btn btn-success">
+        <i class="{{ icon_type }}"></i>&nbsp;{{ button_name }}
+      </button>
+    </div>
+    <br />
+  </div>
+</div>
+
+<div class="span6">
+  <div class="row">
+    
+    <div class="span6">
+      <div class="well">
+        
+        <fieldset>
+          <legend>Contacts</legend>
+        </fieldset>
+        <div class="contacts" data-prototype="{{ form_widget(form.contacts.vars.prototype)|e }}">
+        {% for c in form.contacts %}
+            {{ form_row(c) }}
+        {% endfor %}
+        </div>
+        <br />
+        <button id="add_new_contact" class="btn btn-primary">
+            <i class="icon-plus icon-white"></i>
+            &nbsp;Ajouter un contact
+        </button>
+      </div>
+    </div>
+    
+  </div>
+  <div class="row">
+    
+    <div class="span3">
+      <div class="well">
+        
+        <fieldset>
+          <legend>Tags</legend>
+        </fieldset>
+        <div class="tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e }}">
+        {% for t in form.tags %}
+            {{ form_row(t) }}
+        {% endfor %}
+        </div>
+        <br />
+        <button id="add_new_tag" class="btn btn-primary">
+            <i class="icon-plus icon-white"></i>
+            &nbsp;Ajouter un tag
+        </button>
+      </div>
+    </div>
+
+    <div class="span3">
+      <div class="well">
+        
+        <fieldset>
+          <legend>Propositions</legend>
+        </fieldset>
+        
+        <table id="proposition-tags" class="table table-condensed table-hover">
+          <thead>
+            <tr>
+              <th>Tags</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Aucuns...</td>
+              <td>&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <a id="link-proposition-tags" class="btn btn-primary" href="#">
+          <i class="icon-repeat icon-white"></i>&nbsp;Rafraîchir
+        </a>
+        
+      </div>
+    </div>
+    
+  </div>
+  <div class="row">
+    <div class="span6">
+      {# Afficher tous ceux qui ne sont pas utilisés #}
+      {{ form_rest(form) }}
+    </div>
+  </div>
+</div>
+

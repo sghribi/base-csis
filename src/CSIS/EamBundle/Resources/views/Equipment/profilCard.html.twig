@@ -1,0 +1,9 @@
+{# Propritétés de l'equipement sélectionné #}
+<h3>{{ equipment.designation }}</h3>
+<p><span class="muted">Tags : </span>{{ equipment.tags|join(', ') }}</p>
+<p><span class="muted">Contacts : </span>{{ equipment.contacts|join(', ') }}</p>
+<p><span class="muted">Adresse : </span><a href="{{ equipment.url }}">{{ equipment.url }}</a></p>
+<p><span class="muted">Marque : </span> {{ equipment.brand }}</p>
+<p><span class="muted">Type : </span> {{ equipment.type }}</p>
+<p><span class="muted">Description : </span> </br></br> {{ equipment.description|nl2br }}</p>
+<br/>
