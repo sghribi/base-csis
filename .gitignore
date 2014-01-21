@@ -4,7 +4,7 @@
 /app/logs/*
 /vendor/
 /app/config/parameters.yml
-/src**.php~
+**.php~
 /*.sublime-*
 /web/files/
 /bin/

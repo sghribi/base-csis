@@ -377,4 +377,50 @@ class Laboratory {
         return $this;
     }
 
+
+    /**
+     * Add equipments
+     *
+     * @param \CSIS\EamBundle\Entity\Equipment $equipments
+     * @return Laboratory
+     */
+    public function addEquipment(\CSIS\EamBundle\Entity\Equipment $equipments)
+    {
+        $this->equipments[] = $equipments;
+
+        return $this;
+    }
+
+    /**
+     * Remove equipments
+     *
+     * @param \CSIS\EamBundle\Entity\Equipment $equipments
+     */
+    public function removeEquipment(\CSIS\EamBundle\Entity\Equipment $equipments)
+    {
+        $this->equipments->removeElement($equipments);
+    }
+
+    /**
+     * Add owners
+     *
+     * @param \CSIS\UserBundle\Entity\User $owners
+     * @return Laboratory
+     */
+    public function addOwner(\CSIS\UserBundle\Entity\User $owners)
+    {
+        $this->owners[] = $owners;
+
+        return $this;
+    }
+
+    /**
+     * Remove owners
+     *
+     * @param \CSIS\UserBundle\Entity\User $owners
+     */
+    public function removeOwner(\CSIS\UserBundle\Entity\User $owners)
+    {
+        $this->owners->removeElement($owners);
+    }
 }

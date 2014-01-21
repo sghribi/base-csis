@@ -122,4 +122,34 @@ class Category
     }
 
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->equipments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add equipments
+     *
+     * @param \CSIS\EamBundle\Entity\Equipment $equipments
+     * @return Category
+     */
+    public function addEquipment(\CSIS\EamBundle\Entity\Equipment $equipments)
+    {
+        $this->equipments[] = $equipments;
+
+        return $this;
+    }
+
+    /**
+     * Remove equipments
+     *
+     * @param \CSIS\EamBundle\Entity\Equipment $equipments
+     */
+    public function removeEquipment(\CSIS\EamBundle\Entity\Equipment $equipments)
+    {
+        $this->equipments->removeElement($equipments);
+    }
 }

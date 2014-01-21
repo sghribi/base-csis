@@ -290,4 +290,50 @@ class Institution {
         return $this;
     }
 
+
+    /**
+     * Add owners
+     *
+     * @param \CSIS\UserBundle\Entity\User $owners
+     * @return Institution
+     */
+    public function addOwner(\CSIS\UserBundle\Entity\User $owners)
+    {
+        $this->owners[] = $owners;
+
+        return $this;
+    }
+
+    /**
+     * Remove owners
+     *
+     * @param \CSIS\UserBundle\Entity\User $owners
+     */
+    public function removeOwner(\CSIS\UserBundle\Entity\User $owners)
+    {
+        $this->owners->removeElement($owners);
+    }
+
+    /**
+     * Add laboratories
+     *
+     * @param \CSIS\EamBundle\Entity\Laboratory $laboratories
+     * @return Institution
+     */
+    public function addLaboratory(\CSIS\EamBundle\Entity\Laboratory $laboratories)
+    {
+        $this->laboratories[] = $laboratories;
+
+        return $this;
+    }
+
+    /**
+     * Remove laboratories
+     *
+     * @param \CSIS\EamBundle\Entity\Laboratory $laboratories
+     */
+    public function removeLaboratory(\CSIS\EamBundle\Entity\Laboratory $laboratories)
+    {
+        $this->laboratories->removeElement($laboratories);
+    }
 }

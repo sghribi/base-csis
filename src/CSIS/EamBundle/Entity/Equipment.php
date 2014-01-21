@@ -558,4 +558,73 @@ class Equipment
       return $this;
     }
     
+
+    /**
+     * Add categories
+     *
+     * @param \CSIS\EamBundle\Entity\Category $categories
+     * @return Equipment
+     */
+    public function addCategory(\CSIS\EamBundle\Entity\Category $categories)
+    {
+        $this->categories[] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \CSIS\EamBundle\Entity\Category $categories
+     */
+    public function removeCategory(\CSIS\EamBundle\Entity\Category $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Add tags
+     *
+     * @param \CSIS\EamBundle\Entity\Tag $tags
+     * @return Equipment
+     */
+    public function addTag(\CSIS\EamBundle\Entity\Tag $tags)
+    {
+        $this->tags[] = $tags;
+
+        return $this;
+    }
+
+    /**
+     * Remove tags
+     *
+     * @param \CSIS\EamBundle\Entity\Tag $tags
+     */
+    public function removeTag(\CSIS\EamBundle\Entity\Tag $tags)
+    {
+        $this->tags->removeElement($tags);
+    }
+
+    /**
+     * Add owners
+     *
+     * @param \CSIS\UserBundle\Entity\User $owners
+     * @return Equipment
+     */
+    public function addOwner(\CSIS\UserBundle\Entity\User $owners)
+    {
+        $this->owners[] = $owners;
+
+        return $this;
+    }
+
+    /**
+     * Remove owners
+     *
+     * @param \CSIS\UserBundle\Entity\User $owners
+     */
+    public function removeOwner(\CSIS\UserBundle\Entity\User $owners)
+    {
+        $this->owners->removeElement($owners);
+    }
 }
