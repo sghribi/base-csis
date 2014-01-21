@@ -20,9 +20,9 @@
     <hr />
     <h4>Tags</h4>
     <ul>
-      <li><a href="{{ path("tag") }}">Gestion des tags Tag</a></li>
+      <li><a href="{{ path("tag") }}">Gestion des tags</a></li>
     {% if is_granted("ROLE_GEST_TAGS") %}
-      <li><a href="{{ path("tag", {'onglet' : 'edit'}) }}">Demandes de Tags en attentes ({{ waiting_tags }})</a></li>    
+      <li><a href="{{ path("tag", {'onglet' : 'edit'}) }}">Demandes de tags en attentes</a> {% if waiting_tags is not null %}<span class="badge badge-important">{{ waiting_tags }}</span>{% endif %}</li>    
     {% endif %}
     </ul>
     
@@ -30,101 +30,103 @@
     <hr />
     <h4>Familles</h4>
     <ul>
-      <li><a href="{{ path('category') }}">Accéder à la liste des Familles</a></li>
-      <li><a href="{{ path('category_new') }}">Créer une nouvelle Famille</a></li>
-    </ul>
-
-    <ul>
-    {% for category in categories %}
-      <li><a href="{{ path('category_show', { 'id': category.id }) }}">{{ category.name }}</a></li>
-    {% else %}
-      <li>Aucun(s)</li>
-    {% endfor %}
-    {% if categories_sup %}
-      <li><a href="{{ path('category') }}">Suite ...</a></li>
-    {% endif %}
+        <li><a href="{{ path('category') }}">Accéder à la liste des familles</a></li>
+        <li><a href="{{ path('category_new') }}">Créer une nouvelle famille</a></li>
+        <li>Liste de catégories :</li>
+      <ul class="inline">
+      {% for category in categories %}
+        <li><a href="{{ path('category_show', { 'id': category.id }) }}">{{ category.name }}</a></li>
+      {% else %}
+        <li>Aucun(s)</li>
+      {% endfor %}
+      {% if categories_sup %}
+        <li><em><a href="{{ path('category') }}">Suite ...</a></em></li>
+      {% endif %}
+      </ul>
     </ul>
   {% endif %}
+    
       
   {% if is_granted("ROLE_GEST_PEOPLE") %}
     <hr />
     <h4>Contacts</h4>
     <ul>
-      <li><a href="{{ path('people') }}">Accéder à la liste des Contacts</a></li>
+      <li><a href="{{ path('people') }}">Accéder à la liste des contacts</a></li>
       <li><a href="{{ path('people_new') }}">Créer un nouveau contact</a></li>
+      <li>Liste de contacts :</li>
+        <ul class="inline">
+        {% for people in peoples %}
+          <li><a href="{{ path('people_show', { 'id': people.id }) }}">{{ people }}</a></li>
+        {% else %}
+          <li>Aucun(s)</li>
+        {% endfor %}
+        {% if peoples_sup %}
+          <li><em><a href="{{ path('people') }}">Suite ...</a></em></li>
+        {% endif %}
+      </ul>
     </ul>
-
-    <ul>
-    {% for people in peoples %}
-      <li><a href="{{ path('people_show', { 'id': people.id }) }}">{{ people }}</a></li>
-    {% else %}
-      <li>Aucun(s)</li>
-    {% endfor %}
-    {% if peoples_sup %}
-      <li><a href="{{ path('people') }}">Suite ...</a></li>
-    {% endif %}
-    </ul>
-
   {% endif %}
   </div>
 
   <div class="span5">
   {% if is_granted("ROLE_GEST_ESTAB") %}
-    <h4>Mes Etablissements</h4>
+    <h4>Mes établissements</h4>
     <ul>
       <li><a href="{{ path('institution') }}">Accéder à la liste de mes établissements</a></li>
       <li><a href="{{ path('institution_new') }}">Créer un nouvel établissement</a></li>
-    </ul>
+      <li>Liste d'établissements :</li>
 
-    <ul>
-    {% for institution in institutions %}
-      <li><a href="{{ path('institution_show', { 'id': institution.id }) }}">{{ institution.acronym }}</a></li>
-    {% else %}
-      <li>Aucun(s)</li>
-    {% endfor %}
-    {% if institutions_sup %}
-      <li><a href="{{ path('institution') }}">Suite ...</a></li>
-    {% endif %}
+      <ul class="inline">
+        {% for institution in institutions %}
+          <li><a href="{{ path('institution_show', { 'id': institution.id }) }}">{{ institution.acronym }}</a></li>
+        {% else %}
+          <li>Aucun(s)</li>
+        {% endfor %}
+        {% if institutions_sup %}
+          <li><em><a href="{{ path('institution') }}">Suite ...</a></em></li>
+        {% endif %}
+      </ul>
     </ul>
-    {% endif %}
+  {% endif %}
 
   {% if is_granted("ROLE_GEST_LAB") %}
     {% if is_granted("ROLE_GEST_ESTAB") %}<hr />{% endif %}
-    <h4>Mes Laboratoires</h4>
+    <h4>Mes laboratoires</h4>
     <ul>
       <li><a href="{{ path('laboratory') }}">Accéder à la liste de mes laboratoires</a></li>
       <li><a href="{{ path('laboratory_new') }}">Créer un nouveau laboratoire</a></li>
-    </ul>
+      <li>Liste de laboratoires :</li>
 
-    <ul>
-    {% for lab in labs %}
-      <li><a href="{{ path('laboratory_show', { 'id': lab.id }) }}">{{ lab.acronym }}</a></li>
-    {% else %}
-      <li>Aucun(s)</li>
-    {% endfor %}
-    {% if labs_sup %}
-      <li><a href="{{ path('laboratory') }}">Suite ...</a></li>
-    {% endif %}
+      <ul class="inline">
+        {% for lab in labs %}
+          <li><a href="{{ path('laboratory_show', { 'id': lab.id }) }}">{{ lab.acronym }}</a></li>
+        {% else %}
+          <li>Aucun(s)</li>
+        {% endfor %}
+        {% if labs_sup %}
+          <li><em><a href="{{ path('laboratory') }}">Suite ...</a></em></li>
+        {% endif %}
+      </ul>
     </ul>
   {% endif %}
 
   {% if is_granted("ROLE_GEST_EQUIP") %}
     {% if is_granted("ROLE_GEST_ESTAB") or is_granted("ROLE_GEST_LAB") %}<hr />{% endif %}
-    <h4>Mes Equipements</h4>
+    <h4>Mes équipements</h4>
     <ul>
       <li><a href="{{ path('equipment') }}">Accéder à la liste de mes équipements</a></li>
       <li><a href="{{ path('equipment_new') }}">Créer un nouvel équipement</a></li>
-    </ul>
-
-    <ul>
-    {% for equipment in equipments %}
-      <li><a href="{{ path('equipment_show', { 'id': equipment.id }) }}">{{ equipment.designation }}</a></li>
-    {% else %}
-      <li>Aucun(s)</li>
-    {% endfor %}
-    {% if equipments_sup %}
-      <li><a href="{{ path('equipment') }}">Suite...</a></li>
-    {% endif %}
+      <li>Liste d'équipements :</li>
+      <ul class="inline">
+        {% for equipment in equipments %}
+          <li><a href="{{ path('equipment_show', { 'id': equipment.id }) }}">{{ equipment.designation }}</a></li>
+        {% else %}
+          <li>Aucun(s)</li>
+        {% endfor %}
+        {% if equipments_sup %}
+          <li><em><a href="{{ path('equipment') }}">Suite...</a></em></li>
+        {% endif %}
+      </ul>
     </ul>
   {% endif %}
   </div>

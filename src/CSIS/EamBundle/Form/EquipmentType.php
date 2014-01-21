@@ -45,6 +45,7 @@ class EquipmentType extends AbstractType
                 'attr' => array(
                     'class' => 'span5',
                 ),
+                'required' => false,
             ))
             ->add('description', 'textarea', array(
                 'label' => 'Description de l\'équipement :',
@@ -104,11 +105,11 @@ class EquipmentType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
             ))
-//            ->add('categories', 'entity', array(
-//                'class' => 'CSISEamBundle:Category',
-//                'property' => 'name',
-//                'multiple' => true,
-//            ))
+            ->add('categories', 'entity', array(
+                'class' => 'CSISEamBundle:Category',
+                'property' => 'name',
+                'multiple' => true,
+            ))
     ;
   }
 

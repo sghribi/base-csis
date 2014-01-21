@@ -78,10 +78,6 @@ class InstitutionController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $em->persist($institution);
             $em->flush();
-            
-            /* Creation auto des tags */
-            $repo = $em->getRepository('CSISEamBundle:Tag');
-            $repo->AddTag($institution->getAcronym()." ".$institution->getName());
 
             $this->get('session')->getFlashBag()->add('valid', 'Etablissement ajouté !');
             return $this->redirect($this->generateUrl('institution_show', array('id' => $institution->getId())));

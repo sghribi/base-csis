@@ -54,7 +54,7 @@ class LaboratoryType extends AbstractType {
                 ->add('institution', 'entity', array(
                     'class' => 'CSISEamBundle:Institution',
                     'property' => 'name',
-                    'label' => 'Etablissement',
+                    'label' => 'Établissement',
                     'query_builder' => function(InstitutionRepository $er) use ($user) {
                         return $er->getQbReachableInstitutions($user);
                     },

@@ -89,10 +89,6 @@ class LaboratoryController extends Controller {
             $em->persist($laboratory);
             $em->flush();
             
-            /* Creation auto des tags */
-            $repo = $em->getRepository('CSISEamBundle:Tag');
-            $repo->AddTag($laboratory->getAcronym()." ".$laboratory->getNameFr()." ".$laboratory->getNameEn());
-
             $this->get('session')->getFlashBag()->add('valid', 'Laboratoire ajouté !');
             return $this->redirect($this->generateUrl('laboratory_show', array('id' => $laboratory->getId())));
         }

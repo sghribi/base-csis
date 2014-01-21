@@ -19,16 +19,18 @@ class PeopleType extends AbstractType {
                   'attr' => array('class'=>'span7',),
                   ))
             ->add('email', 'text', array(
-                  'label' => 'e-mail',
+                  'label' => 'E-mail',
                   'attr' => array('class'=>'span7',),
                   ))
             ->add('phoneNumber', 'text', array(
                   'label' => 'N° de téléphone',
                   'attr' => array('class'=>'span7',),
+                  'required' => false,
                   ))
             ->add('url', 'text', array(
-                  'label' => 'site web',
+                  'label' => 'Site web',
                   'attr' => array('class'=>'span7',),
+                  'required' => false,
                   ))
     ;
   }
