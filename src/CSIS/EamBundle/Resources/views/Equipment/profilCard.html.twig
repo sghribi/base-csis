@@ -1,9 +1,73 @@
 {# Propritétés de l'equipement sélectionné #}
 <h3>{{ equipment.designation }}</h3>
-<p><span class="muted">Tags : </span>{{ equipment.tags|join(', ') }}</p>
-<p><span class="muted">Contacts : </span>{{ equipment.contacts|join(', ') }}</p>
-<p><span class="muted">Adresse : </span><a href="{{ equipment.url }}">{{ equipment.url }}</a></p>
-<p><span class="muted">Marque : </span> {{ equipment.brand }}</p>
-<p><span class="muted">Type : </span> {{ equipment.type }}</p>
-<p><span class="muted">Description : </span> </br></br> {{ equipment.description|nl2br }}</p>
-<br/>
+
+<hr/>
+
+<dl>
+  <dt>Description</dt>
+  <dd>{{ equipment.description|nl2br }}</dd>
+</dl>
+
+<div class="row">
+	<dl class="span3">
+	  <dt>Marque</dt>
+	  <dd>
+	  	{% if equipment.brand is not empty %}
+	  		{{ equipment.brand }}
+	  	{% else %}
+	  		<span class="muted">Aucune info</span>
+	  	{% endif %}
+	  </dd>
+	</dl>
+	<dl class="span4">
+	  <dt>Type</dt>
+	  <dd>
+	 	{% if equipment.type is not empty %}
+	  		{{ equipment.type }}
+	  	{% else %}
+	  		<span class="muted">Aucune info</span>
+	  	{% endif %}
+	  </dd>
+	</dl>
+</div>
+
+<dl>
+  <dt>Contacts</dt>
+  <dd>
+  	{% if equipment.contacts is not empty %}
+  	<ul>
+	  	{% for contact in equipment.contacts %}
+			<li>{{ contact }} &lt;<a href="mailto:{{ contact.email }}">{{ contact.email }}</a>&gt;</li>
+		{% endfor %}
+	</ul>
+	{% else %}
+		<span class="muted">Aucun contact</span>
+	{% endif %}
+  </dd>
+</dl>
+
+<dl>
+  <dt>Adresse Web</dt>
+  <dd>
+	  {% if equipment.url is not empty %}
+	  	<a href="{{ equipment.url }}" target="_blank">{{ equipment.url }}</a>
+	  {% else %}
+	  	<span class="muted">Aucune adresse Web</span>
+	  {% endif %}
+   </dd>
+</dl>
+
+<dl>
+  <dt>Tags</dt>
+  <dd>
+  	{% if equipment.tags is not empty %}
+  	<ul class="inline">
+	  	{% for tag in equipment.tags %}
+			<li>{{ tag }}</li>
+		{% endfor %}
+	</ul>
+	{% else %}
+		<span class="muted">Aucun tag associé</span>
+	{% endif %}
+  </dd>
+</dl>

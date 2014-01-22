@@ -82,7 +82,7 @@ class EquipmentType extends AbstractType
                 ),
             ))
             ->add('floor', 'text', array(
-                'label' => 'Etage :',
+                'label' => 'Étage :',
                 'attr' => array(
                     'class' => 'span5',
                 ),
