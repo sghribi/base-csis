@@ -32,21 +32,6 @@
 </div>
 
 <dl>
-  <dt>Contacts</dt>
-  <dd>
-  	{% if equipment.contacts is not empty %}
-  	<ul>
-	  	{% for contact in equipment.contacts %}
-			<li>{{ contact }} &lt;<a href="mailto:{{ contact.email }}">{{ contact.email }}</a>&gt;</li>
-		{% endfor %}
-	</ul>
-	{% else %}
-		<span class="muted">Aucun contact</span>
-	{% endif %}
-  </dd>
-</dl>
-
-<dl>
   <dt>Adresse Web</dt>
   <dd>
 	  {% if equipment.url is not empty %}
