@@ -5,6 +5,16 @@
 <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
 {% endif %}
 
+<div class="row">
+    <div class="span10 offset1 well">
+        <h4>Veuillez vous authentifier</h4>
+        <p>
+            L'authentification est nécessaire pour accéder à l'outil de recherche, ainsi qu'à la plateforme d'administration.
+        </p>
+    </div>
+</div>
+
+
 <div class="span3 offset4 well">
     <form action="{{ path("fos_user_security_check") }}" method="post">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
@@ -21,7 +31,7 @@
         </label>
 
         <br />
-        <input class="btn btn-success" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
+        <center><input class="btn btn-success" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" /></center>
     </form>
     <p class="pull-right"><a href="{{ path("fos_user_resetting_request") }}">Mot de passe oublié ?</a></p>
 </div>

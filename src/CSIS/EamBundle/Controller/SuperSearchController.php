@@ -12,6 +12,7 @@ use CSIS\EamBundle\Entity\Search;
 use CSIS\EamBundle\Entity\SuperSearch;
 use CSIS\EamBundle\Form\SearchType;
 use CSIS\EamBundle\Form\SuperSearchType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 
 /**
@@ -20,6 +21,10 @@ use CSIS\EamBundle\Form\SuperSearchType;
  */
 class SuperSearchController extends Controller
 {    	
+	
+	/**
+	 * @Secure(roles="IS_AUTHENTICATED_REMEMBERED")
+	 */
 	public function indexAction(Request $request)
     {
 		$entity = new SuperSearch();			
