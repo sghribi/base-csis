@@ -17,15 +17,15 @@
     </ul>
     {% endif %}
     
+    {% if is_granted("ROLE_GEST_TAGS") %}
     <hr />
     <h4>Tags</h4>
     <ul>
       <li><a href="{{ path("tag") }}">Gestion des tags</a></li>
-    {% if is_granted("ROLE_GEST_TAGS") %}
       <li><a href="{{ path("tag", {'onglet' : 'edit'}) }}">Demandes de tags en attentes</a> {% if waiting_tags is not null %}<span class="badge badge-important">{{ waiting_tags }}</span>{% endif %}</li>    
-    {% endif %}
     </ul>
-    
+    {% endif %}
+
   {% if is_granted("ROLE_GEST_CATEGORY") %}
     <hr />
     <h4>Familles</h4>
