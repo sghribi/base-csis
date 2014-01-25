@@ -3,6 +3,15 @@
 {% block csis_body %}
 <h2>Résultats de la recherche</h2>
 
+
+{# Affichage de la requête recherchée #}
+<p>
+    <span class="flash-notice">
+        <strong>{{ nb }} résultat{% if nb > 1 %}s{% endif %} pour </strong> : {{ app.session.flashbag.get('notice').0 }}
+    </span>
+    <a class="btn btn-link pull-right" type="button" onclick="history.go(-1);"><i class="icon-pencil"></i> Modifier la recherche</a>
+</p>
+
 <div class="row">
     <div class="span4">
         <div class="well" style="max-width: 340px; padding: 8px 0;">

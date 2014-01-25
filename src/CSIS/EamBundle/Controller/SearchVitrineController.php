@@ -16,6 +16,12 @@ class SearchVitrineController extends Controller
         $em = $this->getDoctrine()->getManager();
 		
 		$tabIdEquipments = $this->container->get('session')->get('csis_eam_results_search');
+		$this->container->get('session')->getFlashBag()->add('notice', $this->container->get('session')->get('recherche'));
+
+
+		$this->container->get('session')->getFlashBag()->add('notice', '');
+
+
 		$equ = array();
 		foreach($tabIdEquipments as $idEqu)
 		{
@@ -46,11 +52,12 @@ class SearchVitrineController extends Controller
 										'equipment' => $equipment, 
 										'categories' => $categories, 
 										'laboratory' => $laboratory, 
-										'institution' => $institution,));   
+										'institution' => $institution,
+										'nb' => sizeof($equipments)));   
 				break;			
 			
 				default : 
-							return $this->render('CSISEamBundle:SuperSearch:layout.html.twig', array('equipements' =>  $this->splitEqpmtsByLetter($equipments), 'vitrine' => $vitrine, 'card' => $card, 'id' => $id,));
+							return $this->render('CSISEamBundle:SuperSearch:layout.html.twig', array('equipements' =>  $this->splitEqpmtsByLetter($equipments), 'vitrine' => $vitrine, 'card' => $card, 'id' => $id, 'nb' => sizeof($equipments)));
 				break;
 			}
     }

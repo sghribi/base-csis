@@ -159,6 +159,9 @@ class SuperSearchController extends Controller
 					}
 					
 					$this->container->get('session')->set('csis_eam_results_search', $tabIdEquipments);
+					$this->container->get('session')->set('recherche', $this->searchToString($entity));
+
+					$this->container->get('session')->set('csis_eam_results_search', $tabIdEquipments);
 
 					return $this->redirect($this->generateUrl('supersearch_test', array(	'vitrine' => 'alphabetique', 
 																			'card' => 'vide', 
@@ -186,6 +189,64 @@ class SuperSearchController extends Controller
 		  'error' 	=> $error,
 		  'results' => '',
         ));       
+    }
+
+    private function searchToString($superSearch)
+    {
+		$stringResult = $superSearch->getForm1()->getOpen();
+        $stringResult .= " " . $superSearch->getForm1()->getTag();
+
+        if ($superSearch->getForm2()->getTag() != "") {
+            $stringResult .= " " . $superSearch->getForm2()->getBooleans();
+            $stringResult .= " " . $superSearch->getForm2()->getOpen();
+            $stringResult .= " " . $superSearch->getForm2()->getTag() . " ";
+            $stringResult .= " " . $superSearch->getForm2()->getClose();
+        }
+
+        if ($superSearch->getForm3()->getTag() != "") {
+            $stringResult .= " " . $superSearch->getForm3()->getBooleans();
+            $stringResult .= " " . $superSearch->getForm3()->getOpen();
+            $stringResult .= " " . $superSearch->getForm3()->getTag() . " ";
+            $stringResult .= " " . $superSearch->getForm3()->getClose();
+        }
+
+        if ($superSearch->getForm4()->getTag() != "") {
+            $stringResult .= " " . $superSearch->getForm4()->getBooleans();
+            $stringResult .= " " . $superSearch->getForm4()->getOpen();
+            $stringResult .= " " . $superSearch->getForm4()->getTag() . " ";
+            $stringResult .= " " . $superSearch->getForm4()->getClose();
+        }
+
+        if ($superSearch->getForm5()->getTag() != "") {
+            $stringResult .= " " . $superSearch->getForm5()->getBooleans();
+            $stringResult .= " " . $superSearch->getForm5()->getOpen();
+            $stringResult .= " " . $superSearch->getForm5()->getTag() . " ";
+            $stringResult .= " " . $superSearch->getForm5()->getClose();
+        }
+
+        if ($superSearch->getForm6()->getTag() != "") {
+            $stringResult .= " " . $superSearch->getForm6()->getBooleans();
+            $stringResult .= " " . $superSearch->getForm6()->getOpen();
+            $stringResult .= " " . $superSearch->getForm6()->getTag() . " ";
+            $stringResult .= " " . $superSearch->getForm6()->getClose();
+        }
+
+        if ($superSearch->getForm7()->getTag() != "") {
+            $stringResult .= " " . $superSearch->getForm7()->getBooleans();
+            $stringResult .= " " . $superSearch->getForm7()->getOpen();
+            $stringResult .= " " . $superSearch->getForm7()->getTag() . " ";
+            $stringResult .= " " . $superSearch->getForm7()->getClose();
+        }
+
+        if ($superSearch->getForm8()->getTag() != "") {
+            $stringResult .= " " . $superSearch->getForm8()->getBooleans();
+            $stringResult .= " " . $superSearch->getForm8()->getOpen();
+            $stringResult .= " " . $superSearch->getForm8()->getTag() . " ";
+            $stringResult .= " " . $superSearch->getForm8()->getClose();
+        }
+
+        return $stringResult;
+
     }
 	
 }
