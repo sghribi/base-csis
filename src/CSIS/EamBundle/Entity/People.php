@@ -62,6 +62,13 @@ class People
      */
     private $url;
 
+
+    /**
+     * @ORM\OneToOne(targetEntity="CSIS\UserBundle\Entity\user", mappedBy="datas")
+     */
+    private $userAccount; 
+
+
     public function __toString()
     {
         if ( strlen($this->getName()) == 0 && strlen($this->getFirstname()) == 0 ) {
@@ -196,4 +203,27 @@ class People
         return $this->url;
     }
 
+
+    /**
+     * Set userAccount
+     *
+     * @param \CSIS\UserBundle\Entity\user $userAccount
+     * @return People
+     */
+    public function setUserAccount(\CSIS\UserBundle\Entity\user $userAccount = null)
+    {
+        $this->userAccount = $userAccount;
+
+        return $this;
+    }
+
+    /**
+     * Get userAccount
+     *
+     * @return \CSIS\UserBundle\Entity\user 
+     */
+    public function getUserAccount()
+    {
+        return $this->userAccount;
+    }
 }
