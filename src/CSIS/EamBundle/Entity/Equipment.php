@@ -48,7 +48,7 @@ class Equipment
     /**
      * @var string
      *
-     * @ORM\Column(name="building", type="string", length=255)
+     * @ORM\Column(name="building", type="string", length=255, nullable=true)
      * @Assert\MaxLength( 
      *      limit=255
      * )
@@ -58,7 +58,7 @@ class Equipment
     /**
      * @var string
      *
-     * @ORM\Column(name="floor", type="string", length=255)
+     * @ORM\Column(name="floor", type="string", length=255, nullable=true)
      * @Assert\MaxLength( 
      *      limit=255
      * )
@@ -68,7 +68,7 @@ class Equipment
     /**
      * @var string
      *
-     * @ORM\Column(name="room", type="string", length=255)
+     * @ORM\Column(name="room", type="string", length=255, nullable=true)
      * @Assert\MaxLength( 
      *      limit=255
      * )
@@ -80,12 +80,12 @@ class Equipment
      *
      * @ORM\Column(name="shared", type="boolean")
      */
-    private $shared;
+    private $shared = false;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="brand", type="string", length=255)
+     * @ORM\Column(name="brand", type="string", length=255, nullable=true)
      * @Assert\MaxLength( 
      *      limit=255
      * )
@@ -95,7 +95,7 @@ class Equipment
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
      * @Assert\MaxLength( 
      *      limit=255
      * )

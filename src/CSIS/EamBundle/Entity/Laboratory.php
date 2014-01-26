@@ -52,14 +52,14 @@ class Laboratory {
      *
      * @ORM\Column(name="belongToCSIS", type="boolean")
      */
-    private $belongToCSIS;
+    private $belongToCSIS = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="researchLaboratory", type="boolean")
      */
-    private $researchLaboratory;
+    private $researchLaboratory = true;
 
     /**
      * @var \CSIS\EamBundle\Entity\Institution
