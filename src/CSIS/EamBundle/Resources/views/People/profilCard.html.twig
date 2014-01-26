@@ -12,20 +12,41 @@
 
 {# Definition des bouttons #}
 {% if is_granted("ROLE_GEST_LAB") %}
+
     <div class="pull-right">
+
+        {% if is_granted("ROLE_GEST_PEOPLE") %}
+            {% if not people.hasUserAccount %}
+                <div class="span4">
+                    <a href="{{ path('people_create_useraccount', { 'id': people.id }) }}" class="btn btn-warning btn-block" data-toggle="tooltip" title="Créer un compte pour le contact">
+                        <i class="icon-arrow-up icon-white"></i>
+                        Créer un compte pour le contact
+                    </a>
+                </div>
+            {% else %}
+                <div class="span3">
+                    <a href="{{ path('csis_user_show', { 'username': people.useraccount.username }) }}" class="btn btn-info btn-block" data-toggle="tooltip" title="Accéder à la fiche utilisateur">
+                        <i class="icon-lock icon-white"></i>
+                        Accéder à la fiche utilisateur
+                    </a>
+                </div>
+            {% endif %}
+        {% endif %}
+
         <div class="span2">
             <a href="{{ path('people_edit', { 'id': people.id }) }}" class="btn btn-success btn-block" data-toggle="tooltip" title="Modifier le contact">
                 <i class="icon-edit icon-white"></i>
-                Modifier
+                Modifier le contact
             </a>
         </div>
 
-        <div class="span2">
+        <div class="span3">
             <a href="{{ path('people_ask_delete', { 'id': people.id }) }}" class="btn btn-danger btn-block" data-toggle="tooltip" title="Supprimer le contact">
                 <i class="icon-trash icon-white"></i>
-                Supprimer
+                Supprimer le contact
             </a>
         </div>
+
     </div>
 {% endif %}
 <p><br/></p>

@@ -4,7 +4,7 @@ namespace CSIS\EamBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use CSIS\EamBundle\Entity\People;
@@ -268,7 +268,7 @@ class PeopleController extends Controller
             // On lie l'attribut email
             $user->setEmail($user->getEmail());
 
-            // On génère un login, en s'assurant qu'il n'existe pas 
+            // On génère un login, en s'assurant qu'il n'existe pas
             $username=$user->getFirstName() . '.' . $user->getLastName();
             $num=1;
             while($em->getRepository('CSISUserBundle:User')->findByUsername($username))
@@ -285,7 +285,7 @@ class PeopleController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('notice', 'Un compte utilisateur a été créé pour le contact ' . $people . '<' . $people->getEmail() . '> ! Vous pouvez définir ou modifier les données de cette page.');
+            $this->get('session')->getFlashBag()->add('notice', 'Un compte utilisateur a été créé pour le contact ' . $people . ' <' . $people->getEmail() . '> ! Vous pouvez définir ou modifier les données de cette page.');
 
             return $this->redirect($this->generateUrl('csis_user_edit', array('username' => $user->getUsername())));
         }

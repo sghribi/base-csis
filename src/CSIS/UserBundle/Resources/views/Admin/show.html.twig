@@ -18,13 +18,16 @@
 
   <form action="{{ path('csis_user_delete', {'username': user.username}) }}" {{ form_enctype(delete_form) }} method="POST">
     <a href="{{ path('csis_user_index') }}" class="btn">
-      <i class="icon-chevron-left"></i>&nbsp;retour
+      <i class="icon-chevron-left"></i>&nbsp;Retour liste utilisateurs
     </a>
     <a href="{{ path('csis_user_edit', {'username': user.username}) }}" class="btn btn-success">
-      <i class="icon-edit icon-white"></i>&nbsp;modifier
+      <i class="icon-edit icon-white"></i>&nbsp;Modifier l'utilisateur
+    </a>
+      <a href="{{ path('people_show', {'id': user.datas.id}) }}" class="btn btn-info">
+      <i class="icon-info-sign icon-white"></i>&nbsp;Accéder fiche contact
     </a>
     <button type="submit" class="btn btn-warning">
-      <i class="icon-trash icon-white"></i>&nbsp;supprimer
+      <i class="icon-trash icon-white"></i>&nbsp;Supprimer l'utilisateur et le contact
     </button>
     {{ form_rest(delete_form) }}
   </form>
