@@ -31,8 +31,8 @@ class User extends BaseUser {
     protected $institution;
 
     /**
-     * @ORM\OneToOne(targetEntity="CSIS\EamBundle\Entity\People", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="CSIS\EamBundle\Entity\People", cascade={"persist","remove"})
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     protected $datas;
     
