@@ -18,7 +18,6 @@ class UserRepository extends EntityRepository {
     
     public function findBySuperiorOrderByNamePaginated(User $user,$start, $limit) {
         $qb = $this->createQueryBuilder('u');
-        $qb = $this->qbBySuperior($qb, $user);
         $qb = $this->qbOrderByName($qb);
         $qb = $this->qbPaginate($qb, $start, $limit);
         
@@ -100,18 +99,9 @@ class UserRepository extends EntityRepository {
         
     }
     
-    private function qbBySuperior(QueryBuilder $qb, User $user) {
-        return $qb->leftJoin('u.lab', 'l')
-                  ->leftJoin('u.institution', 'i')
-                  ->leftJoin('l.institution', 'i2')
-                  ->orWhere(':user MEMBER OF l.owners')
-                  ->orWhere(':user MEMBER OF i.owners')
-                  ->orWhere(':user MEMBER OF i2.owners')
-                  ->setParameter('user', $user);
-    }
-
     private function qbOrderByName(QueryBuilder $qb) {
-        return $qb->orderBy('u.lastName, u.firstName', 'ASC');
+        return $qb->innerJoin('u.datas', 'd', 'WITH', 'u.datas = d.id')
+                  ->orderBy('d.name, d.firstname', 'ASC');
     }
 
     private function qbPaginate(QueryBuilder $qb, $start, $limit) {
