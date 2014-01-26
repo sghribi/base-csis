@@ -21,24 +21,6 @@ class User extends BaseUser {
     protected $id;
     
     /**
-     * @ORM\Column(type="string", length=255)
-     *
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
-     * @Assert\MinLength(limit="3", message="The name is too short.", groups={"Registration", "Profile"})
-     * @Assert\MaxLength(limit="255", message="The name is too long.", groups={"Registration", "Profile"})
-     */
-    protected $firstName;
-    
-    /**
-     * @ORM\Column(type="string", length=255)
-     *
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
-     * @Assert\MinLength(limit="3", message="The name is too short.", groups={"Registration", "Profile"})
-     * @Assert\MaxLength(limit="255", message="The name is too long.", groups={"Registration", "Profile"})
-     */
-    protected $lastName;
-    
-    /**
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Laboratory")
      */
     protected $lab;
@@ -47,7 +29,19 @@ class User extends BaseUser {
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Institution")
      */
     protected $institution;
+
+    /**
+     * @ORM\OneToOne(targetEntity="CSIS\EamBundle\Entity\People", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $datas;
     
+    public function __construct()
+    {
+        parent::__construct();
+        $this->datas = new \CSIS\EamBundle\Entity\People();
+    }
+
     public function __toString() {
         return $this->lastName . ' ' . $this->firstName;
     }
@@ -59,13 +53,35 @@ class User extends BaseUser {
     public function getId() {
         return $this->id;
     }
+
+    /**
+     * Get the email
+     * @return string
+     */
+    public function getEmail() {
+        return $this->datas->getEmail();
+    }
     
+
+    /**
+     * Set the email
+     * @param string $email
+     * @return \CSIS\UserBundle\Entity\User
+     */
+    public function setEmail($email) {
+        // Ceci permet la synchronisation des mails entre l'entité User et l'entité People. C'est nécessaire.
+        $this->email = $email ;
+        $this->datas->setEmail($email);
+        
+        return $this;
+    }
+
     /**
      * Get the user's first name
      * @return string
      */
     public function getFirstName() {
-        return $this->firstName;
+        return $this->datas->getFirstname();
     }
 
     /**
@@ -74,7 +90,7 @@ class User extends BaseUser {
      * @return \CSIS\UserBundle\Entity\User
      */
     public function setFirstName($firstName) {
-        $this->firstName = $firstName;
+        $this->datas->setFirstname($firstName);
         
         return $this;
     }
@@ -84,7 +100,7 @@ class User extends BaseUser {
      * @return sring
      */
     public function getLastName() {
-        return $this->lastName;
+        return $this->datas->getName();
     }
 
     /**
@@ -93,7 +109,7 @@ class User extends BaseUser {
      * @return \CSIS\UserBundle\Entity\User
      */
     public function setLastName($lastName) {
-        $this->lastName = $lastName;
+        $this->datas->setName($lastName);
         
         return $this;
     }
@@ -143,5 +159,28 @@ class User extends BaseUser {
         });
         
         return $roles;
+    }
+
+    /**
+     * Set datas
+     *
+     * @param \CSIS\EamBundle\Entity\People $datas
+     * @return User
+     */
+    public function setDatas(\CSIS\EamBundle\Entity\People $datas)
+    {
+        $this->datas = $datas;
+
+        return $this;
+    }
+
+    /**
+     * Get datas
+     *
+     * @return \CSIS\EamBundle\Entity\People 
+     */
+    public function getDatas()
+    {
+        return $this->datas;
     }
 }
