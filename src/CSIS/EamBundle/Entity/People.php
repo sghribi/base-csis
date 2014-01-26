@@ -226,4 +226,17 @@ class People
     {
         return $this->userAccount;
     }
+
+    /**
+     * Has user account ?
+     * @return bool
+     */
+    public function hasUserAccount()
+    {
+        if ($this->userAccount == null)
+        {
+            return false;
+        }
+        return true;
+    }
 }

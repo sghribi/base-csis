@@ -36,10 +36,18 @@ class User extends BaseUser {
      */
     protected $datas;
     
-    public function __construct()
+    public function __construct(\CSIS\EamBundle\Entity\People $people = null)
     {
-        parent::__construct();
-        $this->datas = new \CSIS\EamBundle\Entity\People();
+        if ($people == null)
+        {
+            parent::__construct();
+            $this->datas = new \CSIS\EamBundle\Entity\People();
+        }
+        else
+        {
+            parent::__construct();
+            $this->datas = $people;
+        }
     }
 
     public function __toString() {

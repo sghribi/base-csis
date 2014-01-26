@@ -3,7 +3,7 @@ people:
     defaults: { _controller: "CSISEamBundle:People:index", page: 1 }
     requirements:
         page: \d+
-        
+
 people_show:
     pattern:  /{id}/show
     defaults: { _controller: "CSISEamBundle:People:show" }
@@ -25,7 +25,7 @@ people_update:
     pattern:  /{id}/update
     defaults: { _controller: "CSISEamBundle:People:update" }
     requirements: { _method: post }
-    
+
 people_ask_delete:
     pattern:  /{id}/ask_delete
     defaults: { _controller: "CSISEamBundle:People:askDelete" }
@@ -33,6 +33,10 @@ people_ask_delete:
 people_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "CSISEamBundle:People:delete" }
+
+people_create_useraccount:
+    pattern:  /{id}/create_useraccount
+    defaults: { _controller: "CSISEamBundle:People:createUserAccount" }
 
 people_autocomplete:
     pattern:  /autocomplete

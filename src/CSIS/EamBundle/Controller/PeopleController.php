@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use CSIS\EamBundle\Entity\People;
+use CSIS\UserBundle\Entity\User;
 use CSIS\EamBundle\Form\PeopleType;
 
 /**
@@ -230,5 +231,63 @@ class PeopleController extends Controller
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+
+
+    /**
+     * Create an User Account for a a People entity.
+     * @Secure(roles="ROLE_GEST_PEOPLE")
+     */
+    public function createUserAccountAction(People $people)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$people) {
+            throw $this->createNotFoundException('Unable to find People entity.');
+        }
+
+        // Cas où le compte possède déjà un compte utilisateur
+        if ($people->hasUserAccount())
+        {
+            $user = $people->getUserAccount();
+
+            $this->get('session')->getFlashBag()->add('notice', 'Le contact ' . $people . ' possède déjà un compte utilisateur. Cette page permet de modifier ce compte utilisateur.');
+
+            return $this->redirect($this->generateUrl('csis_user_edit', array('username' => $user->getUsername())));
+        }
+
+        // Sinon, on va sur le formulaire pour créer un compte utilisateur
+        else
+        {
+            // On crée un nouvel utilisateur
+            $user = new User($people);
+
+            // On lie le People et l'User
+            $people->setUserAccount($user);
+
+            // On lie l'attribut email
+            $user->setEmail($user->getEmail());
+
+            // On génère un login, en s'assurant qu'il n'existe pas 
+            $username=$user->getFirstName() . '.' . $user->getLastName();
+            $num=1;
+            while($em->getRepository('CSISUserBundle:User')->findByUsername($username))
+            {
+                $num++;
+                $username = $user->getFirstName() . '.' . $user->getLastName() . $num;
+            }
+            $user->setUsername($username);
+
+            // On génère un mot de passe aléatoire
+            $user->setPassword(uniqid());
+
+            $em->persist($people);
+            $em->persist($user);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('notice', 'Un compte utilisateur a été créé pour le contact ' . $people . '<' . $people->getEmail() . '> ! Vous pouvez définir ou modifier les données de cette page.');
+
+            return $this->redirect($this->generateUrl('csis_user_edit', array('username' => $user->getUsername())));
+        }
     }
 }
