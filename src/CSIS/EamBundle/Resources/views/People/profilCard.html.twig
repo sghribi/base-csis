@@ -40,11 +40,25 @@
             </a>
         </div>
 
-        <div class="span3">
-            <a href="{{ path('people_ask_delete', { 'id': people.id }) }}" class="btn btn-danger btn-block" data-toggle="tooltip" title="Supprimer le contact">
-                <i class="icon-trash icon-white"></i>
-                Supprimer le contact
-            </a>
+        <div class="span4">
+            {% if people.hasUserAccount %}
+                {% if is_granted("ROLE_GEST_PEOPLE") %}
+                    <a href="{{ path('people_ask_delete', { 'id': people.id }) }}" class="btn btn-danger btn-block" data-toggle="tooltip" title="Supprimer l'utilisateur et le contact">
+                        <i class="icon-trash icon-white"></i>
+                        Supprimer l'utilisateur et le contact
+                    </a>
+                {% else %}
+                    <a href="#" class="btn btn-danger btn-block disabled" data-toggle="tooltip" title="Vous n'avez pas les droits suffisant pour supprimer l'utilisateur et le contact">
+                        <i class="icon-trash icon-white"></i>
+                        Supprimer l'utilisateur et le contact
+                    </a>
+                {% endif %}
+            {% else %}
+                    <a href="{{ path('people_ask_delete', { 'id': people.id }) }}" class="btn btn-danger btn-block" data-toggle="tooltip" title="Supprimer le contact">
+                        <i class="icon-trash icon-white"></i>
+                        Supprimer le contact
+                    </a>
+            {% endif %}
         </div>
 
     </div>

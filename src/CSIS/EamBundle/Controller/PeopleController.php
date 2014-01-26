@@ -171,7 +171,14 @@ class PeopleController extends Controller
         else
         {
             // Message de confirmation
-            $message = 'Etes-vous sûr de bien vouloir supprimer le contact <strong>'.$people->getEmail().'</strong> ?';
+            if ($people->hasUserAccount())
+            {
+                $message = 'Êtes-vous sûr de bien vouloir supprimer le contact <strong>'.$people->getEmail().'</strong> et le compte utilisateur <strong>' . $people->getUserAccount()->getUsername() . '</strong> associé ?';
+            }
+            else
+            {
+                $message = 'Êtes-vous sûr de bien vouloir supprimer le contact <strong>'.$people->getEmail().'</strong> ?';
+            }
             $message .= '&nbsp;&nbsp<a href="' . $this->generateUrl('people_delete', array('id' => $people->getId())) . '">Oui</a>';
             $message .= '&nbsp;&nbsp<a href="' . $this->generateUrl('people') . '">Non</a>';
             $this->get('session')->getFlashBag()->add('main_valid',  $message);

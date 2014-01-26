@@ -24,10 +24,11 @@
 
       <table class="table table-striped table-hover" style="max-height:400px;overflow:auto">
         <thead>
-          <tr>
+          <tr style='text-align: center;'>
             <th>Nom</th>
             <th>e-mail</th>
             <th>n° Tel.</th>
+            <th>Compte utilisateur</th>
             <th colspan="3">Actions</th>
           </tr>
         </thead>
@@ -38,10 +39,31 @@
             <td>{{ people.name }} {{ people.firstname }}</td> {# Nom du contact #}
             <td>{{ people.email }}</td> {# email du contact #}
             <td>{{ people.phoneNumber }}</td> {# téléphone du contact #}
-            <td><a href="{{ path('people_show', { 'id': people.id }) }}" class="icon-eye-open" data-toggle="tooltip" title="Afficher" ></a></td> {# Afficher #}
+            <td style='text-align: center;'>
+                {% if people.useraccount is null %}
+                  {% if is_granted("ROLE_GEST_PEOPLE") %}
+                    <a href="{{ path('people_create_useraccount', { 'id': people.id }) }}" class="icon-arrow-up" data-toggle="tooltip" title="Créer un compte pour le contact"></a>
+                  {% else%}
+                    <i class="icon-ban-circle" data-toggle="tooltip" title="Aucun compte utilisateur associé"/>
+                  {% endif %}
+                {% else %}
+                  {% if is_granted("ROLE_GEST_PEOPLE") %}
+                    <a href="{{ path('csis_user_show', { 'username': people.useraccount.username }) }}" data-toggle="tooltip" title="Accéder à la fiche utilisateur">{{ people.useraccount.username }}</a>
+                  {% else%}
+                    {{ people.useraccount.username }}
+                  {% endif %}
+                {% endif %}
+            </td> {# login du compte user associé #}
+            <td><a href="{{ path('people_show', { 'id': people.id }) }}" class="icon-eye-open"  title="Afficher" ></a></td> {# Afficher #}
           {% if is_granted("ROLE_GEST_PEOPLE") %}
             <td><a href="{{ path('people_edit', { 'id': people.id }) }}" class="icon-edit" data-toggle="tooltip" title="Modifier" ></a></td> {# Modifier #}
-            <td><a href="{{ path('people_ask_delete', { 'id': people.id }) }}" class="icon-trash" data-toggle="tooltip" title="Supprimer" ></a></td> {# Supprimer #}
+            <td>
+              {% if people.useraccount is null %}
+                <a href="{{ path('people_ask_delete', { 'id': people.id }) }}" class="icon-trash" data-toggle="tooltip" title="Supprimer le contact" ></a>
+              {% else %}
+                <a href="{{ path('people_ask_delete', { 'id': people.id }) }}" class="icon-trash" data-toggle="tooltip" title="Supprimer l'utilisateur et le contact" ></a>
+              {% endif %}
+            </td> {# Supprimer #}
           {% endif %}
           </tr>
         {% else %}
