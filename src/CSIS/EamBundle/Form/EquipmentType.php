@@ -33,12 +33,14 @@ class EquipmentType extends AbstractType
                 'attr' => array(
                     'class' => 'span5',
                 ),
+                'required' => false,
             ))
             ->add('type', 'text', array(
                 'label' => 'Type :',
                 'attr' => array(
                     'class' => 'span5',
                 ),
+                'required' => false,
             ))
             ->add('url', 'url', array(
                 'label' => 'Url :',
@@ -80,18 +82,21 @@ class EquipmentType extends AbstractType
                 'attr' => array(
                     'class' => 'span5',
                 ),
+                'required' => false,
             ))
             ->add('floor', 'text', array(
                 'label' => 'Étage :',
                 'attr' => array(
                     'class' => 'span5',
                 ),
+                'required' => false,
             ))
             ->add('room', 'text', array(
                 'label' => 'Salle :',
                 'attr' => array(
                     'class' => 'span5',
                 ),
+                'required' => false,
             ))
             ->add('contacts', 'collection', array(
                 'type' => 'csis_people_selector',
