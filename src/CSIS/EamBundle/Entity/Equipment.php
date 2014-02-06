@@ -127,7 +127,7 @@ class Equipment
     /**
      * @var CSISEamBundle\Entity\Tag
      * 
-     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Tag")
+     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Tag", cascade={"persist"})
      */
     private $tags;
 

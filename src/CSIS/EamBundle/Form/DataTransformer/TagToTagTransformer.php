@@ -82,12 +82,36 @@ class TagToTagTransformer implements DataTransformerInterface
             $this->om->persist($tag);
             $this->om->flush();
 
-            $this->session->getFlashBag()->set(
+            $this->session->getFlashBag()->add(
                     'main_valid',
                     sprintf('Une demande de validation a été éffectuées au près des administrateurs pour valider le tag "%s".', $tag_name)
             );
-        }
 
+            /** ATTENTION
+             * CECI est une faille potentielle
+             * La récupération de l'id de l'équipement ne devrait pas se faire par l'URL mais par un passage de paramètres
+             * A modifier dès qu'une solution est trouvée
+             */
+            try
+            {
+                // On récupère l'id de l'équipement en cours
+                $id_equipement = (int)preg_split("/[\/]+/", $_SERVER['REQUEST_URI'])[2];
+                
+                // On récupère l'équipement
+                $equipement = $this->om
+                ->getRepository('CSISEamBundle:Equipment')
+                ->findOneBy(array( 'id' => $id_equipement ))
+                 ;
+
+                 // On lie l'équipement et le tag
+                 $equipement->addTag($tag);
+                 $this->om->persist($equipement);
+                 $this->om->flush();
+            } catch (\Exception $e)
+            {
+                $this->session->getFlashBag()->add('main_valid', 'Une erreur s\'est produite dans l\'association du tag et de l\'equipement');
+            }
+        }
         return $tag;
     }
 
