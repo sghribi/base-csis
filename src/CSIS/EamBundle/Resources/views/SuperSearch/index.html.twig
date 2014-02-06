@@ -234,6 +234,13 @@
           });
         }
     });
+    $(document).ready(function() {
+      // On coche ET par défaut dès qu'on remplit un champ
+      $('#csis_eambundle_supersearchtype_form{{ i }}_tag').bind("change paste keyup",function () { 
+      $('#csis_eambundle_supersearchtype_form{{ i }}_booleans_0').attr('checked', $('#csis_eambundle_supersearchtype_form{{ i }}_tag').val() != null);
+     });
+  });
+
     {% endfor %}
   });
 </script>
