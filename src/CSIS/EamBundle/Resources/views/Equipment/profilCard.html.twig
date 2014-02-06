@@ -12,21 +12,21 @@
 	<dl class="span3">
 	  <dt>Marque</dt>
 	  <dd>
-	  	{% if equipment.brand is not empty %}
-	  		{{ equipment.brand }}
-	  	{% else %}
-	  		<span class="muted">Aucune info</span>
-	  	{% endif %}
+		{% if equipment.brand is not empty %}
+			{{ equipment.brand }}
+		{% else %}
+			<span class="muted">Aucune info</span>
+		{% endif %}
 	  </dd>
 	</dl>
 	<dl class="span4">
 	  <dt>Type</dt>
 	  <dd>
-	 	{% if equipment.type is not empty %}
-	  		{{ equipment.type }}
-	  	{% else %}
-	  		<span class="muted">Aucune info</span>
-	  	{% endif %}
+		{% if equipment.type is not empty %}
+			{{ equipment.type }}
+		{% else %}
+			<span class="muted">Aucune info</span>
+		{% endif %}
 	  </dd>
 	</dl>
 </div>
@@ -35,9 +35,9 @@
   <dt>Adresse Web</dt>
   <dd>
 	  {% if equipment.url is not empty %}
-	  	<a href="{{ equipment.url }}" target="_blank">{{ equipment.url }}</a>
+		<a href="{{ equipment.url }}" target="_blank">{{ equipment.url }}</a>
 	  {% else %}
-	  	<span class="muted">Aucune adresse Web</span>
+		<span class="muted">Aucune adresse Web</span>
 	  {% endif %}
    </dd>
 </dl>
@@ -45,10 +45,16 @@
 <dl>
   <dt>Tags</dt>
   <dd>
-  	{% if equipment.tags is not empty %}
-  	<ul class="inline">
-	  	{% for tag in equipment.tags %}
-			<li>{{ tag }}</li>
+	{% if equipment.tags is not empty %}
+	<ul class="inline">
+		{# Tri par ordre alphabétique #}
+		{% set tagCanonical={} %}
+		{% for tag in equipment.tags %}
+			{% set tagCanonical={ (tag.tag) : (tag.tagCanonical) }|merge(tagCanonical) %}
+		{% endfor %}
+
+		{% for name, nameCanonical in tagCanonical|sort %}
+			<li>{{ name }}</li>
 		{% endfor %}
 	</ul>
 	{% else %}
