@@ -16,6 +16,7 @@
           <th>login</th>
           <th>Email</th>
           <th colspan="2">Actions</th>
+          <th>État</th>
         </tr>
       </thead>
       <tbody>
@@ -34,6 +35,13 @@
             <a href="{{ path('csis_user_edit', {'username' : user.username}) }}" data-toggle="tooltip" title="Modifier">
               <i class="icon-edit"></i>
             </a>
+          </td>
+          <td>
+            {% if user.enabled %}
+              <i class='icon icon-ok' data-toggle="tooltip" title="Compte activé"></i>
+            {% else %}
+              <i class='icon icon-ban-circle' data-toggle="tooltip" title="Compte désactivé"></i>
+            {% endif %}
           </td>
         </tr>
       {% else %}
