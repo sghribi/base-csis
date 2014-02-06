@@ -77,7 +77,7 @@ class RegistrationFormType extends BaseProfileFormType {
           $roles[$role_class->getRole()] = ucwords(strtolower(str_replace('_', ' ', substr($role_class->getRole(), 5)))); 
         }
         // Supprime tous les doublons et on ne garde que les rôles frontaux
-        $authorized_role = array('Admin', 'Gest Estab', 'Gest Lab', 'Gest Equip', 'Gest Tags', 'Gest Category');
+        $authorized_role = array('User', 'Admin', 'Gest Estab', 'Gest Lab', 'Gest Equip', 'Gest Tags', 'Gest Category');
         $roles = array_intersect(array_unique($roles), $authorized_role);
         
         $formOptions = array(
