@@ -151,7 +151,9 @@ SQL;
     {
         $qb = $this->createQueryBuilder('t');
 
+        // On ne recherche que les tags validés ou en attente
         $qb->where($qb->expr()->like('t.tag', ':tag'))
+            ->andWhere('t.status = 0 OR t.status = 1')
                 ->orderBy('t.tag')
                 ->setParameter('tag', '%' . $tag . '%')
                 ->setFirstResult(0)
