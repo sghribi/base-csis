@@ -21,6 +21,7 @@ class InstitutionType extends AbstractType {
                 ->add('url', 'text', array(
                     'label' => 'Site web',
                     'attr' => array('class' => 'span7',),
+                    'required' => false,
                 ))
                 ->add('description', 'textarea', array(
                     'label' => 'description',
@@ -28,6 +29,7 @@ class InstitutionType extends AbstractType {
                         class' => 'span7',
                         'rows' => 10,
                     ),
+                    'required' => false,
                 ))
         ;
     }
