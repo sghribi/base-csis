@@ -86,6 +86,7 @@ class TagController extends Controller
                 return $this->redirect($this->generateUrl('tag'));
             } else {
                 $this->get('session')->getFlashBag()->add('error', 'Le tag  <strong>' . $entity->getTag() . '</strong> existe déjà.');
+                return $this->redirect($this->generateUrl('tag'));
             }
         }
 
