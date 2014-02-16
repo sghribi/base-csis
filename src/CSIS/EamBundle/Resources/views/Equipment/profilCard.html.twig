@@ -45,11 +45,20 @@
 <dl>
   <dt>Tags</dt>
   <dd>
+
+	{# On n'affiche que les tags valides #}
+	{% set tags=[] %}
+	{% for tag in equipment.tags %}
+		{% if tag.status == 1 %}
+			{% set tags=[tag]|merge(tags) %}
+		{% endif %}
+	{% endfor %}
+
 	{% if equipment.tags is not empty %}
 	<ul class="inline">
 		{# Tri par ordre alphabétique #}
 		{% set tagCanonical={} %}
-		{% for tag in equipment.tags %}
+		{% for tag in tags %}
 			{% set tagCanonical={ (tag.tag) : (tag.tagCanonical) }|merge(tagCanonical) %}
 		{% endfor %}
 

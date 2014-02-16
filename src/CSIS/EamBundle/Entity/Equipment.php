@@ -437,13 +437,7 @@ class Equipment
      */
     public function getTags()
     {
-        $tags = new ArrayCollection();
-        foreach ( $this->tags as $tag ) {
-            if ( $tag->getStatus() ) {
-                $tags->add($tag);
-            }
-        }
-        return $tags;
+        return $this->tags;
     }
 
     /**
