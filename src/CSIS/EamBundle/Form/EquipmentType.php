@@ -114,6 +114,7 @@ class EquipmentType extends AbstractType
                 'class' => 'CSISEamBundle:Category',
                 'property' => 'name',
                 'multiple' => true,
+                'required' => false,
             ))
     ;
   }
