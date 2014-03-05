@@ -42,17 +42,6 @@
     <ul>
       <li><a href="{{ path('people') }}">Accéder à la liste des contacts</a></li>
       <li><a href="{{ path('people_new') }}">Créer un nouveau contact</a></li>
-      <li>Liste de contacts :</li>
-        <ul class="inline">
-        {% for people in peoples %}
-          <li><a href="{{ path('people_show', { 'id': people.id }) }}">{{ people }}</a></li>
-        {% else %}
-          <li>Aucun(s)</li>
-        {% endfor %}
-        {% if peoples_sup %}
-          <li><em><a href="{{ path('people') }}">Suite ...</a></em></li>
-        {% endif %}
-      </ul>
     </ul>
   {% endif %}
   </div>
@@ -63,18 +52,6 @@
     <ul>
       <li><a href="{{ path('institution') }}">Accéder à la liste de mes établissements</a></li>
       <li><a href="{{ path('institution_new') }}">Créer un nouvel établissement</a></li>
-      <li>Liste d'établissements :</li>
-
-      <ul class="inline">
-        {% for institution in institutions %}
-          <li><a href="{{ path('institution_show', { 'id': institution.id }) }}">{{ institution.acronym }}</a></li>
-        {% else %}
-          <li>Aucun(s)</li>
-        {% endfor %}
-        {% if institutions_sup %}
-          <li><em><a href="{{ path('institution') }}">Suite ...</a></em></li>
-        {% endif %}
-      </ul>
     </ul>
   {% endif %}
 
@@ -84,19 +61,7 @@
     <ul>
       <li><a href="{{ path('laboratory') }}">Accéder à la liste de mes laboratoires</a></li>
       <li><a href="{{ path('laboratory_new') }}">Créer un nouveau laboratoire</a></li>
-      <li>Liste de laboratoires :</li>
-
-      <ul class="inline">
-        {% for lab in labs %}
-          <li><a href="{{ path('laboratory_show', { 'id': lab.id }) }}">{{ lab.acronym }}</a></li>
-        {% else %}
-          <li>Aucun(s)</li>
-        {% endfor %}
-        {% if labs_sup %}
-          <li><em><a href="{{ path('laboratory') }}">Suite ...</a></em></li>
-        {% endif %}
-      </ul>
-    </ul>
+         </ul>
   {% endif %}
 
   {% if is_granted("ROLE_GEST_EQUIP") %}
@@ -105,17 +70,6 @@
     <ul>
       <li><a href="{{ path('equipment') }}">Accéder à la liste de mes équipements</a></li>
       <li><a href="{{ path('equipment_new') }}">Créer un nouvel équipement</a></li>
-      <li>Liste d'équipements :</li>
-      <ul class="inline">
-        {% for equipment in equipments %}
-          <li><a href="{{ path('equipment_show', { 'id': equipment.id }) }}">{{ equipment.designation }}</a></li>
-        {% else %}
-          <li>Aucun(s)</li>
-        {% endfor %}
-        {% if equipments_sup %}
-          <li><em><a href="{{ path('equipment') }}">Suite...</a></em></li>
-        {% endif %}
-      </ul>
     </ul>
   {% endif %}
   </div>
