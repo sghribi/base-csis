@@ -10,7 +10,17 @@
       <li><a href="{{ path("fos_user_resetting_request") }}">Changer mon mot de passe</a></li>
      </ul>
     
-    {% if is_granted("ROLE_GEST_USER") %}
+    
+     {% if is_granted("ROLE_GEST_PEOPLE") %}
+    <hr />
+    <h4>Gestion des Contacts et Utilisateurs</h4>
+    <ul>
+      <li><a href="{{ path('people') }}">Accéder à la liste des contacts</a></li>
+      <li><a href="{{ path('people_new') }}">Créer un nouveau contact</a></li>
+    </ul>
+  {% endif %}
+
+  {% if is_granted("ROLE_GEST_USER") %}
     <ul>
       <li><a href="{{ path("fos_user_registration_register") }}">Créer un nouvel utilisateur</a></li>
       <li><a href="{{ path("csis_user_index") }}">Administrer mes utilisateurs</a></li>
@@ -35,15 +45,6 @@
     </ul>
   {% endif %}
     
-      
-  {% if is_granted("ROLE_GEST_PEOPLE") %}
-    <hr />
-    <h4>Contacts</h4>
-    <ul>
-      <li><a href="{{ path('people') }}">Accéder à la liste des contacts</a></li>
-      <li><a href="{{ path('people_new') }}">Créer un nouveau contact</a></li>
-    </ul>
-  {% endif %}
   </div>
 
   <div class="span5">
