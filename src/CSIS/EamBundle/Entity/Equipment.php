@@ -26,6 +26,11 @@ class Equipment
      */
     private $id;
 
+     /**
+      * @ORM\OneToMany(targetEntity="CSIS\EamBundle\Entity\EquipmentTag", cascade={"persist"}, mappedBy="equipment")
+      */
+    private $equipmentTags;
+
     /**
      * @var string
      *
@@ -125,13 +130,6 @@ class Equipment
     private $categories;
 
     /**
-     * @var CSISEamBundle\Entity\Tag
-     * 
-     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Tag", cascade={"persist"})
-     */
-    private $tags;
-
-    /**
      * @var CSISUserBundle\Entity\User
      * 
      * @ORM\ManyToMany(targetEntity="CSIS\UserBundle\Entity\User")
@@ -160,9 +158,10 @@ class Equipment
      */
     function __construct()
     {
+	    $this->equipmentTags = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->categories = new ArrayCollection();
-        $this->tags = new ArrayCollection();
         $this->owners = new ArrayCollection();
         $this->lastEditDate = new \DateTime();
     }
@@ -181,9 +180,9 @@ class Equipment
      * Set designation
      *
      * @param string $designation
-     * @return \CSIS\EamBundle\Entity\Equipment
+     * @return Equipment
      */
-    public function setDesignation( $designation )
+    public function setDesignation($designation)
     {
         $this->designation = $designation;
 
@@ -204,9 +203,9 @@ class Equipment
      * Set description
      *
      * @param string $description
-     * @return \CSIS\EamBundle\Entity\Equipment
+     * @return Equipment
      */
-    public function setDescription( $description )
+    public function setDescription($description)
     {
         $this->description = $description;
 
@@ -227,9 +226,9 @@ class Equipment
      * Set building
      *
      * @param string $building
-     * @return \CSIS\EamBundle\Entity\Equipment
+     * @return Equipment
      */
-    public function setBuilding( $building )
+    public function setBuilding($building)
     {
         $this->building = $building;
 
@@ -250,9 +249,9 @@ class Equipment
      * Set floor
      *
      * @param string $floor
-     * @return \CSIS\EamBundle\Entity\Equipment
+     * @return Equipment
      */
-    public function setFloor( $floor )
+    public function setFloor($floor)
     {
         $this->floor = $floor;
 
@@ -273,9 +272,9 @@ class Equipment
      * Set room
      *
      * @param string $room
-     * @return \CSIS\EamBundle\Entity\Equipment
+     * @return Equipment
      */
-    public function setRoom( $room )
+    public function setRoom($room)
     {
         $this->room = $room;
 
@@ -296,9 +295,9 @@ class Equipment
      * Set shared
      *
      * @param boolean $shared
-     * @return \CSIS\EamBundle\Entity\Equipment
+     * @return Equipment
      */
-    public function setShared( $shared )
+    public function setShared($shared)
     {
         $this->shared = $shared;
 
@@ -319,9 +318,9 @@ class Equipment
      * Set brand
      *
      * @param string $brand
-     * @return \CSIS\EamBundle\Entity\Equipment
+     * @return Equipment
      */
-    public function setBrand( $brand )
+    public function setBrand($brand)
     {
         $this->brand = $brand;
 
@@ -342,9 +341,9 @@ class Equipment
      * Set type
      *
      * @param string $type
-     * @return \CSIS\EamBundle\Entity\Equipment
+     * @return Equipment
      */
-    public function setType( $type )
+    public function setType($type)
     {
         $this->type = $type;
 
@@ -362,156 +361,22 @@ class Equipment
     }
 
     /**
-     * Get Laboratory
-     * 
-     * @return CSISEamBundle\Entity\Laboratory
+     * Set lastEditDate
+     *
+     * @param \DateTime $lastEditDate
+     * @return Equipment
      */
-    public function getLaboratory()
+    public function setLastEditDate($lastEditDate)
     {
-        return $this->laboratory;
-    }
-
-    /**
-     * Set Laboratory
-     * 
-     * @param Laboratory $laboraoty
-     * @return \CSIS\EamBundle\Entity\Equipment
-     */
-    public function setLaboratory( \CSIS\EamBundle\Entity\Laboratory $laboratory )
-    {
-        $this->laboratory = $laboratory;
+        $this->lastEditDate = $lastEditDate;
 
         return $this;
     }
 
     /**
-     * Get Contacts
-     * 
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getContacts()
-    {
-        return $this->contacts;
-    }
-
-    /**
-     * Set Contacts
-     * 
-     * @param \Doctrine\Common\Collections\ArrayCollection $contacts
-     * @return \CSIS\EamBundle\Entity\Equipment
-     */
-    public function setContacts( $contacts )
-    {
-        $this->contacts = $contacts;
-
-        return $this;
-    }
-
-    /**
-     * Get Categories
-     * 
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
-
-    /**
-     * Set Categories
-     * 
-     * @param \Doctrine\Common\Collections\ArrayCollection $categories
-     * @return \CSIS\EamBundle\Entity\Equipment
-     */
-    public function setCategories( $categories )
-    {
-        $this->categories = $categories;
-
-        return $this;
-    }
-
-    /**
-     * Get Tags
-     * 
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
-
-    /**
-     * Set Tags
-     * 
-     * @param \Doctrine\Common\Collections\ArrayCollection
-     * @return \CSIS\EamBundle\Entity\Equipment
-     */
-    public function setTags( $tags )
-    {
-        $this->tags = $tags;
-
-        return $this;
-    }
-
-    /**
-     * Get the owner
-     * 
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getOwners()
-    {
-        return $this->owners;
-    }
-
-    /**
-     * Set the owner
-     * 
-     * @param \Doctrine\Common\Collections\ArrayCollection $owner
-     * @return \CSIS\EamBundle\Entity\Equipment
-     */
-    public function setOwners( $owners )
-    {
-        if ( $owners instanceof ArrayCollection ) {
-            $this->owners = $owners;
-        } else if ( $owners instanceof User ) {
-            $this->owners->add($owners);
-        } else {
-            throw new \InvalidArgumentException('Expected ArrayCollection type or User type, ' . get_class($owners) . ' given.');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add a contact
-     * 
-     * @param \CSIS\EamBundle\Entity\CSISEamBundle\Entity\People $contact
-     * @return \CSIS\EamBundle\Entity\Equipment
-     */
-    public function addContact( $contact )
-    {
-        $this->contacts->add($contact);
-
-        return $this;
-    }
-
-    /**
-     * Remove a contact
-     * 
-     * @param \CSIS\EamBundle\Entity\CSISEamBundle\Entity\People $contact
-     * @return \CSIS\EamBundle\Entity\Equipment
-     */
-    public function removeContact( \CSIS\EamBundle\Entity\People $contact )
-    {
-        $this->contacts->removeElement($contact);
-
-        return $this;
-    }
-
-    /**
-     * Get the date
-     * 
-     * @return \DateTime()
+     * Get lastEditDate
+     *
+     * @return \DateTime 
      */
     public function getLastEditDate()
     {
@@ -519,39 +384,154 @@ class Equipment
     }
 
     /**
-     * Set the date
-     * 
-     * @param \DateTime $lastModificationDate
-     * @return \CSIS\EamBundle\Entity\Equipment
+     * Set url
+     *
+     * @param string $url
+     * @return Equipment
      */
-    public function setLastEditDate( \DateTime $lastEditDate )
+    public function setUrl($url)
     {
-        $this->lastEditDate = $lastEditDate;
+        $this->url = $url;
 
         return $this;
     }
-    
+
     /**
-     * Get the url
-     * 
-     * @return string
+     * Get url
+     *
+     * @return string 
      */
-    public function getUrl ()
+    public function getUrl()
     {
-      return $this->url;
+        return $this->url;
+    }
+
+
+    /**
+     * Get Tags
+     *
+     */
+    public function getTags()
+    {
+        $equipmentTags = $this->equipmentTags;
+
+        $tags= new ArrayCollection();
+
+        foreach ($equipmentTags as $equipmentTag)
+        {
+            $tags[] = $equipmentTag->getTag();
+        }
+
+        return $tags;
     }
 
     /**
-     * Set the url
-     * @param string $url
-     * @return \CSIS\EamBundle\Entity\Equipment
+     * Set Tags
+     *
+     * @author Samy
      */
-    public function setUrl ( $url )
+    public function setTags($tags)
     {
-      $this->url = $url;
-      return $this;
+        foreach ($tags as $tag)
+        {
+            $equipmentTag = new EquipmentTag();
+
+            $equipmentTag->setEquipment($this);
+            $equipmentTag->setTag($tag);
+
+            $this->addEquipmentTag($equipmentTag);
+        }
     }
-    
+
+    /**
+     * Add equipmentTags
+     *
+     * @param \CSIS\EamBundle\Entity\EquipmentTag $equipmentTags
+     * @return Equipment
+     */
+    public function addEquipmentTag(\CSIS\EamBundle\Entity\EquipmentTag $equipmentTags)
+    {
+        $this->equipmentTags[] = $equipmentTags;
+		addTagEquipment : $tagEquipments->setTag($this);
+        return $this;
+    }
+
+    /**
+     * Remove equipmentTags
+     *
+     * @param \CSIS\EamBundle\Entity\EquipmentTag $equipmentTags
+     */
+    public function removeEquipmentTag(\CSIS\EamBundle\Entity\EquipmentTag $equipmentTags)
+    {
+        $this->equipmentTags->removeElement($equipmentTags);
+		removeTagEquipment : $tagEquipment->setTag(null);
+    }
+
+    /**
+     * Get equipmentTags
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEquipmentTags()
+    {
+        return $this->equipmentTags;
+    }
+
+    /**
+     * Set laboratory
+     *
+     * @param \CSIS\EamBundle\Entity\Laboratory $laboratory
+     * @return Equipment
+     */
+    public function setLaboratory(\CSIS\EamBundle\Entity\Laboratory $laboratory)
+    {
+        $this->laboratory = $laboratory;
+
+        return $this;
+    }
+
+    /**
+     * Get laboratory
+     *
+     * @return \CSIS\EamBundle\Entity\Laboratory 
+     */
+    public function getLaboratory()
+    {
+        return $this->laboratory;
+    }
+
+    /**
+     * Add contacts
+     *
+     * @param \CSIS\EamBundle\Entity\People $contacts
+     * @return Equipment
+     */
+    public function addContact(\CSIS\EamBundle\Entity\People $contacts)
+    {
+        $this->contacts[] = $contacts;
+
+        return $this;
+    }
+
+    /**
+     * Remove contacts
+     *
+     * @param \CSIS\EamBundle\Entity\People $contacts
+     */
+    public function removeContact(\CSIS\EamBundle\Entity\People $contacts)
+    {
+        $this->contacts->removeElement($contacts);
+    }
+
+    /**
+     * Get contacts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
 
     /**
      * Add categories
@@ -577,26 +557,13 @@ class Equipment
     }
 
     /**
-     * Add tags
+     * Get categories
      *
-     * @param \CSIS\EamBundle\Entity\Tag $tags
-     * @return Equipment
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function addTag(\CSIS\EamBundle\Entity\Tag $tags)
+    public function getCategories()
     {
-        $this->tags[] = $tags;
-
-        return $this;
-    }
-
-    /**
-     * Remove tags
-     *
-     * @param \CSIS\EamBundle\Entity\Tag $tags
-     */
-    public function removeTag(\CSIS\EamBundle\Entity\Tag $tags)
-    {
-        $this->tags->removeElement($tags);
+        return $this->categories;
     }
 
     /**
@@ -620,5 +587,15 @@ class Equipment
     public function removeOwner(\CSIS\UserBundle\Entity\User $owners)
     {
         $this->owners->removeElement($owners);
+    }
+
+    /**
+     * Get owners
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOwners()
+    {
+        return $this->owners;
     }
 }

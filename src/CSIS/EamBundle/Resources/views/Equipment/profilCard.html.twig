@@ -8,7 +8,7 @@
   <dd>{{ equipment.description|nl2br }}</dd>
 </dl>
 
-<div class="row">
+<div class="row">	
 	<dl class="span3">
 	  <dt>Marque</dt>
 	  <dd>
@@ -45,7 +45,6 @@
 <dl>
   <dt>Tags</dt>
   <dd>
-
 	{# On n'affiche que les tags valides #}
 	{% set tags=[] %}
 	{% for tag in equipment.tags %}
@@ -69,5 +68,5 @@
 	{% else %}
 		<span class="muted">Aucun tag associé</span>
 	{% endif %}
-  </dd>
+	</dd>
 </dl>
