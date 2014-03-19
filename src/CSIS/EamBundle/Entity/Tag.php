@@ -22,7 +22,7 @@ class Tag {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+	
     /**
      * @var string
      *
@@ -35,6 +35,12 @@ class Tag {
      * ) 
      */
     private $tag;
+
+   /**
+    * @ORM\OneToMany(targetEntity="CSIS\EamBundle\Entity\EquipmentTag", cascade={"persist"}, mappedBy="tag")
+    * @ORM\JoinColumn(nullable=false)
+    */
+    private $tagEquipments;
 
     /**
      * @var boolean
@@ -51,11 +57,12 @@ class Tag {
      */
     private $lastEditDate;
 
-    /**
+        /**
      * Tag's constructor
      * Initialize the status to false (unpublished)
      */
     function __construct() {
+
         $this->status       = 0;
         $this->lastEditDate = new \DateTime();
     }
@@ -63,45 +70,26 @@ class Tag {
     public function __toString() {
         return $this->tag;
     }
-
+    
 
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
-    }
-
-    /**
-     * Set tag
-     *
-     * @param string $tag
-     * @return Tag
-     */
-    public function setTag($tag) {
-        $this->tag = $tag;
-
-        return $this;
-    }
-
-    /**
-     * Get tag
-     *
-     * @return string 
-     */
-    public function getTag() {
-        return $this->tag;
     }
 
     /**
      * Set status
      *
-     * @param boolean $status
+     * @param integer $status
      * @return Tag
      */
-    public function setStatus($status) {
+    public function setStatus($status)
+    {
         $this->status = $status;
 
         return $this;
@@ -112,37 +100,93 @@ class Tag {
      *
      * @return integer 
      */
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
     /**
-     * Get the date
-     * 
-     * @return \DateTime()
+     * Set lastEditDate
+     *
+     * @param \DateTime $lastEditDate
+     * @return Tag
      */
-    public function getLastEditDate() {
-        return $this->lastEditDate;
-    }
-
-    /**
-     * Set the date
-     * 
-     * @param \DateTime $lastModificationDate
-     * @return \CSIS\EamBundle\Entity\Tag
-     */
-    public function setLastEditDate(\DateTime $lastEditDate) {
+    public function setLastEditDate($lastEditDate)
+    {
         $this->lastEditDate = $lastEditDate;
 
         return $this;
     }
 
     /**
-     * Get canonical tag (without accent)
+     * Get lastEditDate
+     *
+     * @return \DateTime 
+     */
+    public function getLastEditDate()
+    {
+        return $this->lastEditDate;
+    }
+
+    /**
+     * Add tagEquipments
+     *
+     * @param \CSIS\EamBundle\Entity\EquipmentTag $tagEquipments
+     * @return Tag
+     */
+    public function addTagEquipment(\CSIS\EamBundle\Entity\EquipmentTag $tagEquipments)
+    {
+        $this->tagEquipments[] = $tagEquipments;
+		addEquipmentTag : $equipmentTags->setEquipment($this);
+        return $this;
+    }
+
+    /**
+     * Remove tagEquipments
+     *
+     * @param \CSIS\EamBundle\Entity\EquipmentTag $tagEquipments
+     */
+    public function removeTagEquipment(\CSIS\EamBundle\Entity\EquipmentTag $tagEquipments)
+    {
+        $this->tagEquipments->removeElement($tagEquipments);
+		removeEquipmentTag : $equipmentTag->setEquipment(null);
+    }
+
+    /**
+     * Get tagEquipments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTagEquipments()
+    {
+        return $this->tagEquipments;
+    }
+
+    /**
+     * Set tag
+     *
+     * @param string $tag
+     * @return Tag
+     */
+    public function setTag($tag)
+    {
+        $this->tag = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Get tag
      *
      * @return string 
      */
-    public function getTagCanonical() {
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    public function getTagCanonical()
+    {
 
         $tag = mb_strtolower($this->tag, 'UTF-8');
         $tag = str_replace(array(  'à', 'â', 'ä', 'á', 'ã', 'å',
@@ -163,5 +207,4 @@ class Tag {
                 );
         return $tag;
     }
-
 }
