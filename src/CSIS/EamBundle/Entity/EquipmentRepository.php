@@ -95,61 +95,64 @@ class EquipmentRepository extends EntityRepository {
 
     public function findSearchedEquipments($superSearch) {
         $stringResult = "SELECT e FROM CSISEamBundle:Equipment e ";
+        $stringResult .= "INNER JOIN e.equipmentTags et ";
         $stringResult .= "WHERE ";
         $stringResult .= $superSearch->getForm1()->getOpen();
-        $stringResult .= " :tag1 MEMBER OF e.tags";
+        $stringResult .= " :tag1 = et.tag";
 
 
         if ($superSearch->getForm2()->getTag() != "") {
             $stringResult .= " " . $superSearch->getForm2()->getBooleans();
             $stringResult .= " " . $superSearch->getForm2()->getOpen();
-            $stringResult .= " :tag2 MEMBER OF e.tags";
+            $stringResult .= " :tag2 = et.tag";
             $stringResult .= " " . $superSearch->getForm2()->getClose();
         }
 
         if ($superSearch->getForm3()->getTag() != "") {
             $stringResult .= " " . $superSearch->getForm3()->getBooleans();
             $stringResult .= " " . $superSearch->getForm3()->getOpen();
-            $stringResult .= " :tag3 MEMBER OF e.tags";
+            $stringResult .= " :tag3 = et.tag";
             $stringResult .= " " . $superSearch->getForm3()->getClose();
         }
 
         if ($superSearch->getForm4()->getTag() != "") {
             $stringResult .= " " . $superSearch->getForm4()->getBooleans();
             $stringResult .= " " . $superSearch->getForm4()->getOpen();
-            $stringResult .= " :tag4 MEMBER OF e.tags";
+            $stringResult .= " :tag4 = et.tag";
             $stringResult .= " " . $superSearch->getForm4()->getClose();
         }
 
         if ($superSearch->getForm5()->getTag() != "") {
             $stringResult .= " " . $superSearch->getForm5()->getBooleans();
             $stringResult .= " " . $superSearch->getForm5()->getOpen();
-            $stringResult .= " :tag5 MEMBER OF e.tags";
+            $stringResult .= " :tag5 = et.tag";
             $stringResult .= " " . $superSearch->getForm5()->getClose();
         }
 
         if ($superSearch->getForm6()->getTag() != "") {
             $stringResult .= " " . $superSearch->getForm6()->getBooleans();
             $stringResult .= " " . $superSearch->getForm6()->getOpen();
-            $stringResult .= " :tag6 MEMBER OF e.tags";
+            $stringResult .= " :tag6 = et.tag";
             $stringResult .= " " . $superSearch->getForm6()->getClose();
         }
 
         if ($superSearch->getForm7()->getTag() != "") {
             $stringResult .= " " . $superSearch->getForm7()->getBooleans();
             $stringResult .= " " . $superSearch->getForm7()->getOpen();
-            $stringResult .= " :tag7 MEMBER OF e.tags";
+            $stringResult .= " :tag7 = et.tag";
             $stringResult .= " " . $superSearch->getForm7()->getClose();
         }
 
         if ($superSearch->getForm8()->getTag() != "") {
             $stringResult .= " " . $superSearch->getForm8()->getBooleans();
             $stringResult .= " " . $superSearch->getForm8()->getOpen();
-            $stringResult .= " :tag8 MEMBER OF e.tags";
+            $stringResult .= " :tag8 = et.tag";
             $stringResult .= " " . $superSearch->getForm8()->getClose();
         }
 
         $query = $this->_em->createQuery($stringResult);
+
+        print_r($stringResult);
 
         $repo = $this->_em->getRepository('CSISEamBundle:Tag');
         $tag = $repo->findOneByTag($superSearch->getForm1()->getTag());
