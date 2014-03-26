@@ -65,7 +65,7 @@ SQL;
         $rsm->addScalarResult('nb', 'nb');
 
         $query = $this->_em->createNativeQuery(
-                'SELECT id, tag, status, count(equipment_id) as nb '
+                'SELECT tag.id, tag, tag.status, count(equipment_id) as nb '
                 . 'FROM `tag` LEFT JOIN  `equipment_tag` ON `tag`.id=`equipment_tag`.tag_id '
                 . 'GROUP BY id ORDER BY tag asc LIMIT ' . (($start - 1) * $limit) . ', ' . $limit, $rsm
         );
@@ -86,9 +86,9 @@ SQL;
         $rsm->addScalarResult('nb', 'nb');
 
         $query = $this->_em->createNativeQuery(
-                'SELECT id, tag, status, count(equipment_id) as nb '
+                'SELECT tag.id, tag, tag.status, count(equipment_id) as nb '
                 . 'FROM `tag` LEFT JOIN  `equipment_tag` ON `tag`.id=`equipment_tag`.tag_id '
-                . 'WHERE status=0 GROUP BY id  ORDER BY tag asc LIMIT ' . (($start - 1) * $limit) . ', ' . $limit, $rsm
+                . 'WHERE tag.status=0 GROUP BY id  ORDER BY tag asc LIMIT ' . (($start - 1) * $limit) . ', ' . $limit, $rsm
         );
 
         $tags = $query->getResult();
