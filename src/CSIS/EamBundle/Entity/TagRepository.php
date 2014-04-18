@@ -5,6 +5,7 @@ namespace CSIS\EamBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query;
 
 /**
  * TagRepository
@@ -25,7 +26,7 @@ class TagRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findRelativeTags( Collection $tags )
+    public function findRelativeTags( $tags )
     {
         $rsm = new ResultSetMapping();
         $rsm->addEntityResult('CSISEamBundle:Tag', 'tag2', 'tag');
@@ -44,6 +45,7 @@ ORDER BY `nombre` DESC
 LIMIT 0, 10
 SQL;
 
+
         $tagsId = array( );
         foreach ( $tags as $tag ) {
             $tagsId[] = $tag->getId();
@@ -56,20 +58,31 @@ SQL;
 
     public function findTagsWithNumberOfUse( $start, $limit )
     {
-        // Recherche la liste des tags par ordre alphabétique et leur nombre d'utilisation
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('CSISEamBundle:Tag', 't', 'tag');
-        $rsm->addFieldResult('t', 'id', 'id');
-        $rsm->addFieldResult('t', 'tag', 'tag');
-        $rsm->addFieldResult('t', 'status', 'status');
-        $rsm->addScalarResult('nb', 'nb');
+        // // Recherche la liste des tags par ordre alphabétique et leur nombre d'utilisation
+        // $rsm = new ResultSetMapping();
+        // $rsm->addEntityResult('CSISEamBundle:Tag', 't', 'tag');
+        // $rsm->addFieldResult('t', 'id', 'id');
+        // $rsm->addFieldResult('t', 'tag', 'tag');
+        // $rsm->addFieldResult('t', 'status', 'status');
+        // $rsm->addScalarResult('nb', 'nb');
 
-        $query = $this->_em->createNativeQuery(
-                'SELECT tag.id, tag, tag.status, count(equipment_id) as nb '
-                . 'FROM `tag` LEFT JOIN  `equipment_tag` ON `tag`.id=`equipment_tag`.tag_id '
-                . 'GROUP BY id ORDER BY tag asc LIMIT ' . (($start - 1) * $limit) . ', ' . $limit, $rsm
-        );
+        // $query = $this->_em->createNativeQuery(
+        //         'SELECT tag.id, tag.tag, tag.status, count(equipment_id) as nb '
+        //         . 'FROM `tag` LEFT JOIN  `equipment_tag` ON `tag`.id=`equipment_tag`.tag_id '
+        //         . 'GROUP BY id ORDER BY tag asc LIMIT ' . (($start - 1) * $limit) . ', ' . $limit, $rsm
+        // );
 
+
+        $query = $this->_em->createQuery(
+            "
+            SELECT t as tag, t.status as status, count(et) as nb
+            FROM CSISEamBundle:Tag t
+            LEFT JOIN t.tagEquipments et
+            GROUP BY t.id
+            ORDER BY t.tag ASC
+            ")
+            ->setFirstResult(($start-1)*$limit)
+            ->setMaxResults($limit);
         $tags = $query->getResult();
 
         return $tags;
@@ -77,20 +90,31 @@ SQL;
 
     public function findTagsStandByWithNumberOfUse( $start, $limit )
     {
-        // Recherche la liste des tags par ordre alphabétique et leur nombre d'utilisation
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('CSISEamBundle:Tag', 't', 'tag');
-        $rsm->addFieldResult('t', 'id', 'id');
-        $rsm->addFieldResult('t', 'tag', 'tag');
-        $rsm->addFieldResult('t', 'status', 'status');
-        $rsm->addScalarResult('nb', 'nb');
+        // // Recherche la liste des tags par ordre alphabétique et leur nombre d'utilisation
+        // $rsm = new ResultSetMapping();
+        // $rsm->addEntityResult('CSISEamBundle:Tag', 't', 'tag');
+        // $rsm->addFieldResult('t', 'id', 'id');
+        // $rsm->addFieldResult('t', 'tag', 'tag');
+        // $rsm->addFieldResult('t', 'status', 'status');
+        // $rsm->addScalarResult('nb', 'nb');
 
-        $query = $this->_em->createNativeQuery(
-                'SELECT tag.id, tag, tag.status, count(equipment_id) as nb '
-                . 'FROM `tag` LEFT JOIN  `equipment_tag` ON `tag`.id=`equipment_tag`.tag_id '
-                . 'WHERE tag.status=0 GROUP BY id  ORDER BY tag asc LIMIT ' . (($start - 1) * $limit) . ', ' . $limit, $rsm
-        );
+        // $query = $this->_em->createNativeQuery(
+        //         'SELECT id, tag, status, count(equipment_id) as nb '
+        //         . 'FROM `tag` LEFT JOIN  `equipment_tag` ON `tag`.id=`equipment_tag`.tag_id '
+        //         . 'WHERE status=0 GROUP BY id  ORDER BY tag asc LIMIT ' . (($start - 1) * $limit) . ', ' . $limit, $rsm
+        // );
 
+        $query = $this->_em->createQuery(
+            "
+            SELECT t as tag, t.status as status, count(et) as nb
+            FROM CSISEamBundle:Tag t
+            LEFT JOIN t.tagEquipments et
+            WHERE t.status = 0
+            GROUP BY t.id
+            ORDER BY t.tag ASC
+            ")
+            ->setFirstResult(($start-1)*$limit)
+            ->setMaxResults($limit);
         $tags = $query->getResult();
 
         return $tags;
@@ -98,20 +122,30 @@ SQL;
 
     public function isTagUsed( $id )
     {
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('CSISEamBundle:Tag', 't', 'tag');
-        $rsm->addFieldResult('t', 'id', 'id');
-        $rsm->addFieldResult('t', 'tag', 'tag');
-        $rsm->addFieldResult('t', 'status', 'status');
-        $rsm->addScalarResult('nb', 'nb');
+        // $rsm = new ResultSetMapping();
+        // $rsm->addEntityResult('CSISEamBundle:Tag', 't', 'tag');
+        // $rsm->addFieldResult('t', 'id', 'id');
+        // $rsm->addFieldResult('t', 'tag', 'tag');
+        // $rsm->addFieldResult('t', 'status', 'status');
+        // $rsm->addScalarResult('nb', 'nb');
 
-        $query = $this->_em->createNativeQuery(
-                'SELECT id, tag, status, count(equipment_id) as nb '
-                . 'FROM `tag` LEFT JOIN  `equipment_tag` ON `tag`.id=`equipment_tag`.tag_id '
-                . 'WHERE id = ? GROUP BY id  ORDER BY tag asc', $rsm
-        );
+        // $query = $this->_em->createNativeQuery(
+        //         'SELECT tag.id, tag.tag, tag.status, count(equipment_id) as nb '
+        //         . 'FROM `tag` LEFT JOIN  `equipment_tag` ON `tag`.id=`equipment_tag`.tag_id '
+        //         . 'WHERE id = ? GROUP BY id  ORDER BY tag asc', $rsm
+        // );
 
-        $query->setParameter(1, $id);
+        // $query->setParameter(1, $id);
+
+        $query = $this->_em->createQuery(
+            "
+            SELECT t as tag, t.status as status, count(et) as nb
+            FROM CSISEamBundle:Tag t
+            LEFT JOIN t.tagEquipments et
+            WHERE t.id = :tagId
+            ORDER BY t.tag ASC
+            ")
+            ->setParameter('tagId', $id);   
 
         $tag = $query->getResult();
 
