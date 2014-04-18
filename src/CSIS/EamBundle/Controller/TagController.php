@@ -39,6 +39,7 @@ class TagController extends Controller
             $page_all = $page;
         }
         $tags_all = $repo->findTagsWithNumberOfUse($page_all, $maxPerPage); // Liste de tous les tags
+        
         $tags_att = $repo->findTagsStandByWithNumberOfUse($page_att, $maxPerPage); // Liste des tags ayant comme status en attente
         $nbPages_all = ceil(count($repo->findAll()) / $maxPerPage);
         $nbPages_att = ceil(count($repo->findBy(array( 'status' => 0 ))) / $maxPerPage);

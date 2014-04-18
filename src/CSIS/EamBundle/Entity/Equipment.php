@@ -415,7 +415,7 @@ class Equipment
     {
         $equipmentTags = $this->equipmentTags;
 
-        $tags= new ArrayCollection();
+        $tags = new ArrayCollection();
 
         foreach ($equipmentTags as $equipmentTag)
         {
@@ -452,7 +452,7 @@ class Equipment
     public function addEquipmentTag(\CSIS\EamBundle\Entity\EquipmentTag $equipmentTags)
     {
         $this->equipmentTags[] = $equipmentTags;
-		addTagEquipment : $tagEquipments->setTag($this);
+		//$tagEquipments->setTag($this);
         return $this;
     }
 
@@ -464,7 +464,7 @@ class Equipment
     public function removeEquipmentTag(\CSIS\EamBundle\Entity\EquipmentTag $equipmentTags)
     {
         $this->equipmentTags->removeElement($equipmentTags);
-		removeTagEquipment : $tagEquipment->setTag(null);
+		//$tagEquipment->setTag(null);
     }
 
     /**
