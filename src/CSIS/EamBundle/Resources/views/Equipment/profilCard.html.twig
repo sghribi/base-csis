@@ -47,9 +47,9 @@
   <dd>
 	{# On n'affiche que les tags valides #}
 	{% set tags=[] %}
-	{% for tag in equipment.tags %}
-		{% if tag.status == 1 %}
-			{% set tags=[tag]|merge(tags) %}
+	{% for et in equipment.equipmentTags %}
+		{% if et.tag.status == 1 and et.status == 0 %}
+			{% set tags=[et.tag]|merge(tags) %}
 		{% endif %}
 	{% endfor %}
 
