@@ -58,9 +58,10 @@
       // On récupère le nom du tag
       var tag = $(this).parent().parent().parent()
       var name = tag.find('.name').html();
+      var status = tag.find('.status').attr('data-status');
 
       // On l'ajoute à la liste des tags acceptés
-      addAcceptedTag({'name' : name});
+      addAcceptedTag({'name' : name, 'status': status});
 
       // On réactive le bouton update
       updateBtn.removeAttr('disabled');
@@ -77,9 +78,10 @@
       // On récupère le nom du tag
       var tag = $(this).parent().parent().parent()
       var name = tag.find('.name').html();
+      var status = tag.find('.status').attr('data-status');
 
       // On l'ajoute à la liste des tags acceptés
-      addRejectedTag({'name' : name});
+      addRejectedTag({'name' : name, 'status': status});
 
       // On réactive le bouton update
       updateBtn.removeAttr('disabled');
@@ -105,11 +107,31 @@
     });
   }
 
+  function generateHtmlStatus(status)
+  {
+    var html;
+    if(status == 0)
+    {
+      html = '<i class="icon icon-time tips" title="Ce tag est en attente de validation par un administrateur"></i>';
+    }
+    else if(status == 1)
+    {
+      html = '<i class="icon icon-ok tips" title="Ce tag a été validé par un administrateur"></i>';
+    }
+    else if(status == 2)
+    {
+      html = '<i class="icon icon-warning-sign tips" title="Ce tag a été refusé par un administrateur"></i>';
+    }
+
+    return html;
+  }
+
   // Méthode pour ajouter un tag aux tags acceptés
   function addAcceptedTag(tag) {
     // On crée le HTML
+    var statusHtml = generateHtmlStatus(tag['status']);
     var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove deleteBtn" title="Enlever le tag"></a>&nbsp;<a href="#" class="tips icon icon-ban-circle rejectBtn" title="Rejeter le tag"></a></p>';
-    var liHtml = '<li class="tag"><a class="span10 name">' + tag['name'] + '</a> <span class="span2">' + buttonsHtml + '</span>';
+    var liHtml = '<li class="tag"><a class="span10"><span class="pull-left status" data-status="' + tag['status'] + '">' + statusHtml + '</span><span class="name">' + tag['name'] + '</a><span class="span2">' + buttonsHtml + '</span>';
 
     // On l'insère dans le DOM
     $('#acceptedTagsBox .tags').append(liHtml);
@@ -121,8 +143,9 @@
   // Méthode pour ajouter un tag aux tags rejetés
   function addRejectedTag(tag) {
     // On crée le HTML
+    var statusHtml = generateHtmlStatus(tag['status']);
     var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove deleteBtn" title="Enlever le tag"></a>&nbsp;<a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a></p>';
-    var liHtml = '<li class="tag"><a class="span10 name">' + tag['name'] + '</a> <span class="span2">' + buttonsHtml + '</span>';
+    var liHtml = '<li class="tag"><a class="span10"><span class="pull-left status" data-status="' + tag['status'] + '">' + statusHtml + '</span><span class="name">' + tag['name'] + '</a><span class="span2">' + buttonsHtml + '</span>';
 
     // On l'insère dans le DOM
     $('#rejectedTagsBox .tags').append(liHtml);
@@ -134,8 +157,9 @@
   // Méthode pour ajouter un tag aux tags suggérés
   function addSuggestedTag(tag) {
     // On crée le HTML
+    var statusHtml = generateHtmlStatus(tag['status']);
     var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a>&nbsp;<a href="#" class="tips icon icon-ban-circle rejectBtn" title="Rejeter le tag"></a></p>';
-    var liHtml = '<li class="tag"><a class="span10 name">' + tag['name'] + '</a> <span class="span2">' + buttonsHtml + '</span>';
+    var liHtml = '<li class="tag"><a class="span10"><span class="pull-left status" data-status="' + tag['status'] + '">' + statusHtml + '</span><span class="name">' + tag['name'] + '</a><span class="span2">' + buttonsHtml + '</span>';
 
     // On l'insère dans le DOM
     $('#suggestedTagsBox .tags').append(liHtml);
