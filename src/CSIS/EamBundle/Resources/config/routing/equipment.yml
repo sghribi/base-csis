@@ -45,6 +45,13 @@ equipment_fetch_tags:
         _method: get
         id: \d+
 
+equipment_fetch_relative_tags:
+    pattern:  /{id}/edit/tags/relatives
+    defaults: { _controller: CSISEamBundle:Equipment:fetchRelativeTags }
+    requirements:
+        _method: get
+        id: \d+
+
 equipment_update_tags:
     pattern:  /{id}/edit/tags/update
     defaults: { _controller: CSISEamBundle:Equipment:updateTags }

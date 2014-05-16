@@ -319,48 +319,6 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Allow to fetch a set of proposal tags for the user
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
-     * @throws \RuntimeException
-     */
-    public function relativeTagsAction( Request $request )
-    {
-        if ( $request->isXmlHttpRequest() ) {
-            $equipment = new Equipment();
-            $form = $this->createForm(new EquipmentType($this->getUser()), $equipment);
-
-            $form->bind($request);
-            if ( $form->isValid() ) {
-                // Saves current Tags
-                $tags = $equipment->getTags();
-
-                // Then auto-atach Tags to the equipment from its contents
-                $this->attachTags($equipment, false);
-
-                // Fetch associated Tags from DB
-                $newTags = $this->getDoctrine()->getEntityManager()->getRepository('CSISEamBundle:Tag')->findRelativeTags($equipment->getTags());
-
-                // Keep only the new ones
-                $relativesTag = array( );
-                foreach ( $newTags as $tag ) {
-                    if ( !$tags->contains($tag['tag']) ) {
-                        $relativesTag[$tag['tag']->getId()] = $tag['tag']->getTag();
-                    }
-                }
-
-                // Return them to the user
-                return new JsonResponse(array( 'tags' => $relativesTag ));
-            }
-            
-            throw new \RuntimeException();
-        }
-
-        throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
-    }
-
-    /**
      * Fetch tags for an Equipment
      *
      * @Secure(roles="ROLE_GEST_EQUIP")
@@ -386,6 +344,40 @@ class EquipmentController extends Controller
                 $json['rejected'][] = array('name' => $equipmentTag->getTag()->getTag());
             }
         }
+
+        $response = new Response(json_encode($json));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
+
+    /**
+     * Fetch relative tags for an Equipment
+     *
+     * @Secure(roles="ROLE_GEST_EQUIP")
+     * 
+     */
+    public function fetchRelativeTagsAction(Equipment $equipment, Request $request)
+    {
+        if (!$request->isXmlHttpRequest())
+            throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
+        
+        $tags = $equipment->getTags();
+
+        // On attache les pseudos tags
+        $this->attachTags($equipment, false);
+
+        // Fetch associated Tags from DB
+        $newTags = $this->getDoctrine()->getEntityManager()->getRepository('CSISEamBundle:Tag')->findRelativeTags($equipment->getTags());
+
+        $relativesTag = array();
+        foreach ( $newTags as $tag ) {
+            if ( !$tags->contains($tag['tag']) ) {
+                $relativesTag[] = array('name' => $tag['tag']->getTag());
+            }
+        }
+
+        $json = array('suggested' => $relativesTag);
 
         $response = new Response(json_encode($json));
         $response->headers->set('Content-Type', 'application/json');
