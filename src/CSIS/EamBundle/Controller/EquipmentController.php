@@ -5,7 +5,8 @@ namespace CSIS\EamBundle\Controller;
 use Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\JsonResponse,
     Symfony\Bundle\FrameworkBundle\Controller\Controller,
-    Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+    Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException,
+    Symfony\Component\HttpFoundation\Response
 ;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use CSIS\EamBundle\Entity\Equipment,
@@ -13,7 +14,8 @@ use CSIS\EamBundle\Entity\Equipment,
     CSIS\EamBundle\Entity\Tag,
     CSIS\EamBundle\Form\EquipmentType,
     CSIS\EamBundle\Form\EquipmentAddOwnerType,
-    CSIS\UserBundle\Entity\User
+    CSIS\UserBundle\Entity\User,
+    CSIS\EamBundle\Entity\EquipmentTag
 
 ;
 
@@ -135,9 +137,6 @@ class EquipmentController extends Controller
      */
     public function editAction( Equipment $equipment )
     {
-        if ( $equipment->getTags()->isEmpty() ) {
-            $equipment->getTags()->add(new Tag());
-        }
         if ( $equipment->getContacts()->isEmpty() ) {
             $equipment->getContacts()->add(new People());
         }
@@ -147,6 +146,21 @@ class EquipmentController extends Controller
         return $this->render('CSISEamBundle:Equipment:edit.html.twig', array(
                     'equipment' => $equipment,
                     'form' => $editForm->createView(),
+        ));
+    }
+
+    /**
+     * Displays a widget for tags edition for an Equipment
+     *  
+     * @Secure(roles="ROLE_GEST_EQUIP")
+     * 
+     * @param \CSIS\EamBundle\Entity\Equipment $equipement The Equipment to edit
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editTagsAction( Equipment $equipment )
+    {
+        return $this->render('CSISEamBundle:Equipment:editTags.html.twig', array(
+                    'equipment' => $equipment,
         ));
     }
 
@@ -344,6 +358,106 @@ class EquipmentController extends Controller
         }
 
         throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
+    }
+
+    /**
+     * Fetch tags for an Equipment
+     *
+     * @Secure(roles="ROLE_GEST_EQUIP")
+     * 
+     */
+    public function fetchTagsAction(Equipment $equipment, Request $request)
+    {
+        if (!$request->isXmlHttpRequest())
+            throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
+            
+        $equipmentTags = $equipment->getEquipmentTags();
+
+        $json = array('accepted' => array(), 'rejected' => array());
+
+        foreach ($equipmentTags as $equipmentTag)
+        {
+            if ($equipmentTag->getStatus() == EquipmentTag::ACCEPTED)
+            {
+                $json['accepted'][] = array('name' => $equipmentTag->getTag()->getTag());
+            }
+            elseif ($equipmentTag->getStatus() == EquipmentTag::REFUSED)
+            {
+                $json['rejected'][] = array('name' => $equipmentTag->getTag()->getTag());
+            }
+        }
+
+        $response = new Response(json_encode($json));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
+
+    /**
+     * Update tags for an Equipment
+     *
+     * @Secure(roles="ROLE_GEST_EQUIP")
+     * 
+     */
+    public function updateTagsAction(Equipment $equipment, Request $request)
+    {
+        if (!$request->isXmlHttpRequest())
+            throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
+        
+        $em = $this->getDoctrine()->getManager();
+        $tagRepo = $em->getRepository('CSISEamBundle:Tag');
+
+        $tags = $request->request->get('tags');
+
+        // 1. On supprime tous les tags de l'équipement
+        $oldEquipmentTags = $equipment->getEquipmentTags();
+        foreach ($oldEquipmentTags as $equipmentTag)
+        {
+            $equipment->removeEquipmentTag($equipmentTag);
+            $equipmentTag->setTag(null);
+            $equipmentTag->setEquipment(null);
+        }
+
+        // 2. On traite les tags reçus en POST
+        foreach ($tags as $tag => $status)
+        {
+            $existingTag = $tagRepo->findOneByTag($tag);
+
+            // Si le tag n'existe pas
+            if(!$existingTag)
+            {
+                $existingTag = new Tag();
+                $existingTag->setTag($tag);
+                $existingTag->setStatus(false);
+                $existingTag->setLastEditDate(new \DateTime());
+
+            }
+
+            $equipmentTag = new EquipmentTag();
+            $equipmentTag->setEquipment($equipment);
+            $equipmentTag->setTag($existingTag);
+
+            if ($status == 'accepted')
+            {
+                $equipmentTag->setStatus(EquipmentTag::ACCEPTED);
+            }
+            elseif ($status == 'rejected')
+            {
+                $equipmentTag->setStatus(EquipmentTag::REFUSED);
+            }
+            else
+            {
+                print_r($status); die;
+            }
+
+            $em->persist($existingTag);
+            $em->persist($equipmentTag);
+            $em->persist($equipment);
+        }
+
+        $em->flush();
+
+        return new Response(json_encode(array('message' => 'ok')));
     }
 
     /**
