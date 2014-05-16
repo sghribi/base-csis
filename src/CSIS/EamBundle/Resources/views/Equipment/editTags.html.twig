@@ -88,12 +88,27 @@
       // On le supprime de son emplacement actuel
       tag.remove();
     });
+
+    // Listener sur .deleteBtn
+    $(element + ' .deleteBtn').on('click', function(e) {
+      e.preventDefault();
+
+      // On récupère le tag
+      var tag = $(this).parent().parent().parent()
+
+      // On réactive le bouton update
+      updateBtn.removeAttr('disabled');
+      updateBtn.removeClass('disabled');
+
+      // On le supprime de son emplacement actuel
+      tag.remove();
+    });
   }
 
   // Méthode pour ajouter un tag aux tags acceptés
   function addAcceptedTag(tag) {
     // On crée le HTML
-    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove rejectBtn" title="Rejeter le tag"></a></p>';
+    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove deleteBtn" title="Enlever le tag"></a>&nbsp;<a href="#" class="tips icon icon-ban-circle rejectBtn" title="Rejeter le tag"></a></p>';
     var liHtml = '<li class="tag"><a class="span10 name">' + tag['name'] + '</a> <span class="span2">' + buttonsHtml + '</span>';
 
     // On l'insère dans le DOM
@@ -106,7 +121,7 @@
   // Méthode pour ajouter un tag aux tags rejetés
   function addRejectedTag(tag) {
     // On crée le HTML
-    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a></p>';
+    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove deleteBtn" title="Enlever le tag"></a>&nbsp;<a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a></p>';
     var liHtml = '<li class="tag"><a class="span10 name">' + tag['name'] + '</a> <span class="span2">' + buttonsHtml + '</span>';
 
     // On l'insère dans le DOM
@@ -119,7 +134,7 @@
   // Méthode pour ajouter un tag aux tags suggérés
   function addSuggestedTag(tag) {
     // On crée le HTML
-    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a>&nbsp;<a href="#" class="tips icon icon-remove rejectBtn" title="Rejeter le tag"></a></p>';
+    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove deleteBtn" title="Enlever le tag"></a>&nbsp;<a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a>&nbsp;<a href="#" class="tips icon icon-remove rejectBtn" title="Rejeter le tag"></a></p>';
     var liHtml = '<li class="tag"><a class="span10 name">' + tag['name'] + '</a> <span class="span2">' + buttonsHtml + '</span>';
 
     // On l'insère dans le DOM
