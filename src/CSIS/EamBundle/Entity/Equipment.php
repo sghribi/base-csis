@@ -432,6 +432,13 @@ class Equipment
      */
     public function setTags($tags)
     {
+        $equipmentTags = $this->getEquipmentTags();
+
+        foreach ($equipmentTags as $equipmentTag)
+        {
+            $this->removeEquipmentTag($equipmentTag);
+        }
+
         foreach ($tags as $tag)
         {
             $equipmentTag = new EquipmentTag();

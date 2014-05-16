@@ -44,6 +44,9 @@ class EquipmentTag
     */
     private $status;
 
+    const ACCEPTED = 0;
+    const REFUSED = 1;
+
     /**
      * Get id
      *

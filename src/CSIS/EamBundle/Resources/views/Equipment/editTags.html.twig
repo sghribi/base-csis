@@ -1,0 +1,195 @@
+<div id="tagsEdition">
+
+  <div class="row">
+    {# Tags acceptés #}
+    <div class="span4" id="acceptedTagsBox">
+      <div class="row-fluid text-center">
+        <h4>Tags acceptés</h4>
+        <ul class="nav nav-tabs nav-stacked tags">
+          {# Ici seront insérés les tags #}
+        </ul>
+      </div>
+    </div>
+
+    {# Tags rejetés #}
+    <div class="span4" id="rejectedTagsBox">
+      <div class="row-fluid text-center">
+        <h4>Tags rejetés</h4>
+        <ul class="nav nav-tabs nav-stacked tags">
+          {# Ici seront insérés les tags #}
+        </ul>
+      </div>
+    </div>
+
+    {# Tags suggérés #}
+    <div class="span4" id="suggestedTagsBox">
+      <div class="row-fluid text-center">
+        <h4>Tags suggérés <a href="#" id="refreshBtn" class="icon icon-refresh tips" title="Rafraîchir les suggestions"></a></h4>
+        <ul class="nav nav-tabs nav-stacked tags">
+          {# Ici seront insérés les tags #}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="buttons" class="pull-center">
+    <button class="btn btn-success" id="updateBtn" data-loading-text="Mise à jour..." disabled="disabled"><i class="icon icon-refresh icon-white"></i> Mettre à jour les tags</button>
+  </div> 
+</div>
+
+<script type="text/javascript">
+
+  // Active les tooltips
+  $('.tips').tooltip();
+
+  var updateBtn = $('#updateBtn');
+  var refreshBtn = $('#refreshBtn');
+  var initialUpdateBtnText = updateBtn.html();
+
+  function prepare(element)
+  {
+    // Activer les tooltip
+    $(element + ' .tips').tooltip();
+
+    // Listener sur .acceptBtn
+    $(element + ' .acceptBtn').on('click', function(e) {
+      e.preventDefault();
+
+      // On récupère le nom du tag
+      var tag = $(this).parent().parent().parent()
+      var name = tag.find('.name').html();
+
+      // On l'ajoute à la liste des tags acceptés
+      addAcceptedTag({'name' : name});
+
+      // On réactive le bouton update
+      updateBtn.removeAttr('disabled');
+      updateBtn.removeClass('disabled');
+
+      // On le supprime de son emplacement actuel
+      tag.remove();
+    });
+
+    // Listener sur .rejectBtn
+    $(element + ' .rejectBtn').on('click', function(e) {
+      e.preventDefault();
+
+      // On récupère le nom du tag
+      var tag = $(this).parent().parent().parent()
+      var name = tag.find('.name').html();
+
+      // On l'ajoute à la liste des tags acceptés
+      addRejectedTag({'name' : name});
+
+      // On réactive le bouton update
+      updateBtn.removeAttr('disabled');
+      updateBtn.removeClass('disabled');
+
+      // On le supprime de son emplacement actuel
+      tag.remove();
+    });
+  }
+
+  // Méthode pour ajouter un tag aux tags acceptés
+  function addAcceptedTag(tag) {
+    // On crée le HTML
+    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove rejectBtn" title="Rejeter le tag"></a></p>';
+    var liHtml = '<li class="tag"><a class="span10 name">' + tag['name'] + '</a> <span class="span2">' + buttonsHtml + '</span>';
+
+    // On l'insère dans le DOM
+    $('#acceptedTagsBox .tags').append(liHtml);
+
+    // On met bien à jour les listeners sur cet élément
+    prepare('#acceptedTagsBox .tag:last');
+  }
+
+  // Méthode pour ajouter un tag aux tags rejetés
+  function addRejectedTag(tag) {
+    // On crée le HTML
+    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a></p>';
+    var liHtml = '<li class="tag"><a class="span10 name">' + tag['name'] + '</a> <span class="span2">' + buttonsHtml + '</span>';
+
+    // On l'insère dans le DOM
+    $('#rejectedTagsBox .tags').append(liHtml);
+
+    // On met bien à jour les listeners sur cet élément
+    prepare('#rejectedTagsBox .tag:last');
+  }
+
+  // Méthode pour ajouter un tag aux tags suggérés
+  function addSuggestedTag(tag) {
+    // On crée le HTML
+    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a>&nbsp;<a href="#" class="tips icon icon-remove rejectBtn" title="Rejeter le tag"></a></p>';
+    var liHtml = '<li class="tag"><a class="span10 name">' + tag['name'] + '</a> <span class="span2">' + buttonsHtml + '</span>';
+
+    // On l'insère dans le DOM
+    $('#suggestedTagsBox .tags').append(liHtml);
+
+    // On met bien à jour les listeners sur cet élément
+    prepare('#suggestedTagsBox .tag:last');
+  }
+
+  // Au chargement du document
+  jQuery(document).ready(function() {
+    // On désactive les boutons
+    updateBtn.attr('disabled','disabled');
+    refreshBtn.attr('disabled','disabled');
+
+    // On charge les tags
+    $.ajax({
+      url: "{{ path('equipment_fetch_tags', {'id': equipment.id}) }}",
+      dataType: 'json',
+      type: 'GET',
+      success: function(data) {
+        // On ajoute les tags acceptés
+        $.each(data['accepted'], function(i, tag){
+          addAcceptedTag(tag);
+        });
+
+        // On ajoute les tags refusés
+        $.each(data['rejected'], function(i, tag){
+          addRejectedTag(tag);
+        });
+
+        // On réactive un bouton
+        refreshBtn.removeAttr('disabled');
+      }
+    });
+
+    // On met un listener sur le bouton #updateBtn
+    updateBtn.on('click', function(event){
+      event.preventDefault();
+
+      // On désactive le bouton
+      updateBtn.attr('disabled','disabled');
+      updateBtn.button('loading');
+
+      // On forme le JSON
+      tags = {};
+      $('#acceptedTagsBox .tag').each(function() {
+        var name = $(this).find('.name').html();
+        tags[name] = 'accepted';
+      });
+      $('#rejectedTagsBox .tag').each(function() {
+        var name = $(this).find('.name').html();
+        tags[name] = 'rejected';
+      });
+      dataJSON = {'tags': tags};
+
+      // On envoie les tags
+      $.ajax({
+        url: "{{ path('equipment_update_tags', {'id': equipment.id}) }}",
+        dataType: 'json',
+        data: dataJSON,
+        cache: false,
+        type: 'POST',
+        success: function() {
+          // On remet le texte du bouton
+          updateBtn.html(initialUpdateBtnText);
+        }
+      });
+    });
+
+  });
+
+</script>

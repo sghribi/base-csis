@@ -104,12 +104,12 @@ class EquipmentType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
             ))
-            ->add('tags', 'collection', array(
-                'type' => 'csis_tag_selector',
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-            ))
+            // ->add('tags', 'collection', array(
+            //     'type' => 'csis_tag_selector',
+            //     'allow_add' => true,
+            //     'allow_delete' => true,
+            //     'by_reference' => false,
+            // ))
             ->add('categories', 'entity', array(
                 'class' => 'CSISEamBundle:Category',
                 'property' => 'name',
