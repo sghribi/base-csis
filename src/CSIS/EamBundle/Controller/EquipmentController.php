@@ -337,11 +337,11 @@ class EquipmentController extends Controller
         {
             if ($equipmentTag->getStatus() == EquipmentTag::ACCEPTED)
             {
-                $json['accepted'][] = array('name' => $equipmentTag->getTag()->getTag());
+                $json['accepted'][] = array('name' => $equipmentTag->getTag()->getTag(), 'status' => $equipmentTag->getTag()->getStatus());
             }
             elseif ($equipmentTag->getStatus() == EquipmentTag::REFUSED)
             {
-                $json['rejected'][] = array('name' => $equipmentTag->getTag()->getTag());
+                $json['rejected'][] = array('name' => $equipmentTag->getTag()->getTag(), 'status' => $equipmentTag->getTag()->getStatus());
             }
         }
 
@@ -373,7 +373,7 @@ class EquipmentController extends Controller
         $relativesTag = array();
         foreach ( $newTags as $tag ) {
             if ( !$tags->contains($tag['tag']) ) {
-                $relativesTag[] = array('name' => $tag['tag']->getTag());
+                $relativesTag[] = array('name' => $tag['tag']->getTag(), 'status' => $tag['tag']->getStatus());
             }
         }
 
