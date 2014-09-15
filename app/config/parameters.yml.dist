@@ -1,0 +1,17 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     3306
+    database_name:     base-csis
+    database_user:     base-csis
+    database_password: base-csis
+
+    mailer_transport:  gmail
+    mailer_host:       ~
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            fr
+    secret:            ThisTokenIsNotSoSecretChangeIt 
+
+    csis_max_in_pagination: 4
