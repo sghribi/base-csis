@@ -42,7 +42,7 @@ class People
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true, nullable=false)
      * 
-     * @Assert\Email()
+     * @Assert\Email(checkHost=true, checkMX=true)
      */
     private $email;
 

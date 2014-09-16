@@ -15,6 +15,16 @@ use CSIS\UserBundle\Entity\User;
  */
 class EquipmentRepository extends EntityRepository {
 
+    public function findByContact(People $people)
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->innerJoin('e.contacts', 'p')
+            ->where('p = :people')
+            ->setParameter('people', $people);
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findByOwners($user) {
         $qb = $this->createQueryBuilder('e');
         $qb = $this->qbByOwners($qb, $user);
@@ -151,8 +161,6 @@ class EquipmentRepository extends EntityRepository {
         }
 
         $query = $this->_em->createQuery($stringResult);
-
-        print_r($stringResult);
 
         $repo = $this->_em->getRepository('CSISEamBundle:Tag');
         $tag = $repo->findOneByTag($superSearch->getForm1()->getTag());
