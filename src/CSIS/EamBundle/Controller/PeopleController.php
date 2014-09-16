@@ -81,7 +81,7 @@ class PeopleController extends Controller
     {
         $people  = new People();
         $form = $this->createForm(new PeopleType(), $people);
-        $form->bind($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -138,7 +138,7 @@ class PeopleController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new PeopleType(), $people);
-        $editForm->bind($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->persist($people);
@@ -164,19 +164,13 @@ class PeopleController extends Controller
         
         // On vérifie si le contact existe
         $exist = $repo->isPeopleUsed($people->getId());
-        if ($exist == true) 
-        {
+        if ($exist) {
             $this->get('session')->getFlashBag()->add('error', 'Suppression impossible : le contact <strong>'. $people->getEmail() .'</strong>, est utilisé dans les équipements.');
-        } 
-        else
-        {
+        } else {
             // Message de confirmation
-            if ($people->hasUserAccount())
-            {
+            if ($people->hasUserAccount()) {
                 $message = 'Êtes-vous sûr de bien vouloir supprimer le contact <strong>'.$people->getEmail().'</strong> et le compte utilisateur <strong>' . $people->getUserAccount()->getUsername() . '</strong> associé ?';
-            }
-            else
-            {
+            } else {
                 $message = 'Êtes-vous sûr de bien vouloir supprimer le contact <strong>'.$people->getEmail().'</strong> ?';
             }
             $message .= '&nbsp;&nbsp<a href="' . $this->generateUrl('people_delete', array('id' => $people->getId())) . '">Oui</a>';
@@ -193,7 +187,6 @@ class PeopleController extends Controller
      */
     public function deleteAction(People $people)
     {
-
         $em = $this->getDoctrine()->getManager();
 
         if (!$people) {
@@ -212,7 +205,7 @@ class PeopleController extends Controller
         $peopleRepo = $em->getRepository('CSISEamBundle:People');
         $input = $request->request->get('input');
         
-        if ( $this->getRequest()->isXmlHttpRequest() ) {
+        if ($request->isXmlHttpRequest() ) {
             $peoples = $peopleRepo->findAutocomplete($input);
             
             $data = array();
