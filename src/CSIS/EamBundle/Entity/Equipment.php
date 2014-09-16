@@ -54,8 +54,8 @@ class Equipment
      * @var string
      *
      * @ORM\Column(name="building", type="string", length=255, nullable=true)
-     * @Assert\MaxLength( 
-     *      limit=255
+     * @Assert\Length(
+     *      max=255
      * )
      */
     private $building;
@@ -64,8 +64,8 @@ class Equipment
      * @var string
      *
      * @ORM\Column(name="floor", type="string", length=255, nullable=true)
-     * @Assert\MaxLength( 
-     *      limit=255
+     * @Assert\Length(
+     *      max=255
      * )
      */
     private $floor;
@@ -74,8 +74,8 @@ class Equipment
      * @var string
      *
      * @ORM\Column(name="room", type="string", length=255, nullable=true)
-     * @Assert\MaxLength( 
-     *      limit=255
+     * @Assert\Length(
+     *      max=255
      * )
      */
     private $room;
@@ -91,8 +91,8 @@ class Equipment
      * @var string
      *
      * @ORM\Column(name="brand", type="string", length=255, nullable=true)
-     * @Assert\MaxLength( 
-     *      limit=255
+     * @Assert\Length(
+     *      max=255
      * )
      */
     private $brand;
@@ -101,8 +101,8 @@ class Equipment
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
-     * @Assert\MaxLength( 
-     *      limit=255
+     * @Assert\Length(
+     *      max=255
      * )
      */
     private $type;
