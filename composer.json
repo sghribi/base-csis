@@ -6,43 +6,46 @@
   },
   "require": {
     "php": ">=5.3.3",
-    "symfony/symfony": "2.1.*",
-    "doctrine/orm": ">=2.2.3,<2.5-dev",
-    "doctrine/doctrine-bundle": "1.1.*",
-    "doctrine/migrations": "1.0.*@dev",
-    "doctrine/doctrine-migrations-bundle": "2.1.*@dev",
-    "twig/extensions": "1.0.*@dev",
-    "symfony/assetic-bundle": "2.1.*",
-    "symfony/swiftmailer-bundle": "2.1.*",
-    "symfony/monolog-bundle": "2.1.*",
-    "sensio/distribution-bundle": "2.1.*",
-    "sensio/framework-extra-bundle": "2.1.*",
-    "sensio/generator-bundle": "2.1.*",
-    "jms/security-extra-bundle": "1.2.*",
-    "jms/di-extra-bundle": "1.1.*",
-    "kriswallsmith/assetic": "1.1.*@dev",
+    "symfony/symfony": "~2.4",
+    "doctrine/orm": "~2.2,>=2.2.3",
+    "doctrine/doctrine-bundle": "~1.2",
+    "doctrine/migrations": "dev-master",
+    "doctrine/doctrine-migrations-bundle": "dev-master",
+    "twig/extensions": "~1.0",
+    "symfony/assetic-bundle": "~2.3",
+    "symfony/swiftmailer-bundle": "~2.3",
+    "symfony/monolog-bundle": "~2.4",
+    "sensio/distribution-bundle": "~2.3",
+    "sensio/framework-extra-bundle": "~3.0",
+    "sensio/generator-bundle": "~2.3",
+    "jms/security-extra-bundle": "dev-master",
+    "jms/di-extra-bundle": "dev-master",
+    "kriswallsmith/assetic": "dev-master",
     "stof/doctrine-extensions-bundle": "dev-master",
     "friendsofsymfony/user-bundle": "*"
   },
   "scripts": {
     "post-install-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
     ],
     "post-update-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
       "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
     ]
   },
+  "minimum-stability": "stable",
   "extra": {
     "symfony-app-dir": "app",
     "symfony-web-dir": "web",
     "branch-alias": {
-      "dev-master": "2.1-dev"
+      "dev-master": "2.5-dev"
     }
   }
 }

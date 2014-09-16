@@ -2,39 +2,39 @@
 
 namespace CSIS\EamBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\JsonResponse,
-    Symfony\Bundle\FrameworkBundle\Controller\Controller,
-    Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException,
-    Symfony\Component\HttpFoundation\Response
-;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\Response;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-use CSIS\EamBundle\Entity\Equipment,
-    CSIS\EamBundle\Entity\People,
-    CSIS\EamBundle\Entity\Tag,
-    CSIS\EamBundle\Form\EquipmentType,
-    CSIS\EamBundle\Form\EquipmentAddOwnerType,
-    CSIS\UserBundle\Entity\User,
-    CSIS\EamBundle\Entity\EquipmentTag
-
-;
+use CSIS\EamBundle\Entity\Equipment;
+use CSIS\EamBundle\Entity\People;
+use CSIS\EamBundle\Entity\Tag;
+use CSIS\EamBundle\Form\EquipmentType;
+use CSIS\EamBundle\Form\EquipmentAddOwnerType;
+use CSIS\UserBundle\Entity\User;
+use CSIS\EamBundle\Entity\EquipmentTag;
 
 /**
  * This Controller allows to manage all actions of the Equipement entity
- * 
+ *
+ * @Route("/equipments")
  */
 class EquipmentController extends Controller
 {
-
     /**
      * Displays all reachable Equipments to the user
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template("CSISEamBundle:Equipment:index.html.twig")
+     * @Route("/", name="equipment")
+     * @Method({"GET"})
      */
-    public function indexAction( Request $request )
+    public function indexAction(Request $request)
     {
         $repo = $this->getDoctrine()->getManager()->getRepository('CSISEamBundle:Equipment');
         $user = $this->getUser();
@@ -43,171 +43,163 @@ class EquipmentController extends Controller
 
         $entities = $repo->findByOwnersOrderByDesignationPaginated($user, $page, $maxPerPage);
 
-        return $this->render('CSISEamBundle:Equipment:index.html.twig', array(
-                    'entities' => $entities,
-                    'page' => $page,
-                    'nbPages' => ceil(count($entities) / $maxPerPage),
-        ));
+        return array(
+            'entities' => $entities,
+            'page' => $page,
+            'nbPages' => ceil(count($entities) / $maxPerPage),
+        );
     }
 
     /**
      * Displays the requested Equipment
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \CSIS\EamBundle\Entity\Equipment $equipment the equipment to display
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/{id}", name="equipment_show", requirements={"id" = "\d+"})
+     * @Method({"GET"})
+     * @Template("CSISEamBundle:Equipment:show.html.twig")
      */
-    public function showAction( Equipment $equipment )
+    public function showAction(Equipment $equipment)
     {
-        return $this->render('CSISEamBundle:Equipment:show.html.twig', array(
-                    'equipment' => $equipment,
-        ));
+        return array('equipment' => $equipment);
     }
 
     /**
      * Displays a form for Equipment creation
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template("CSISEamBundle:Equipment:new.html.twig")
+     * @Route("/new", name="equipment_new")
+     * @Method({"GET"})
      */
     public function newAction()
     {
         $equipment = new Equipment();
+
+        // @TODO: WTF ??
         $equipment->getContacts()->add(new People()); // Enlever le label
         $equipment->getTags()->add(new Tag()); // Enlever le label
         $form = $this->createForm(new EquipmentType($this->getUser()), $equipment);
 
-        return $this->render('CSISEamBundle:Equipment:new.html.twig', array(
-                    'equipment' => $equipment,
-                    'form' => $form->createView(),
-        ));
+        return array(
+            'equipment' => $equipment,
+            'form' => $form->createView(),
+        );
     }
 
     /**
      * Receives the POST data in order to create an Equipment 
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\ResdirectResponse
+     * @Template("CSISEamBundle:Equipment:new.html.twig")
+     * @Route("/", name="equipment_create")
+     * @Method({"POST"})
      */
-    public function createAction( Request $request )
+    public function createAction(Request $request)
     {
         $equipment = new Equipment();
         $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(new EquipmentType($this->getUser()), $equipment);
 
-        if ( $request->isMethod('POST') ) {
-            $form->bind($request);
+        $form->handleRequest($request);
 
-            if ( $form->isValid() ) {
-                $equipment->getOwners()->add($this->getUser());
+        if ($form->isValid()) {
+            $equipment->getOwners()->add($this->getUser());
 
-                $em->persist($equipment);
-                $em->flush();
+            $em->persist($equipment);
+            $em->flush();
 
-                /* Creation auto des liens avec les tags */
-                $this->attachTags($equipment);
+            /* Creation auto des liens avec les tags */
+            $this->attachTags($equipment);
 
-                $this->addFlash(
-                        'valid', sprintf('
-                            L\'équipement %s a été ajouté ! Des tags on été ' .
-                                'ajoutés automatiquement vous pourrez les modifier', $equipment->getDesignation()
-                        )
-                );
-                return $this->redirect($this->generateUrl('equipment_show', array( 'id' => $equipment->getId() )));
-            }
+            $this->addFlash(
+                    'valid', sprintf('
+                        L\'équipement %s a été ajouté ! Des tags on été ' .
+                            'ajoutés automatiquement vous pourrez les modifier', $equipment->getDesignation()
+                    )
+            );
+
+            return $this->redirect($this->generateUrl('equipment_show', array( 'id' => $equipment->getId() )));
         }
 
-        return $this->render('CSISEamBundle:Equipment:new.html.twig', array(
-                    'equipment' => $equipment,
-                    'form' => $form->createView(),
-        ));
+        return array(
+            'equipment' => $equipment,
+            'form' => $form->createView(),
+        );
     }
 
     /**
      * Displays a form for Equipment edition
      *  
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \CSIS\EamBundle\Entity\Equipment $equipement The Equipment to edit
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template("CSISEamBundle:Equipment:edit.html.twig")
+     * @Route("/{id}/edit", name="equipment_edit", requirements={"id" = "\d+"})
+     * @Method({"GET"})
      */
-    public function editAction( Equipment $equipment )
+    public function editAction(Equipment $equipment)
     {
-        if ( $equipment->getContacts()->isEmpty() ) {
+        if ($equipment->getContacts()->isEmpty()) {
             $equipment->getContacts()->add(new People());
         }
 
         $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment);
 
-        return $this->render('CSISEamBundle:Equipment:edit.html.twig', array(
-                    'equipment' => $equipment,
-                    'form' => $editForm->createView(),
-        ));
+        return array(
+            'equipment' => $equipment,
+            'form' => $editForm->createView(),
+        );
     }
 
     /**
      * Displays a widget for tags edition for an Equipment
      *  
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \CSIS\EamBundle\Entity\Equipment $equipement The Equipment to edit
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template("CSISEamBundle:Equipment:editTags.html.twig")
+     * @Route("/{id}/edit/tags", name="equipment_edit_tags", requirements={"id" = "\d+"})
+     * @Method({"GET"})
      */
-    public function editTagsAction( Equipment $equipment )
+    public function editTagsAction(Equipment $equipment)
     {
-        return $this->render('CSISEamBundle:Equipment:editTags.html.twig', array(
-                    'equipment' => $equipment,
-        ));
+        return array('equipment' => $equipment);
     }
 
     /**
      * Receives the POST data in order to edit an Equipment 
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \CSIS\EamBundle\Entity\Equipment $equipment The Equipment to edit
-     * @return \Symfony\Component\HttpFoundation\Response|\Symfony\Component\HttpFoundation\ResdirectResponse
+     * @Template("CSISEamBundle:Equipment:edit.html.twig")
+     * @Route("/{id}/update", name="equipment_update", requirements={"id" = "\d+"})
+     * @Method({"POST"})
      */
-    public function updateAction( Request $request, Equipment $equipment )
+    public function updateAction(Request $request, Equipment $equipment)
     {
-        // Base de données
-        $em = $this->getDoctrine()->getManager();
-
         $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment);
 
-        if ( $request->isMethod('POST') ) {
-            $editForm->bind($request);
+        $editForm->handleRequest($request);
 
-            if ( $editForm->isValid() ) {
-                $em->persist($equipment);
-                $em->flush();
+        if ($editForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($equipment);
+            $em->flush();
 
-                $this->addFlash(
-                        'valid', sprintf('La mise à jour de votre équipement %s est bien prise en compte.', $equipment->getDesignation())
-                );
+            $this->addFlash(
+                'valid',
+                sprintf('La mise à jour de votre équipement %s est bien prise en compte.', $equipment->getDesignation())
+            );
 
-                return $this->redirect($this->generateUrl('equipment_show', array( 'id' => $equipment->getId() )));
-            }
+            return $this->redirect($this->generateUrl('equipment_show', array('id' => $equipment->getId())));
         }
 
-        return $this->render('CSISEamBundle:Equipment:edit.html.twig', array(
-                    'equipment' => $equipment,
-                    'form' => $editForm->createView(),
-        ));
+        return array(
+            'equipment' => $equipment,
+            'form' => $editForm->createView(),
+        );
     }
 
     /**
      * Displays to the user a message in order to confirm the removal of the Equipment entity
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \CSIS\EamBundle\Entity\Equipment $equipment The Equipment to remove
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/{id}/ask_delete", name="equipment_ask_delete", requirements={"id" = "\d+"})
      */
     public function askDeleteAction( Equipment $entity )
     {
@@ -225,11 +217,10 @@ class EquipmentController extends Controller
      * Remove the requested Equipment
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \CSIS\EamBundle\Entity\Equipment $equipment The Equipment to remove
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/{id}/delete", name="equipment_delete", requirements={"id" = "\d+"})
+     * @Method({"GET"})
      */
-    public function deleteAction( Equipment $entity )
+    public function deleteAction(Equipment $entity)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -247,30 +238,28 @@ class EquipmentController extends Controller
      * Displays the list of Equipment's owners
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \CSIS\EamBundle\Entity\Equipment $equipment
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template("CSISEamBundle:Equipment:credentials.html.twig")
+     * @Route("/{id}/credentials", name="equipment_credentials", requirements={"id" = "\d+"})
+     * @Method({"GET"})
      */
     public function credentialsAction( Equipment $equipment )
     {
-        return $this->render('CSISEamBundle:Equipment:credentials.html.twig', array(
-                    'equipment' => $equipment,
-                    'owners' => $equipment->getOwners(),
-        ));
+        return array(
+            'equipment' => $equipment,
+            'owners' => $equipment->getOwners(),
+        );
     }
 
     /**
      * Removes an owner from an equipment
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \CSIS\EamBundle\Entity\Equipment $equipment
-     * @param \CSIS\UserBundle\Entity\User $owner
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/{id}/credentials/{owner}/remove", name="equipment_credentials_remove", requirements={"id" = "\d+", "owner" = "\d+"})
+     * @Method({"GET"})
      */
     public function credentialsRemoveAction( Equipment $equipment, User $owner )
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if ( $equipment->getOwners()->contains($owner) ) {
             $equipment->getOwners()->removeElement($owner);
@@ -292,43 +281,40 @@ class EquipmentController extends Controller
      * Adds an owner to an equipment
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \CSIS\EamBundle\Entity\Equipment $equipment
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @Template("CSISEamBundle:Equipment:addOwner.html.twig")
+     * @Route("/{id}/credentials", name="equipment_credentials_add", requirements={"id" = "\d+"})
+     * @Method({"POST"})
      */
-    public function credentialsAddAction( Request $request, Equipment $equipment )
+    public function credentialsAddAction(Request $request, Equipment $equipment)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
         $form = $this->createForm(new EquipmentAddOwnerType($this->getUser()), $equipment);
+        $form->handleRequest($request);
 
-        if ( $request->isMethod('POST') ) {
-            $form->bind($request);
-
-            if ( $form->isValid() ) {
-                $em->flush();
-                return $this->redirect($this->generateUrl('equipment_credentials', array( 'id' => $equipment->getId() )));
-            }
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+            return $this->redirect($this->generateUrl('equipment_credentials', array( 'id' => $equipment->getId() )));
         }
 
-        return $this->render('CSISEamBundle:Equipment:addOwner.html.twig', array(
+        return array(
                     'equipment' => $equipment,
                     'form' => $form->createView(),
-        ));
+        );
     }
 
     /**
      * Fetch tags for an Equipment
      *
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
+     * @Route("/{id}/edit/tags/fetch", name="equipment_fetch_tags", requirements={"id" = "\d+"})
+     * @Method({"GET"})
      */
     public function fetchTagsAction(Equipment $equipment, Request $request)
     {
-        if (!$request->isXmlHttpRequest())
+        if (!$request->isXmlHttpRequest()) {
             throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
-            
+        }
+
         $equipmentTags = $equipment->getEquipmentTags();
 
         $json = array('accepted' => array(), 'rejected' => array());
@@ -345,17 +331,15 @@ class EquipmentController extends Controller
             }
         }
 
-        $response = new Response(json_encode($json));
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return new JsonResponse($json);
     }
 
     /**
      * Fetch relative tags for an Equipment
      *
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
+     * @Route("/{id}/edit/tags/relatives", name="equipment_fetch_relative_tags", requirements={"id" = "\d+"})
+     * @Method({"GET"})
      */
     public function fetchRelativeTagsAction(Equipment $equipment, Request $request)
     {
@@ -368,7 +352,7 @@ class EquipmentController extends Controller
         $this->attachTags($equipment, false);
 
         // Fetch associated Tags from DB
-        $newTags = $this->getDoctrine()->getEntityManager()->getRepository('CSISEamBundle:Tag')->findRelativeTags($equipment->getTags());
+        $newTags = $this->getDoctrine()->getRepository('CSISEamBundle:Tag')->findRelativeTags($equipment->getTags());
 
         $relativesTag = array();
         foreach ( $newTags as $tag ) {
@@ -379,17 +363,15 @@ class EquipmentController extends Controller
 
         $json = array('suggested' => $relativesTag);
 
-        $response = new Response(json_encode($json));
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return new JsonResponse($json);
     }
 
     /**
      * Update tags for an Equipment
      *
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * 
+     * @Route("/{id}/edit/tags/update", name="equipment_update_tags", requirements={"id" = "\d+"})
+     * @Method({"POST"})
      */
     public function updateTagsAction(Equipment $equipment, Request $request)
     {
@@ -439,7 +421,7 @@ class EquipmentController extends Controller
             }
             else
             {
-                print_r($status); die;
+                var_dump($status); die;
             }
 
             $em->persist($existingTag);
@@ -449,7 +431,7 @@ class EquipmentController extends Controller
 
         $em->flush();
 
-        return new Response(json_encode(array('message' => 'ok')));
+        return new JsonResponse(array('message' => 'ok'));
     }
 
     /**
@@ -488,7 +470,7 @@ class EquipmentController extends Controller
         $tagList = explode(' ', $words);
 
         // Recuperation du repository des tags
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $repoTag = $em->getRepository('CSISEamBundle:Tag');
 
         // Definition de la liste des tags existant
@@ -518,5 +500,4 @@ class EquipmentController extends Controller
     {
         $this->get('session')->getFlashBag()->add($type, $message);
     }
-
 }
