@@ -1,7 +1,0 @@
-csis_eam_admin_index:
-    pattern:  /
-    defaults: { _controller: CSISEamBundle:Admin:index }
-    
-csis_eam_admin_test:
-    pattern: /test
-    defaults: { _controller: CSISEamBundle:Admin:test }

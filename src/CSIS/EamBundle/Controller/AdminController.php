@@ -2,19 +2,23 @@
 
 namespace CSIS\EamBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
- * Category controller.
- *
+ * Admin controller.
+ * @Route("/admin")
  */
 class AdminController extends Controller {
 
     /**
      * Homepage of admin space
      * @Secure(roles="ROLE_USER")
+     * @Template("CSISEamBundle:Admin:index.html.twig")
+     * @Route("/", name="csis_eam_admin_index")
      */
     public function indexAction() {
         
@@ -30,7 +34,7 @@ class AdminController extends Controller {
         $categories   = $em->getRepository('CSISEamBundle:Category')->findByOrderNamePaginated(1, $max);
         $waitingTags  = $em->getRepository('CSISEamBundle:Tag')->waitingTags();
 
-        return $this->render('CSISEamBundle:Admin:index.html.twig', array(
+        return array(
             'peoples'          => $peoples,
             'peoples_sup'      => ( count($peoples) > $max ),
             'categories'       => $categories,
@@ -42,7 +46,7 @@ class AdminController extends Controller {
             'institutions'     => $institutions,
             'institutions_sup' => ( count($institutions) > $max ),
             'waiting_tags'     => $waitingTags
-        ));
+        );
     }
 
 }

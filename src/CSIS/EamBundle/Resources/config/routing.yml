@@ -6,24 +6,24 @@ csis_eam_homepage:
         permanent: true
 
 CSISEamBundle_admin:
-    resource: "@CSISEamBundle/Resources/config/routing/admin.yml"
-    prefix:   /admin
+    resource: "@CSISEamBundle/Controller/AdminController.php"
+    type:     annotation
 
 CSISEamBundle_category:
-    resource: "@CSISEamBundle/Resources/config/routing/category.yml"
-    prefix:   /categories
+    resource: "@CSISEamBundle/Controller/CategoryController.php"
+    type:     annotation
 
 CSISEamBundle_equipment:
-    resource: "@CSISEamBundle/Resources/config/routing/equipment.yml"
-    prefix:   /equipments
+    resource: "@CSISEamBundle/Controller/EquipmentController.php"
+    type:     annotation
 
 CSISEamBundle_institution:
-    resource: "@CSISEamBundle/Resources/config/routing/institution.yml"
-    prefix:   /institutions
+    resource: "@CSISEamBundle/Controller/InstitutionController.php"
+    type:     annotation
 
 CSISEamBundle_laboratory:
-    resource: "@CSISEamBundle/Resources/config/routing/laboratory.yml"
-    prefix:   /laboratories
+    resource: "@CSISEamBundle/Controller/LaboratoryController.php"
+    type:     annotation
 
 CSISEamBundle_people:
     resource: "@CSISEamBundle/Resources/config/routing/people.yml"

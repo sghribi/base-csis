@@ -2,10 +2,12 @@
 
 namespace CSIS\EamBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use CSIS\EamBundle\Entity\Laboratory;
 use CSIS\EamBundle\Classes\LaboratoryFusionClass;
 use CSIS\EamBundle\Form\LaboratoryType;
@@ -15,15 +17,18 @@ use CSIS\UserBundle\Entity\User;
 
 /**
  * Laboratory controller.
- *
+ * @Route("/laboratories")
  */
-class LaboratoryController extends Controller {
-
+class LaboratoryController extends Controller
+{
     /**
      * Lists all Laboratory entities.
      * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Template("CSISEamBundle:Laboratory:index.html.twig")
+     * @Route("/{page}", name="laboratory", requirements={"page" = "\d+"}, defaults={"page" = 1})
      */
-    public function indexAction($page) {
+    public function indexAction($page)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $maxPerPage = $this->container->getParameter('csis_admin_views_max_in_lists');
@@ -31,55 +36,59 @@ class LaboratoryController extends Controller {
         
         $laboratories = $em->getRepository('CSISEamBundle:Laboratory')->findByOwnerOrderByAcronymPaginated($user, $page, $maxPerPage);
 
-        return $this->render('CSISEamBundle:Laboratory:index.html.twig', array(
+        return array(
                     'laboratories' => $laboratories,
                     'page' => $page,
                     'nbPages' => ceil(count($laboratories) / $maxPerPage),
-        ));
+        );
     }
 
     /**
      * Finds and displays a Laboratory entity.
      * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Template("CSISEamBundle:Laboratory:show.html.twig")
+     * @Route("/{id}/show", name="laboratory_show", requirements={"id" = "\d+"})
      */
-    public function showAction($id) {
+    public function showAction(Laboratory $laboratory)
+    {
         $em = $this->getDoctrine()->getManager();
+        $deleteForm = $this->createDeleteForm($laboratory->getId());
 
-        $laboratory = $em->getRepository('CSISEamBundle:Laboratory')->find($id);
-
-        if (!$laboratory) {
-            throw $this->createNotFoundException('Unable to find Laboratory entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('CSISEamBundle:Laboratory:show.html.twig', array(
-                    'laboratory' => $laboratory,
-                    'delete_form' => $deleteForm->createView(),));
+        return array(
+            'laboratory' => $laboratory,
+            'delete_form' => $deleteForm->createView()
+        );
     }
 
     /**
      * Displays a form to create a new Laboratory entity.
      * @Secure(roles="ROLE_GEST_LAB")
+     * @Template("CSISEamBundle:Laboratory:new.html.twig")
+     * @Route("/new", name="laboratory_new")
      */
-    public function newAction() {
+    public function newAction()
+    {
         $laboratory = new Laboratory();
         $form = $this->createForm(new LaboratoryType($this->getUser()), $laboratory);
 
-        return $this->render('CSISEamBundle:Laboratory:new.html.twig', array(
-                    'laboratory' => $laboratory,
-                    'form' => $form->createView(),
-        ));
+        return array(
+            'laboratory' => $laboratory,
+            'form' => $form->createView(),
+        );
     }
 
     /**
      * Creates a new Laboratory entity.
      * @Secure(roles="ROLE_GEST_LAB")
+     * @Template("CSISEamBundle:Laboratory:new.html.twig")
+     * @Route("/create", name="laboratory_create")
+     * @Method({"POST"})
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request)
+    {
         $laboratory = new Laboratory();
         $form = $this->createForm(new LaboratoryType($this->getUser()), $laboratory);
-        $form->bind($request);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -93,53 +102,46 @@ class LaboratoryController extends Controller {
             return $this->redirect($this->generateUrl('laboratory_show', array('id' => $laboratory->getId())));
         }
 
-        return $this->render('CSISEamBundle:Laboratory:new.html.twig', array(
+        return array(
                     'laboratory' => $laboratory,
                     'form' => $form->createView(),
-        ));
+        );
     }
 
     /**
      * Displays a form to edit an existing Laboratory entity.
      * @Secure(roles="ROLE_GEST_LAB")
+     * @Template("CSISEamBundle:Laboratory:edit.html.twig")
+     * @Route("{id}/edit", name="laboratory_edit", requirements={"id" = "\d+"})
+     * @Method({"GET"})
      */
-    public function editAction($id) {
-        $em = $this->getDoctrine()->getManager();
-
-        $laboratory = $em->getRepository('CSISEamBundle:Laboratory')->find($id);
-
-        if (!$laboratory) {
-            throw $this->createNotFoundException('Unable to find Laboratory entity.');
-        }
-
+    public function editAction(Laboratory $laboratory)
+    {
         $editForm = $this->createForm(new LaboratoryType($this->getUser()), $laboratory);
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($laboratory->getId());
 
-        return $this->render('CSISEamBundle:Laboratory:edit.html.twig', array(
-                    'laboratory' => $laboratory,
-                    'edit_form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
-        ));
+        return array(
+            'laboratory' => $laboratory,
+            'edit_form' => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        );
     }
 
     /**
      * Edits an existing Laboratory entity.
      * @Secure(roles="ROLE_GEST_LAB")
+     * @Template("CSISEamBundle:Laboratory:edit.html.twig")
+     * @Route("{id}/update", name="laboratory_update", requirements={"id" = "\d+"})
+     * @Method({"POST"})
      */
-    public function updateAction(Request $request, $id) {
-        $em = $this->getDoctrine()->getManager();
-
-        $laboratory = $em->getRepository('CSISEamBundle:Laboratory')->find($id);
-
-        if (!$laboratory) {
-            throw $this->createNotFoundException('Unable to find Laboratory entity.');
-        }
-
+    public function updateAction(Request $request, Laboratory $laboratory)
+    {
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new LaboratoryType($this->getUser()), $laboratory);
-        $editForm->bind($request);
+        $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             $em->persist($laboratory);
             $em->flush();
             
@@ -147,34 +149,33 @@ class LaboratoryController extends Controller {
             return $this->redirect($this->generateUrl('laboratory_show', array('id' => $id)));
         }
 
-        return $this->render('CSISEamBundle:Laboratory:edit.html.twig', array(
+        return array(
                     'laboratory' => $laboratory,
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
-        ));
+        );
     }
     
-     /**
+    /**
      * @Secure(roles="ROLE_GEST_LAB")
+     * @Route("/{id}/ask_delete", name="laboratory_ask_delete", requirements={"id" = "\d+"})
      */
-    public function askDeleteAction(Laboratory $laboratory) {
-        $em   = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('CSISEamBundle:Laboratory');
+    public function askDeleteAction(Laboratory $laboratory)
+    {
+        $repo = $this->getDoctrine()->getRepository('CSISEamBundle:Laboratory');
         
         // On vérifie si le laboratoire existe
         $exist = $repo->isLaboratoryUsed($laboratory->getId());
-        if ($exist == true) 
-        {
+        if ($exist) {
             $this->get('session')->getFlashBag()->add('error', 'Suppression impossible : le laboratoire <strong>'. $laboratory->getAcronym() .'</strong>, est utilisé dans les équipements.');
-        } 
-        else
-        {
+        } else {
             // Message de confirmation
             $message = 'Etes-vous sûr de bien vouloir supprimer le laboratoire <strong>'.$laboratory->getAcronym().'</strong> ?';
             $message .= '&nbsp;&nbsp<a href="'.$this->generateUrl('laboratory_delete', array('id'=>$laboratory->getId())).'">Oui</a>';
             $message .= '&nbsp;&nbsp<a href="'.$this->generateUrl('laboratory').'">Non</a>';
             $this->get('session')->getFlashBag()->add('main_valid',  $message);
         }
+
         // Redirection vers la page principale
         return $this->redirect($this->generateUrl('laboratory'));
     }
@@ -182,15 +183,11 @@ class LaboratoryController extends Controller {
     /**
      * Deletes a Laboratory entity.
      * @Secure(roles="ROLE_GEST_LAB")
+     * @Route("/{id}/delete", name="laboratory_delete", requirements={"id" = "\d+"})
      */
     public function deleteAction(Laboratory $laboratory) {
 
         $em = $this->getDoctrine()->getManager();
-
-        if (!$laboratory) {
-            throw $this->createNotFoundException('Unable to find Laboratory entity.');
-        }
-
         $em->remove($laboratory);
         $em->flush();
         $this->get('session')->getFlashBag()->add('valid', 'Laboratoire supprimé !');
@@ -201,26 +198,27 @@ class LaboratoryController extends Controller {
     /**
      * Manage laboratory owners
      * @Secure(roles="ROLE_GEST_LAB")
-     * @param \CSIS\EamBundle\Entity\Laboratory $institution
+     * @Template("CSISEamBundle:Laboratory:credentials.html.twig")
+     * @Route("/{id}/credentials", name="laboratory_credentials", requirements={"id" = "\d+"})
      */
-    public function credentialsAction(Laboratory $laboratory) {
-        
-        return $this->render('CSISEamBundle:Laboratory:credentials.html.twig', array(
+    public function credentialsAction(Laboratory $laboratory)
+    {
+        return array(
             'laboratory' => $laboratory,
             'owners' => $laboratory->getOwners(),
-        ));
+        );
     }
     
     /**
      * Remove an owner from a laboratory
      * @Secure(roles="ROLE_GEST_LAB")
-     * @param \CSIS\EamBundle\Entity\Laboratory $institution
-     * @param \CSIS\UserBundle\Entity\User $owner
+     * @Route("/{id}/credentials/{owner}/remove", name="laboratory_credentials_remove", requirements={"id" = "\d+", "owner" = "\d+"})
      */
-    public function credentialsRemoveAction(Laboratory $laboratory, User $owner) {
-        $em = $this->getDoctrine()->getEntityManager();
+    public function credentialsRemoveAction(Laboratory $laboratory, User $owner)
+    {
+        $em = $this->getDoctrine()->getManager();
         
-        if( $laboratory->getOwners()->contains($owner) ) {
+        if($laboratory->getOwners()->contains($owner)) {
             $laboratory->getOwners()->removeElement($owner);
             $this->container->get('session')->getFlashBag()->set('main_valid', 
                     'Propriétaire '. $owner->getLastName() . ' ' . $owner->getFirstName() .' supprimé.'
@@ -239,61 +237,62 @@ class LaboratoryController extends Controller {
     /**
      * Add an owner to a laboratory
      * @Secure(roles="ROLE_GEST_LAB")
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \CSIS\EamBundle\Entity\Laboratory $institution
+     * @Template("CSISEamBundle:Laboratory:addOwner.html.twig")
+     * @Route("/{id}/credentials/add", name="laboratory_credentials_add", requirements={"id" = "\d+"})
      */
-    public function credentialsAddAction(Request $request, Laboratory $laboratory) {
-        $em = $this->getDoctrine()->getEntityManager();
-        $repo = $em->getRepository('CSISUserBundle:User');
-        
+    public function credentialsAddAction(Request $request, Laboratory $laboratory)
+    {
         $form = $this->createForm(new LaboratoryAddOwnerType($this->getUser()), $laboratory);
         
-        if ( $this->getRequest()->isMethod('POST') ) {
-            $form->bind($request);
-            if ( $form->isValid() ) {
-                $em->flush();
-                return $this->redirect($this->generateUrl('laboratory_credentials', array('id' => $laboratory->getId())));
-            }
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+            return $this->redirect($this->generateUrl('laboratory_credentials', array('id' => $laboratory->getId())));
         }
-        
-        return $this->render('CSISEamBundle:Laboratory:addOwner.html.twig', array(
+
+        return array(
             'laboratory' => $laboratory,
             'form' => $form->createView(),
-        ));
+        );
     }
     
     /**
      * Make a fusion between multiple laboratories
      * @Secure(roles="ROLE_GEST_LAB")
-     * @param \CSIS\EamBundle\Entity\Laboratory $laboratory
+     * @Template("CSISEamBundle:Laboratory:fusion.html.twig")
+     * @Route("/{id}/fusion", name="laboratory_fusion", requirements={"id" = "\d+"})
      */
-    public function fusionAction(Laboratory $laboratory) {
-        $em = $this->getDoctrine()->getEntityManager();
+    public function fusionAction(Laboratory $laboratory, Request $request) {
+        $em = $this->getDoctrine()->getManager();
         $labClass = new LaboratoryFusionClass();
         $form = $this->createForm(new LaboratoryFusionType(), $labClass);
-        
-        if ( $this->getRequest()->isMethod('POST') ) {
-            $form->bind($this->getRequest());
-            
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
             $labClass->fusionWith($laboratory);
             
-            foreach ($labClass->getLaboratories() as $lab) $em->remove($lab);
+            foreach ($labClass->getLaboratories() as $lab) {
+                $em->remove($lab);
+            }
             $em->flush();
             
             return $this->redirect($this->generateUrl('laboratory_show', array('id' => $laboratory->getId())));
         }
         
-        return $this->render('CSISEamBundle:Laboratory:fusion.html.twig', array(
+        return array(
             'lab' => $laboratory,
             'form' => $form->createView(),
-        ));
+        );
     }
 
-    private function createDeleteForm($id) {
+    private function createDeleteForm($id)
+    {
         return $this->createFormBuilder(array('id' => $id))
                         ->add('id', 'hidden')
                         ->getForm()
         ;
     }
-
 }
