@@ -5,190 +5,251 @@ namespace CSIS\UserBundle\Entity;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table(name="user")
+ * @UniqueEntity("email")
  * @ORM\Entity(repositoryClass="CSIS\UserBundle\Entity\UserRepository")
  */
-class User extends BaseUser {
-
+class User extends BaseUser
+{
     /**
+     * @var integer
+     *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    protected $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=false)
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=255, nullable=false)
+     */
+    protected $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
+     */
+    protected $phoneNumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="url", type="string", length=255, nullable=true)
+     * @Assert\Url()
+     */
+    protected $url;
+
     /**
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Laboratory")
      */
     protected $lab;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Institution")
      */
     protected $institution;
 
-    /**
-     * @ORM\OneToOne(targetEntity="CSIS\EamBundle\Entity\People", cascade={"persist","remove"}, inversedBy="userAccount")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
-    protected $datas;
-    
-    public function __construct(\CSIS\EamBundle\Entity\People $people = null)
-    {
-        if ($people == null)
-        {
-            parent::__construct();
-            $this->datas = new \CSIS\EamBundle\Entity\People();
-        }
-        else
-        {
-            parent::__construct();
-            $this->datas = $people;
-        }
-    }
-
     public function __toString() {
         return $this->getLastName() . ' ' . $this->getFirstName();
     }
-    
-    /**
-     * Get the user's id
-     * @return integer
-     */
-    public function getId() {
-        return $this->id;
-    }
 
-    /**
-     * Get the email
-     * @return string
-     */
-    public function getEmail() {
-        return $this->datas->getEmail();
-    }
-    
-
-    /**
-     * Set the email
-     * @param string $email
-     * @return \CSIS\UserBundle\Entity\User
-     */
-    public function setEmail($email) {
-        // Ceci permet la synchronisation des mails entre l'entité User et l'entité People. C'est nécessaire.
-        $this->email = $email ;
-        $this->datas->setEmail($email);
-        
-        return $this;
-    }
-
-    /**
-     * Get the user's first name
-     * @return string
-     */
-    public function getFirstName() {
-        return $this->datas->getFirstname();
-    }
-
-    /**
-     * Set the user's first name
-     * @param string $firstName
-     * @return \CSIS\UserBundle\Entity\User
-     */
-    public function setFirstName($firstName) {
-        $this->datas->setFirstname($firstName);
-        
-        return $this;
-    }
-
-    /**
-     * Get the user's last name
-     * @return sring
-     */
-    public function getLastName() {
-        return $this->datas->getName();
-    }
-
-    /**
-     * Set the user's last name
-     * @param string $lastName
-     * @return \CSIS\UserBundle\Entity\User
-     */
-    public function setLastName($lastName) {
-        $this->datas->setName($lastName);
-        
-        return $this;
-    }
-    
-    /**
-     * Get the user's laboratory
-     * @return \CSIS\EamBundle\Entity\Laboratory
-     */
-    public function getLab() {
-        return $this->lab;
-    }
-    
-    /**
-     * Set the user's laboratory
-     * @param \CSIS\EamBundle\Entity\Laboratory $lab
-     * @return \CSIS\UserBundle\Entity\User
-     */
-    public function setLab($lab = null) {
-        $this->lab = $lab;
-        
-        return $this;
-    }
-    
-    /**
-     * Get the user's institution
-     * @return \CSIS\EamBundle\Entity\Institution
-     */
-    public function getInstitution() {
-        return $this->institution;
-    }
-    
-    /**
-     * Set the user's institution
-     * @param \CSIS\EamBundle\Entity\Institution $institution
-     * @return \CSIS\UserBundle\Entity\User
-     */
-    public function setInstitution($institution = null) {
-        $this->institution = $institution;
-        
-        return $this;
-    }
-    
     public function getFormatedRoles() {
         $roles = $this->getRoles();
         array_walk($roles, function(&$role) {
             $role = ucwords(strtolower(str_replace('_', ' ', substr($role, 5))));
         });
-        
+
         return $roles;
     }
 
     /**
-     * Set datas
+     * Get id
      *
-     * @param \CSIS\EamBundle\Entity\People $datas
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
      * @return User
      */
-    public function setDatas(\CSIS\EamBundle\Entity\People $datas)
+    public function setName($name)
     {
-        $this->datas = $datas;
+        $this->name = $name;
 
         return $this;
     }
 
     /**
-     * Get datas
+     * Get name
      *
-     * @return \CSIS\EamBundle\Entity\People 
+     * @return string
      */
-    public function getDatas()
+    public function getName()
     {
-        return $this->datas;
+        return $this->name;
+    }
+
+    /**
+     * Set firstName
+     *
+     * @param string $firstName
+     * @return User
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * Get firstName
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set lastName
+     *
+     * @param string $lastName
+     * @return User
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get lastName
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set phoneNumber
+     *
+     * @param string $phoneNumber
+     * @return User
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get phoneNumber
+     *
+     * @return string
+     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return User
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set lab
+     *
+     * @param \CSIS\EamBundle\Entity\Laboratory $lab
+     * @return User
+     */
+    public function setLab(\CSIS\EamBundle\Entity\Laboratory $lab = null)
+    {
+        $this->lab = $lab;
+
+        return $this;
+    }
+
+    /**
+     * Get lab
+     *
+     * @return \CSIS\EamBundle\Entity\Laboratory
+     */
+    public function getLab()
+    {
+        return $this->lab;
+    }
+
+    /**
+     * Set institution
+     *
+     * @param \CSIS\EamBundle\Entity\Institution $institution
+     * @return User
+     */
+    public function setInstitution(\CSIS\EamBundle\Entity\Institution $institution = null)
+    {
+        $this->institution = $institution;
+
+        return $this;
+    }
+
+    /**
+     * Get institution
+     *
+     * @return \CSIS\EamBundle\Entity\Institution
+     */
+    public function getInstitution()
+    {
+        return $this->institution;
     }
 }

@@ -13,7 +13,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class People
 {
-
     /**
      * @var integer
      *
@@ -61,13 +60,6 @@ class People
      * @Assert\Url()
      */
     private $url;
-
-
-    /**
-     * @ORM\OneToOne(targetEntity="CSIS\UserBundle\Entity\user", mappedBy="datas")
-     */
-    private $userAccount; 
-
 
     public function __toString()
     {
@@ -203,7 +195,6 @@ class People
         return $this->url;
     }
 
-
     /**
      * Set userAccount
      *
@@ -215,28 +206,5 @@ class People
         $this->userAccount = $userAccount;
 
         return $this;
-    }
-
-    /**
-     * Get userAccount
-     *
-     * @return \CSIS\UserBundle\Entity\user 
-     */
-    public function getUserAccount()
-    {
-        return $this->userAccount;
-    }
-
-    /**
-     * Has user account ?
-     * @return bool
-     */
-    public function hasUserAccount()
-    {
-        if ($this->userAccount == null)
-        {
-            return false;
-        }
-        return true;
     }
 }
