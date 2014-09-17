@@ -25,4 +25,7 @@ services:
             - "@fos_user.util.user_manipulator"
             - false
         tags: [{ name: "form.type", alias: "csis_user_registration" }]
-            
+
+    csis.user.manager:
+        class: CSIS\UserBundle\Manager\UserManager
+        arguments: [@fos_user.user_manager]
