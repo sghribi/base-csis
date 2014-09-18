@@ -1,19 +1,9 @@
 <?php
 
-/*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace CSIS\UserBundle\Form\Type;
 
 use FOS\UserBundle\Form\Type\ProfileFormType as BaseProfileFormType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Security\Core\Validator\Constraint\UserPassword;
 
 class ProfileFormType extends BaseProfileFormType
 {
@@ -32,7 +22,9 @@ class ProfileFormType extends BaseProfileFormType
     {
         $builder
             ->add('firstName', 'text', array('label' => 'Prénom :'))
-            ->add('lastName', 'text', array('label' => 'Nom de famille :'))
+            ->add('lastName', 'text', array('label' => 'Nom :'))
+            ->add('url', null, array('label' => 'Site Web :'))
+            ->add('phoneNumber', null, array('label' => 'Téléphone :'))
         ;
         
         parent::buildUserForm($builder, $options);

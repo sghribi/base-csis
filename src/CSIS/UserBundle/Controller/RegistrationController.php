@@ -62,7 +62,7 @@ class RegistrationController extends BaseController
         );
         
         if ($request->isMethod('POST')) {
-            $form->bind($request);
+            $form->handleRequest($request);
             
             if ($form->isValid()) {
                 if ($confirmationEnabled) {
@@ -96,7 +96,7 @@ class RegistrationController extends BaseController
         );
         
         if ($request->isMethod('POST')) {
-            $form->bind($request);
+            $form->handleRequest($request);
             
             if ($form->isValid()) {
                 if ($confirmationEnabled) {

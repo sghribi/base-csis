@@ -45,8 +45,8 @@ class RegistrationFormType extends BaseProfileFormType {
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('firstname', 'text', array('label' => 'Prénom :'))
-            ->add('lastname', 'text', array('label' => 'Nom de famille :'))
+            ->add('firstName', 'text', array('label' => 'Prénom :'))
+            ->add('lastName', 'text', array('label' => 'Nom de famille :'))
             ->add('plainPassword', 'repeated', array(
                 'type' => 'password',
                 'options' => array('translation_domain' => 'FOSUserBundle'),
@@ -55,6 +55,8 @@ class RegistrationFormType extends BaseProfileFormType {
                 'invalid_message' => 'fos_user.password.mismatch',
                 'required' => $this->psswd_req,
             ))
+            ->add('url', null, array('label' => 'Site Web :'))
+            ->add('phoneNumber', null, array('label' => 'Téléphone :'))
         ;
 
         $user = $this->securityContext->getToken()->getUser();

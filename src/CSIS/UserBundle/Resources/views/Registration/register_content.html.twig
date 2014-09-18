@@ -1,11 +1,13 @@
 <form class="well span4 offset2" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
     <fieldset>
       <legend>Créer un nouveau utilisateur</legend>
-      {{ form_row(form.firstname) }}
-      {{ form_row(form.lastname) }}
+      {{ form_row(form.firstName) }}
+      {{ form_row(form.lastName) }}
       {{ form_row(form.username) }}
       {{ form_row(form.email) }}
       {{ form_row(form.plainPassword) }}
+      {{ form_row(form.url) }}
+      {{ form_row(form.phoneNumber) }}
       {{ form_row(form.roles) }}
       {{ form_rest(form) }}
       <br />

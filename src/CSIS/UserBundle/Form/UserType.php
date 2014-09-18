@@ -37,8 +37,8 @@ class RegistrationFormType extends BaseProfileFormType {
 
   public function buildForm(FormBuilderInterface $builder, array $options) {
     $builder
-            ->add('firstname', 'text', array('label' => 'Prénom :'))
-            ->add('lastname', 'text', array('label' => 'Nom de famille :'))
+            ->add('firstName', 'text', array('label' => 'Prénom :'))
+            ->add('lastName', 'text', array('label' => 'Nom de famille :'))
     ;
 
     parent::buildForm($builder, $options);

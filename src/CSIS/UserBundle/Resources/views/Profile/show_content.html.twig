@@ -5,4 +5,6 @@
     <p>Nom de famille : {{ user.lastName }}</p>
     <p>{{ 'profile.show.username'|trans({}, 'FOSUserBundle') }}: {{ user.username }}</p>
     <p>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}: {{ user.email }}</p>
+    <p>Site Web : {{ user.url }}</p>
+    <p>Téléphone : {{ user.phoneNumber }}</p>
 </div>
