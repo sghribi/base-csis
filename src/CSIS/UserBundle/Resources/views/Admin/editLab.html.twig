@@ -4,8 +4,9 @@
 
 <form class="well span9 offset1" action="{{ path('csis_user_edit_lab', {'username': user.username}) }}" {{ form_enctype(form) }} method="POST">
     <fieldset>
-      <legend>Modifier le aboratoire de l'utilisateur {{ user.lastname}} {{ user.firstname }}</legend>
+      <legend>Modifier le laboratoire de l'utilisateur {{ user.lastName}} {{ user.firstName }}</legend>
       {{ form_widget(form) }}
+      <p class="help-block">Vous voyez les laboratoires de l'institution gérée par l'utilisateur, le laboratoire géré par l'utilisateur</p>
       <br />
       <div>
           <input class="btn btn-success" type="submit" value="Continuer" />

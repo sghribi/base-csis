@@ -86,6 +86,7 @@ class RegistrationFormType extends BaseProfileFormType {
                     'choices'  => $roles,
                     'required' => true,
                     'multiple' => true,
+                    'expanded' => false,
                     'label'    => 'Rôles :',
                     'auto_initialize' => false,
                 );
@@ -95,18 +96,6 @@ class RegistrationFormType extends BaseProfileFormType {
                 $event->getForm()->add($factory->createNamed('roles', 'choice', null, $formOptions));
             }
         );
-
-        // État du compte
-        $builder->add('enabled', 'choice', array(
-            'choices' => array(
-                1 => 'Activé',
-                0 => 'Désactivé'
-            ),
-            'multiple' => false,
-            'expanded' => false,
-            'label' => 'État du compte :',
-            'required' => true
-        ));
     }
 
     public function getName() {

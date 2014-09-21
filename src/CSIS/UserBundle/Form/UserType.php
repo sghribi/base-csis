@@ -14,17 +14,17 @@ use Symfony\Component\Security\Core\Role\Role;
 class RegistrationFormType extends BaseProfileFormType {
 
   /**
-   * @var Symfony\Component\Security\Core\Role\RoleHierarchy 
+   * @var RoleHierarchy
    */
   private $securityHierarchy;
 
   /**
-   * @var FOS\UserBundle\Util\UserManipulator
+   * @var UserManipulator
    */
   private $userManipulator;
   
   /**
-   * @var Symfony\Component\Security\Core\SecurityContext
+   * @var SecurityContext
    */
   private $securityContext;
   

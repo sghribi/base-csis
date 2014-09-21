@@ -4,27 +4,30 @@
 
 {% block fos_user_content %}
 <div class="span12">
-  <h2>Modifier un utilisateur</h2>
-
-  <form action="{{ path('csis_user_edit', {'username': user.username}) }}" {{ form_enctype(form) }} method="POST">
-    {{ form_row(form.firstName) }}
-    {{ form_row(form.lastName) }}
-    {{ form_row(form.username) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.url) }}
-    {{ form_row(form.phoneNumber) }}
-    {{ form_row(form.plainPassword) }}
-    {{ form_row(form.roles) }}
-    {{ form_rest(form) }}
-    <br />
-    <p>
-      <a href="{{ path('csis_user_show', {'username': user.username}) }}" class="btn">
-        <i class="icon-chevron-left"></i>&nbsp;annuler
-      </a>
-      <button type="submit" class="btn btn-success">
-        <i class="icon-edit icon-white"></i>&nbsp;modifier
-      </button>
-    </p>
-  </form>
+  <div class="row">
+    <form action="{{ path('csis_user_edit', {'username': user.username}) }}" {{ form_enctype(form) }} class="well span4 offset2" method="POST">
+      <fieldset>
+          <legend>Modifier un utilisateur</legend>
+          {{ form_row(form.firstName) }}
+          {{ form_row(form.lastName) }}
+          {{ form_row(form.username) }}
+          {{ form_row(form.email) }}
+          {{ form_row(form.url) }}
+          {{ form_row(form.phoneNumber) }}
+          {{ form_row(form.plainPassword) }}
+          {{ form_row(form.roles) }}
+          {{ form_rest(form) }}
+          <br />
+          <p>
+            <a href="{{ path('csis_user_show', {'username': user.username}) }}" class="btn">
+              <i class="icon-chevron-left"></i>&nbsp;Annuler
+            </a>
+            <button type="submit" class="btn btn-success">
+              <i class="icon-edit icon-white"></i>&nbsp;Modifier
+            </button>
+          </p>
+      </fieldset>
+    </form>
+  </div>
 </div>
 {% endblock %}

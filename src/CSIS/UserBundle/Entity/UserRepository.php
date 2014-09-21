@@ -5,7 +5,6 @@ namespace CSIS\UserBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Doctrine\ORM\Query\ResultSetMapping;
 
 
 /**
@@ -16,7 +15,8 @@ use Doctrine\ORM\Query\ResultSetMapping;
  */
 class UserRepository extends EntityRepository {
     
-    public function findBySuperiorOrderByNamePaginated(User $user,$start, $limit) {
+    public function findBySuperiorOrderByNamePaginated($start, $limit)
+    {
         $qb = $this->createQueryBuilder('u');
         $qb = $this->qbOrderByName($qb);
         $qb = $this->qbPaginate($qb, $start, $limit);
@@ -29,10 +29,11 @@ class UserRepository extends EntityRepository {
         return $this->qbWithRole($qb, 'ROLE_GEST_ESTAB');
     }
     
-    public function getQbFindSuperiorWhithLabRole(User $user) {
+    public function getQbFindSuperiorWhithLabRole(User $user)
+    {
         $qb = $this->createQueryBuilder('u');
         
-        if ( !$user->hasRole('ROLE_ADMIN') ) {
+        if (!$user->hasRole('ROLE_ADMIN')) {
             $qb->leftJoin('u.institution', 'i')
                ->where($qb->expr()->orX(
                          ':user MEMBER OF i.owners',    
@@ -54,20 +55,21 @@ class UserRepository extends EntityRepository {
                   ->setParameter('role3', '%ROLE_ADMIN%');
     }
     
-    public function getQbFindSuperiorWhithEquipmentRole(User $user) {
+    public function getQbFindSuperiorWhithEquipmentRole(User $user)
+    {
         $qb = $this->createQueryBuilder('u');
         
-        if ( !$user->hasRole('ROLE_ADMIN') ) {
+        if (!$user->hasRole('ROLE_ADMIN')) {
             $qb->leftJoin('u.lab', 'l')
-                  ->leftJoin('l.institution', 'i')
-                  ->where($qb->expr()->orX(
+                ->leftJoin('l.institution', 'i')
+                ->where($qb->expr()->orX(
                                 ':user MEMBER OF l.owners',
                                 ':user MEMBER OF i.owners',
                                 $qb->expr()->eq('u.institution', ':institution'),
                                 $qb->expr()->eq('u.lab', ':lab')
                           ))
-                  ->setParameter('institution', $user->getInstitution())
-                  ->setParameter('lab', $user->getLab());
+                ->setParameter('institution', $user->getInstitution())
+                ->setParameter('lab', $user->getLab());
         }
         return $qb->andWhere( $qb->expr()->andX(
                         $qb->expr()->orX(
@@ -85,7 +87,8 @@ class UserRepository extends EntityRepository {
                 ->setParameter('role4', '%ROLE_ADMIN%');
     }
     
-    public function findAllOrderByNamePaginated($start, $limit) {
+    public function findAllOrderByNamePaginated($start, $limit)
+    {
         $qb = $this->createQueryBuilder('u');
         $qb = $this->qbOrderByName($qb);
         $qb = $this->qbPaginate($qb, $start, $limit);
@@ -93,18 +96,20 @@ class UserRepository extends EntityRepository {
         return new Paginator($qb);
     }
     
-    private function qbWithRole(QueryBuilder $qb, $role) {
+    private function qbWithRole(QueryBuilder $qb, $role)
+    {
         return $qb->Where($qb->expr()->like('u.roles', ':role'))
                   ->setParameter('role', '%'.$role.'%');
         
     }
     
-    private function qbOrderByName(QueryBuilder $qb) {
-        return $qb->innerJoin('u.datas', 'd', 'WITH', 'u.datas = d.id')
-                  ->orderBy('d.name, d.firstname', 'ASC');
+    private function qbOrderByName(QueryBuilder $qb)
+    {
+        return $qb->orderBy('u.lastName, u.firstName', 'ASC');
     }
 
-    private function qbPaginate(QueryBuilder $qb, $start, $limit) {
+    private function qbPaginate(QueryBuilder $qb, $start, $limit)
+    {
         if ($start < 1) {
             throw new \InvalidArgumentException('L\'argument $start ne peut être inférieur à 1 (valeur : "' . $start . '").');
         }
@@ -112,5 +117,4 @@ class UserRepository extends EntityRepository {
         return $qb->setFirstResult(($start - 1) * $limit)
                   ->setMaxResults($limit);
     }
-  
 }

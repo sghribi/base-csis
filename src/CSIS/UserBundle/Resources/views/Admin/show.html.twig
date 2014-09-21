@@ -6,14 +6,41 @@
 <div class="span12">
   <h2>Utilisateur</h2>
 
-  <div>
-    <p>Prénom : {{ user.firstName }}</p>
-    <p>Nom de famille : {{ user.lastName }}</p>
-    <p>{{ 'profile.show.username'|trans({}, 'FOSUserBundle') }}: {{ user.username }}</p>
-    <p>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}: {{ user.email }}</p>
-    <p>Rôles : {{ user.formatedRoles|join(', ') }}</p>
-    <p>Laboratoire : {{ user.lab }}</p>
-    <p>Etablissement : {{ user.institution }}</p>
+  <div class="well">
+    <dl class="dl-horizontal">
+      <dt>Prénom</dt>
+      <dd>{{ user.firstName }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt>Nom</dt>
+      <dd>{{ user.lastName }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt>{{ 'profile.show.username'|trans({}, 'FOSUserBundle') }}</dt>
+      <dd>{{ user.username }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}</dt>
+      <dd>{{ user.email }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt>Rôles</dt>
+        <dd>
+          <ul>
+            {% for role in user.formatedRoles %}
+              <li>{{ role }}</li>
+            {% endfor %}
+          </ul>
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt>Laboratoire</dt>
+      <dd>{{ user.lab }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+      <dt>Établissement</dt>
+      <dd>{{ user.institution }}</dd>
+    </dl>
   </div>
 
   <form action="{{ path('csis_user_delete', {'username': user.username}) }}" {{ form_enctype(delete_form) }} method="POST">
@@ -22,9 +49,6 @@
     </a>
     <a href="{{ path('csis_user_edit', {'username': user.username}) }}" class="btn btn-success">
       <i class="icon-edit icon-white"></i>&nbsp;Modifier l'utilisateur
-    </a>
-      <a href="{{ path('people_show', {'id': user.datas.id}) }}" class="btn btn-info">
-      <i class="icon-info-sign icon-white"></i>&nbsp;Accéder fiche contact
     </a>
     <button type="submit" class="btn btn-warning">
       <i class="icon-trash icon-white"></i>&nbsp;Supprimer l'utilisateur

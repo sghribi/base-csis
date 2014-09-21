@@ -39,7 +39,7 @@ class UserManager
         $user->setPlainPassword($password);
         $user->setEnabled((Boolean)$active);
         if ($superAdmin) {
-            $user->setRoles(array('ROLE_SUPER_ADMIN'));
+            $user->setRoles(array('ROLE_ADMIN'));
         } else {
             $user->setRoles(array('ROLE_USER'));
         }
