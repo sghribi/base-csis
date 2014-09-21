@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use CSIS\UserBundle\Entity\User;
 
@@ -29,6 +30,7 @@ class Laboratory {
     /**
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="acronym", type="string", length=255)
      */
     private $acronym;
@@ -36,6 +38,7 @@ class Laboratory {
     /**
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="nameFr", type="string", length=255)
      */
     private $nameFr;
@@ -43,6 +46,7 @@ class Laboratory {
     /**
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="nameEn", type="string", length=255)
      */
     private $nameEn;
@@ -50,6 +54,7 @@ class Laboratory {
     /**
      * @var boolean
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="belongToCSIS", type="boolean")
      */
     private $belongToCSIS = false;
@@ -57,14 +62,17 @@ class Laboratory {
     /**
      * @var boolean
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="researchLaboratory", type="boolean")
      */
     private $researchLaboratory = true;
 
     /**
      * @var \CSIS\EamBundle\Entity\Institution
-     * 
+     *
+     * @Assert\NotBlank(message="Vous devez attacher ce laboratoire à une institution.")
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Institution", inversedBy="laboratories")
+     * @ORM\JoinColumn(name="institution_id", referencedColumnName="id", nullable=false)
      */
     private $institution;
 

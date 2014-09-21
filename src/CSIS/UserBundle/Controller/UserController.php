@@ -2,6 +2,7 @@
 
 namespace CSIS\UserBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -14,39 +15,41 @@ class UserController extends Controller {
     /**
      * Find and displays all users beneath me
      * @Secure(roles="ROLE_GEST_USER")
-     * @param integer $page
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template("CSISUserBundle:Admin:index.html.twig")
      */
-    public function indexAction($page) {
+    public function indexAction($page)
+    {
         $user = $this->getUser();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $userRepo = $em->getRepository('CSISUserBundle:User');
         $maxPerPage = $this->container->getParameter('csis_user_max_per_page');
         
         if ( $user->hasRole('ROLE_ADMIN') ) {
             $users = $userRepo->findAllOrderByNamePaginated($page, $maxPerPage);
         } else {
-            $users = $userRepo->findBySuperiorOrderByNamePaginated($user, $page, $maxPerPage);
+            $users = $userRepo->findBySuperiorOrderByNamePaginated($page, $maxPerPage);
         }
         
-        return $this->render('CSISUserBundle:Admin:index.html.twig', array(
+        return array(
             'users' => $users,
             'page' => $page,
             'nbPages'  => ceil( count($users) / $maxPerPage ),
-        ));
+        );
     }
-    
+
     /**
      * Finds and displays a User.
      * @Secure(roles="ROLE_GEST_USER")
+     * @Template("CSISUserBundle:Admin:show.html.twig")
      */
-    public function showAction(User $user) {
+    public function showAction(User $user)
+    {
         $deleteForm = $this->createDeleteForm($user);
 
-        return $this->render('CSISUserBundle:Admin:show.html.twig', array(
-                    'user' => $user,
-                    'delete_form' => $deleteForm->createView(),
-        ));
+        return array(
+            'user' => $user,
+            'delete_form' => $deleteForm->createView(),
+        );
     }
 
     /**
@@ -57,7 +60,7 @@ class UserController extends Controller {
         $form = $this->createForm($this->container->get('csis.user.form'), $user);
         
         if ( $request->isMethod('POST') ) {
-            $form->bind($request);
+            $form->handleRequest($request);
             
             if ($form->isValid()) {
                 $this->get('fos_user.user_manager')->updateUser($user);
@@ -92,7 +95,7 @@ class UserController extends Controller {
         $form = $this->createDeleteForm($user);
         
         if ( $request->isMethod('POST') ) {
-            $form->bind($request);
+            $form->handleRequest($request);
             
             $data = $form->getData();
             if ($data['id'] == $user->getId()) {
@@ -115,12 +118,12 @@ class UserController extends Controller {
      */
     public function editLaboratoryDependanceAction(Request $request, User $user) {
         $form = $this->createForm(
-                new AddLabType($this->container->get('security.context')->getToken()->getUser()),
-                $user
+            new AddLabType($this->getUser()),
+            $user
         );
         
         if ($request->isMethod('POST')) {
-            $form->bind($request);
+            $form->handleRequest($request);
             
             if ($form->isValid()) {
                 $userManager = $this->container->get('fos_user.user_manager');
@@ -144,12 +147,12 @@ class UserController extends Controller {
      */
     public function editInstitutionDependanceAction(Request $request, User $user) {
         $form = $this->createForm(
-                new AddInstitutionType($this->container->get('security.context')->getToken()->getUser()),
-                $user
+            new AddInstitutionType($this->container->get('security.context')->getToken()->getUser()),
+            $user
         );
         
         if ( $request->isMethod('POST') ) {
-            $form->bind($request);
+            $form->handleRequest($request);
             
             if ($form->isValid()) {
                 $userManager = $this->container->get('fos_user.user_manager');

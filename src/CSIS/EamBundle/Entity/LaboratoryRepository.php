@@ -51,11 +51,12 @@ class LaboratoryRepository extends EntityRepository {
       return $qb->getQuery()->getResult();
     }
     
-    public function getQbReachableLaboratoriesOrderedByAcronym(User $user) {
+    public function getQbReachableLaboratoriesOrderedByAcronym(User $user)
+    {
         $qb = $this->createQueryBuilder('l');
         $qb = $this->qbOrderByAcronym($qb);
         $qb = $this->qbReachByUser($qb, $user);
-        
+
         return $this->qbByOwners($qb, $user);
     }
     
