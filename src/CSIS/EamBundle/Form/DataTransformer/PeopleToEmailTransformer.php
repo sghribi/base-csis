@@ -6,6 +6,12 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Doctrine\Common\Persistence\ObjectManager;
 use CSIS\EamBundle\Entity\People;
 
+/**
+ * Class PeopleToEmailTransformer
+ *
+ * @deprecated
+ * @package CSIS\EamBundle\Form\DataTransformer
+ */
 class PeopleToEmailTransformer implements DataTransformerInterface
 {
     /**

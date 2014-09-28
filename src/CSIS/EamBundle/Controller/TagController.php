@@ -70,7 +70,7 @@ class TagController extends Controller
         $form = $this->createForm(new TagType(), $entity);
 
         // On récupère les valeurs saisies sur le formulaire
-        $form->bind($request);
+        $form->handleRequest($request);
 
         // On vérifie si les champs sont valides
         if ( $form->isValid() ) {

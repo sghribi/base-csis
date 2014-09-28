@@ -43,5 +43,4 @@ class InstitutionType extends AbstractType {
     public function getName() {
         return 'csis_eambundle_institutiontype';
     }
-
 }

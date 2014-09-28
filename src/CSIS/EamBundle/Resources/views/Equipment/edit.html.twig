@@ -19,7 +19,7 @@
 
  </div>
   <hr/>
-  {% render "CSISEamBundle:Equipment:editTags" with {'equipment': equipment.id } %}
+  {{ render(controller('CSISEamBundle:Equipment:editTags', { 'equipment': equipment.id })) }}
 {% endblock %}
 
 {% block page_js %}

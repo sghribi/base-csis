@@ -201,7 +201,7 @@ class PeopleController extends Controller
     }
     
     public function autocompleteAction(Request $request) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $peopleRepo = $em->getRepository('CSISEamBundle:People');
         $input = $request->request->get('input');
         

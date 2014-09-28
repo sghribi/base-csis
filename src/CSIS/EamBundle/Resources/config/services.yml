@@ -7,6 +7,15 @@ services:
             - "@router"
         tags:
             - { name: form.type, alias: csis_people_selector }
+
+    csis.type.user_selector:
+        class: CSIS\EamBundle\Form\Type\UserSelectorType
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@session"
+            - "@router"
+        tags:
+            - { name: form.type, alias: csis_user_selector }
             
     csis.type.tag_selector:
         class: CSIS\EamBundle\Form\Type\TagSelectorType

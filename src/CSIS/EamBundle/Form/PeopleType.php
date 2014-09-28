@@ -6,6 +6,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class PeopleType
+ *
+ * @deprecated
+ * @package CSIS\EamBundle\Form
+ */
 class PeopleType extends AbstractType {
 
   public function buildForm(FormBuilderInterface $builder, array $options) {
