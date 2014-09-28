@@ -97,7 +97,7 @@ class EquipmentType extends AbstractType
                     'class' => 'span5',
                 ),
                 'required' => false,
-            ))
+            )) //@TODO: replace with user
             ->add('contacts', 'collection', array(
                 'type' => 'csis_people_selector',
                 'allow_add' => true,
@@ -130,5 +130,4 @@ class EquipmentType extends AbstractType
   {
     return 'csis_eambundle_equipmenttype';
   }
-
 }
