@@ -116,6 +116,8 @@ class Equipment
     private $laboratory;
 
     /**
+     * @deprecated: to delete
+     * @TODO: à supprimer
      * @var CSISEamBundle\Entity\People
      * 
      * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\People")

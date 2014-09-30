@@ -84,11 +84,21 @@ class Laboratory {
     private $equipments;
 
     /**
+     * @deprecated
+     * @TODO: to delete
      * @var \CSIS\EamBundle\Entity\People
      * 
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\People")
      */
     private $responsible;
+
+    /**
+     * @var \CSIS\UserBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="CSIS\UserBundle\Entity\User", inversedBy="respLaboratories")
+     * @ORM\JoinColumn(name="responsable_user_id", referencedColumnName="id")
+     */
+    private $responsibleUser;
 
     /**
      * @var CSISUserBundle\Entity\User

@@ -281,8 +281,8 @@ class EquipmentController extends Controller
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:addOwner.html.twig")
-     * @Route("/{id}/credentials", name="equipment_credentials_add", requirements={"id" = "\d+"})
-     * @Method({"POST"})
+     * @Route("/{id}/credentials/add", name="equipment_credentials_add", requirements={"id" = "\d+"})
+     * @Method({"GET", "POST"})
      */
     public function credentialsAddAction(Request $request, Equipment $equipment)
     {

@@ -64,6 +64,13 @@ class User extends BaseUser
      */
     protected $institution;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection $respLaboratories
+     *
+     * @ORM\OneToMany(targetEntity="CSIS\EamBundle\Entity\Laboratory", mappedBy="responsibleUser")
+     */
+    protected $respLaboratories;
+
     public function __toString() {
         return $this->getLastName() . ' ' . $this->getFirstName();
     }
