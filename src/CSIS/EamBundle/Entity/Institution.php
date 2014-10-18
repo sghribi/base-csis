@@ -55,21 +55,23 @@ class Institution {
     private $url;
 
     /**
-     * @var CSISUserBundle\Entity\User
+     * @var User
      * 
      * @ORM\ManyToMany(targetEntity="CSIS\UserBundle\Entity\User")
      */
     private $owners;
 
     /**
-     * @var CSISEAMBundle\Entity\Laboratory
+     * @var Laboratory
+     *
+     * Liste des utilisateurs qui ont un droit sur cet institution
      * 
-     * @ORM\OneToMany(targetEntity="CSIS\EamBundle\Entity\Laboratory", mappedBy="institution")
+     * @ORM\OneToMany(targetEntity="Laboratory", mappedBy="institution")
      */
     private $laboratories;
 
     /**
-     * @var datetime $lastEditDate
+     * @var \DateTime $lastEditDate
      *
      * @Gedmo\Timestampable(on="create", on="update")
      * @ORM\Column(type="datetime")

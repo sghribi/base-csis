@@ -92,16 +92,18 @@
                 <i class="icon-user"></i> Gestion des droits d'accès
               </a>
             </li>
-            <li>
-              <a href="{{ path('laboratory_fusion', { 'id': laboratory.id }) }}">
-                <i class="icon-resize-small"></i> Fusionner
-              </a>
-            </li>
-            <li>
-              <a href="">
-                <i class="icon-resize-full"></i> Séparer (wip)
-              </a>
-            </li>
+            {# Désactivé car non fonctionnel
+                <li>
+                  <a class="disabled" href="{{ path('laboratory_fusion', { 'id': laboratory.id }) }}">
+                    <i class="icon-resize-small"></i> Fusionner (/!\)
+                  </a>
+                </li>
+                <li>
+                  <a class="disabled" href="">
+                    <i class="icon-resize-full"></i> Séparer  (/!\)
+                  </a>
+                </li>
+             #}
           </ul>
         </div>
       </div>

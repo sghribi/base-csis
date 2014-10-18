@@ -9,9 +9,9 @@
       <li><a href="{{ path("fos_user_profile_show") }}">Voir mes informations</a></li>
       <li><a href="{{ path("fos_user_resetting_request") }}">Changer mon mot de passe</a></li>
      </ul>
-    
-    
-     {% if is_granted("ROLE_GEST_PEOPLE") %}
+
+   {# @TODO: DELETE THIS ... #}
+   {% if is_granted("ROLE_GEST_PEOPLE") %}
     <hr />
     <h4>Gestion des Contacts et Utilisateurs</h4>
     <ul>
@@ -23,7 +23,7 @@
   {% if is_granted("ROLE_GEST_USER") %}
     <ul>
       <li><a href="{{ path("fos_user_registration_register") }}">Créer un nouvel utilisateur</a></li>
-      <li><a href="{{ path("csis_user_index") }}">Administrer mes utilisateurs</a></li>
+      <li><a href="{{ path("csis_user_index") }}">Administrer les utilisateurs</a></li>
     </ul>
     {% endif %}
     

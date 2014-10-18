@@ -115,6 +115,7 @@ class UserController extends Controller {
     /**
      * Edits a User.
      * @Secure(roles="ROLE_GEST_USER")
+     * @Template("CSISUserBundle:Admin:editLab.html.twig")
      */
     public function editLaboratoryDependanceAction(Request $request, User $user) {
         $form = $this->createForm(
@@ -135,10 +136,10 @@ class UserController extends Controller {
             }
         }
         
-        return $this->render('CSISUserBundle:Admin:editLab.html.twig', array(
+        return array(
             'form' => $form->createView(),
             'user' => $user,
-        ));
+        );
     }
     
     /**

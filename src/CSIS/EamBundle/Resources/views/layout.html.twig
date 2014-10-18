@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset("css/bootstrap-2.3.1.min.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("css/smoothness/jquery-ui-1.10.3.min.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("css/main.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ asset("css/chosen.min.css") }}">
 {% endblock %}
 
 {% block javascripts %}
@@ -14,6 +15,7 @@
 <script type="text/javascript" src="{{ asset("js/jquery-1.9.1.min.js") }}"></script>
 <script type="text/javascript" src="{{ asset("js/jquery-ui-1.10.3.min.js") }}"></script>
 <script type="text/javascript" src="{{ asset("js/bootstrap-2.3.1.min.js") }}"></script>
+<script type="text/javascript" src="{{ asset("js/chosen.jquery.min.js") }}"></script>
 <script>$("[data-toggle='tooltip']").tooltip();</script>
 {% block page_js %}{% endblock %}
 {% endblock %}
@@ -65,13 +67,15 @@
       <hr />
       <div class="pull-center" style="padding-bottom: 30px">
         <img alt="sponsors" src="{{ asset("img/sponsors.jpg") }}" /><br /><br />
-        <p class="muted">
-          Portail réalisé par des 
+        <small class="muted">
+          Portail réalisé en 2013 par des
           <span data-toggle="tooltip" title="Julien BEAUSSIER, Cédric BOULET-KESSLER, Stéphanie CHOU, Céline DANGLET, Vaïk DUHAUTOIS, Faouzi GAZZAH">
             <u>apprentis</u>
           </span> 
           en informatique de Polytech Paris-Sud
-        </p>
+          <br/>
+          Refonte agile du portail en 2014 par <a style="color: inherit; text-decoration: underline;" href="https://linkedin.com/in/ghribi" target="_blank">Samy GHRIBI</a>, étudiant à Centrale Paris.
+        </small>
       </div>
     </div>
   </div>

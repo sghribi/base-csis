@@ -55,24 +55,25 @@ class User extends BaseUser
     protected $url;
 
     /**
+     * Laboratoire dans lequel travaille l'utilisateur.
+     * ATTENTION : cela ne donne aucun droit à l'utilisateur
+     * Les droits sont gérés via Laboratory::$owners
+     *
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Laboratory")
      */
     protected $lab;
 
     /**
+     * Institution dans laquelle travaille l'utilisateur
+     * ATTENTION : cela ne donne aucun droit à l'utilisateur
+     * Les droits sont gérés via Institution::$owners
+     *
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Institution")
      */
     protected $institution;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection $respLaboratories
-     *
-     * @ORM\OneToMany(targetEntity="CSIS\EamBundle\Entity\Laboratory", mappedBy="responsibleUser")
-     */
-    protected $respLaboratories;
-
     public function __toString() {
-        return $this->getLastName() . ' ' . $this->getFirstName();
+        return $this->getLastName() . ' ' . $this->getFirstName() . ' <' . $this->getEmail() . '>';
     }
 
     public function getFormatedRoles() {

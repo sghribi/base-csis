@@ -125,14 +125,14 @@ class Equipment
     private $contacts;
 
     /**
-     * @var CSISEamBundle\Entity\Category
+     * @var Category
      * 
      * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Category", inversedBy="equipments")
      */
     private $categories;
 
     /**
-     * @var CSISUserBundle\Entity\User
+     * @var User
      * 
      * @ORM\ManyToMany(targetEntity="CSIS\UserBundle\Entity\User")
      */

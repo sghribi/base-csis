@@ -2,6 +2,7 @@
 
 namespace CSIS\EamBundle\Form;
 
+use CSIS\UserBundle\Entity\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -19,7 +20,7 @@ class LaboratoryType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $user = $this->user;
-        
+
         $builder
                 ->add('acronym', 'text', array(
                     'label' => 'Acronyme',
@@ -55,16 +56,9 @@ class LaboratoryType extends AbstractType {
                     'class' => 'CSISEamBundle:Institution',
                     'property' => 'name',
                     'label' => 'Établissement',
+                    'required' => true,
                     'query_builder' => function(InstitutionRepository $er) use ($user) {
                         return $er->getQbReachableInstitutions($user);
-                    },
-                    'attr' => array('class' => 'span7',),
-                ))
-                ->add('responsible', 'entity', array(
-                    'class' => 'CSISEamBundle:People',
-                    'label' => 'Responsable',
-                    'query_builder' => function(PeopleRepository $er) {
-                        return $er->getQbFindAllOrderedByName();
                     },
                     'attr' => array('class' => 'span7',),
                 ))

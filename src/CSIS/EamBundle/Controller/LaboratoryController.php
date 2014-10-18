@@ -2,6 +2,7 @@
 
 namespace CSIS\EamBundle\Controller;
 
+use CSIS\EamBundle\Form\LaboratoryEditOwnersType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -37,9 +38,9 @@ class LaboratoryController extends Controller
         $laboratories = $em->getRepository('CSISEamBundle:Laboratory')->findByOwnerOrderByAcronymPaginated($user, $page, $maxPerPage);
 
         return array(
-                    'laboratories' => $laboratories,
-                    'page' => $page,
-                    'nbPages' => ceil(count($laboratories) / $maxPerPage),
+            'laboratories' => $laboratories,
+            'page' => $page,
+            'nbPages' => ceil(count($laboratories) / $maxPerPage),
         );
     }
 
@@ -112,7 +113,7 @@ class LaboratoryController extends Controller
      * Displays a form to edit an existing Laboratory entity.
      * @Secure(roles="ROLE_GEST_LAB")
      * @Template("CSISEamBundle:Laboratory:edit.html.twig")
-     * @Route("{id}/edit", name="laboratory_edit", requirements={"id" = "\d+"})
+     * @Route("/{id}/edit", name="laboratory_edit", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
     public function editAction(Laboratory $laboratory)
@@ -131,12 +132,12 @@ class LaboratoryController extends Controller
      * Edits an existing Laboratory entity.
      * @Secure(roles="ROLE_GEST_LAB")
      * @Template("CSISEamBundle:Laboratory:edit.html.twig")
-     * @Route("{id}/update", name="laboratory_update", requirements={"id" = "\d+"})
+     * @Route("/{id}/update", name="laboratory_update", requirements={"id" = "\d+"})
      * @Method({"POST"})
      */
     public function updateAction(Request $request, Laboratory $laboratory)
     {
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($laboratory->getId());
         $editForm = $this->createForm(new LaboratoryType($this->getUser()), $laboratory);
         $editForm->handleRequest($request);
 
@@ -146,7 +147,7 @@ class LaboratoryController extends Controller
             $em->flush();
             
             $this->get('session')->getFlashBag()->add('valid', 'Laboratoire modifié !');
-            return $this->redirect($this->generateUrl('laboratory_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('laboratory_show', array('id' => $laboratory->getId())));
         }
 
         return array(
@@ -235,14 +236,14 @@ class LaboratoryController extends Controller
     }
     
     /**
-     * Add an owner to a laboratory
+     * Edit owners of a laboratory
      * @Secure(roles="ROLE_GEST_LAB")
-     * @Template("CSISEamBundle:Laboratory:addOwner.html.twig")
-     * @Route("/{id}/credentials/add", name="laboratory_credentials_add", requirements={"id" = "\d+"})
+     * @Template("CSISEamBundle:Laboratory:editOwners.html.twig")
+     * @Route("/{id}/credentials/edit", name="laboratory_credentials_edit", requirements={"id" = "\d+"})
      */
-    public function credentialsAddAction(Request $request, Laboratory $laboratory)
+    public function credentialsEditAction(Request $request, Laboratory $laboratory)
     {
-        $form = $this->createForm(new LaboratoryAddOwnerType($this->getUser()), $laboratory);
+        $form = $this->createForm(new LaboratoryEditOwnersType($this->getUser()), $laboratory);
         
         $form->handleRequest($request);
 

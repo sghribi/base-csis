@@ -35,13 +35,15 @@
                             {{ form_widget(edit_form) }}
                             <div class="pull-right">
                                 {# Definition des bouttons #}
-                                <span class="span2">
-                                    <button type="submit" class="btn btn-success btn-block" data-toggle="tooltip" title="Appliquer les modifications">
-                                        <i class="icon-share-alt icon-white"></i>
-                                        Appliquer
-                                    </button>
-                                </span>
-                            </div>      
+                                <a href="{{ path('laboratory_show', {id: laboratory.id }) }}" type="button" class="btn btn-default">
+                                    <i class="icon-chevron-left"></i>
+                                    Retour
+                                </a>
+                                <button type="submit" class="btn btn-success" data-toggle="tooltip" title="Appliquer les modifications">
+                                    <i class="icon-share-alt icon-white"></i>
+                                    Appliquer
+                                </button>
+                            </div>
                         </fieldset>
                     </div>
                 </div>

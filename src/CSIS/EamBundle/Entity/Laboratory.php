@@ -84,31 +84,16 @@ class Laboratory {
     private $equipments;
 
     /**
-     * @deprecated
-     * @TODO: to delete
-     * @var \CSIS\EamBundle\Entity\People
-     * 
-     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\People")
-     */
-    private $responsible;
-
-    /**
-     * @var \CSIS\UserBundle\Entity\User
+     * @var User[]
      *
-     * @ORM\ManyToOne(targetEntity="CSIS\UserBundle\Entity\User", inversedBy="respLaboratories")
-     * @ORM\JoinColumn(name="responsable_user_id", referencedColumnName="id")
-     */
-    private $responsibleUser;
-
-    /**
-     * @var CSISUserBundle\Entity\User
-     * 
+     * Liste des utilisateurs qui ont un droit sur ce laboratoire
+     *
      * @ORM\ManyToMany(targetEntity="CSIS\UserBundle\Entity\User")
      */
     private $owners;
-    
+
     /**
-     * @var datetime $lastEditDate
+     * @var \DateTime $lastEditDate
      *
      * @Gedmo\Timestampable(on="create", on="update")
      * @ORM\Column(type="datetime")

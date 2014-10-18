@@ -1,0 +1,31 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{% block csis_body %}
+
+<div class="row">
+  <div class="span10 offset1">
+    <div class="well">
+      <form action="{{ path('institution_credentials_edit', {'id': institution.id}) }}" method="post" {{ form_enctype(form) }}>
+        <fieldset>
+          <legend>Éditer les propriétaires</legend>
+          {{ form_widget(form) }}
+          <br />
+          <button type="submit" class="btn btn-success">Éditer</button>
+          <a href="{{ path('institution_credentials', {'id': institution.id}) }}" class="btn">
+             Annuler
+          </a>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block page_js %}
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            $("#csis_eambundle_institutionEditOwnerstype_owners").chosen({disable_search_threshold: 10, no_results_text: "Aucun résultat",placeholder_text_multiple: 'Sélectionner les propriétaires', });
+        });
+    </script>
+{% endblock %}

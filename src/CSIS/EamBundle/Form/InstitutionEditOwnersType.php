@@ -8,16 +8,16 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use CSIS\UserBundle\Entity\UserRepository;
 
-class InstitutionAddOwnerType extends AbstractType {
+class InstitutionEditOwnersType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('owners', 'entity', array(
                     'class' => 'CSISUserBundle:User',
                     'label' => ' ',
-                    'multiple' => false,
+                    'multiple' => true,
                     'expanded' => false,
-                    'attr' => array('class' => 'span4'),
+                    'attr' => array('class' => 'span9'),
                     'query_builder' => function(UserRepository $er) {
                             return $er->getQbfindAllWithEstabRole();
                     }
@@ -32,7 +32,7 @@ class InstitutionAddOwnerType extends AbstractType {
     }
 
     public function getName() {
-        return 'csis_eambundle_institutionAddOwnertype';
+        return 'csis_eambundle_institutionEditOwnerstype';
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace CSIS\EamBundle\Controller;
 
+use CSIS\EamBundle\Form\InstitutionEditOwnersType;
+use CSIS\EamBundle\Form\LaboratoryEditOwnersType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -226,12 +228,12 @@ class InstitutionController extends Controller {
     /**
      * Add an owner to an institution
      * @Secure(roles="ROLE_GEST_ESTAB")
-     * @Route("/{id}/credentials/add", name="institution_credentials_add", requirements={"id" = "\d+"})
-     * @Template("CSISEamBundle:Institution:addOwner.html.twig")
+     * @Route("/{id}/credentials/edit", name="institution_credentials_edit", requirements={"id" = "\d+"})
+     * @Template("CSISEamBundle:Institution:editOwners.html.twig")
      */
-    public function credentialsAddAction(Institution $institution, Request $request)
+    public function credentialsEditAction(Institution $institution, Request $request)
     {
-        $form = $this->createForm(new InstitutionAddOwnerType(), $institution);
+        $form = $this->createForm(new InstitutionEditOwnersType($this->getUser()), $institution);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
