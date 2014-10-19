@@ -1,13 +1,4 @@
 services:
-    csis.type.people_selector:
-        class: CSIS\EamBundle\Form\Type\PeopleSelectorType
-        arguments: 
-            - "@doctrine.orm.entity_manager"
-            - "@session"
-            - "@router"
-        tags:
-            - { name: form.type, alias: csis_people_selector }
-
     csis.type.user_selector:
         class: CSIS\EamBundle\Form\Type\UserSelectorType
         arguments:

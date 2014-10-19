@@ -68,6 +68,19 @@ class UserToEmailTransformer implements DataTransformerInterface
               'La personne avec l\'email "%s" ne peut pas être trouvée !',
               $email
           ));
+
+
+            // @TODO: handle ...
+//            $people = new People();
+//            $people->setEmail($email);
+//            $this->om->persist($people);
+//            $this->om->flush();
+//
+//            $url = $this->router->generate('people_edit', array('id' => $people->getId()) );
+//            $msg = 'Le contact que vous avez associé n\'existe pas encore. Veuillez compléter ses informations.';
+//            $link = '<a href="' . $url . '">Cliquez ici</a>';
+//
+//            $this->session->getFlashBag()->set('main_valid', ($msg . $link) );
         }
         
         return $user;

@@ -199,31 +199,6 @@ class PeopleController extends Controller
 
         return $this->redirect($this->generateUrl('people'));
     }
-    
-    public function autocompleteAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $peopleRepo = $em->getRepository('CSISEamBundle:People');
-        $input = $request->request->get('input');
-        
-        if ($request->isXmlHttpRequest() ) {
-            $peoples = $peopleRepo->findAutocomplete($input);
-            
-            $data = array();
-            if ( count($peoples) > 0 ) {
-                foreach ($peoples as $people) $data[] = $people->getEmail();
-            } else {
-                $data[] = 'Aucun résulat trouvé. Vous pouvez ajouter un';
-                $data[] = 'nouveau contact il sera automatiquement créé.';
-            }
-            
-            return new Response(json_encode($data));
-                
-        } else {
-            throw new AccessDeniedHttpException(
-                    'La page à laquelle vous tentez d\'accéder ne fonctionne que par ajax'
-            );
-        }
-    }
 
     private function createDeleteForm($id)
     {

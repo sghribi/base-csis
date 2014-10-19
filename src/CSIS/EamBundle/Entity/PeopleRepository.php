@@ -38,19 +38,7 @@ class PeopleRepository extends EntityRepository {
         
         return new Paginator($qb);
     }
-    
-    public function findAutocomplete($email) {
-        $qb = $this->createQueryBuilder('p');
-        
-        return $qb->where($qb->expr()->like('p.email', ':email'))
-           ->orderBy('p.email')
-           ->setParameter('email', '%'.$email.'%')
-           ->setFirstResult(0)
-           ->setMaxResults(10)
-           ->getQuery()
-           ->getResult();
-    }
-    
+
     public function getQbFindAllOrderedByName() {
         $qb = $this->createQueryBuilder('c');
         

@@ -37,9 +37,3 @@ people_delete:
 people_create_useraccount:
     pattern:  /{id}/create_useraccount
     defaults: { _controller: "CSISEamBundle:People:createUserAccount" }
-
-people_autocomplete:
-    pattern:  /autocomplete
-    defaults: { _controller: "CSISEamBundle:People:autocomplete", _format: json }
-    requirements:
-        _method: post
