@@ -25,10 +25,6 @@ CSISEamBundle_laboratory:
     resource: "@CSISEamBundle/Controller/LaboratoryController.php"
     type:     annotation
 
-CSISEamBundle_people:
-    resource: "@CSISEamBundle/Resources/config/routing/people.yml"
-    prefix:   /peoples
-
 CSISEamBundle_tag:
     resource: "@CSISEamBundle/Resources/config/routing/tag.yml"
     prefix:   /tags

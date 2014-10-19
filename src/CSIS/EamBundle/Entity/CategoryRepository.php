@@ -27,7 +27,7 @@ class CategoryRepository extends EntityRepository
     }
     
      /*
-     * used by peoples index
+     * used by users index
      */
     public function findByOrderNamePaginated ($start, $limit){
         $qb = $this->createQueryBuilder('f');
