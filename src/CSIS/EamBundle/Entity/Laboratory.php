@@ -7,12 +7,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use CSIS\UserBundle\Entity\User;
 
 /**
  * Laboratory
  *
+ * @UniqueEntity("acronym")
  * @ORM\Table(name="laboratory")
  * @ORM\Entity(repositoryClass="CSIS\EamBundle\Entity\LaboratoryRepository")
  */

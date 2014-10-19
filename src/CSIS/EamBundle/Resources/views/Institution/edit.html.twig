@@ -9,45 +9,34 @@
     </div>
 
     <div class="row">
-        <form action="{{ path('institution_update', { 'id': institution.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-            <div class="span12">
-                <div class="span8">
-                    <div class="well">
-                        <fieldset>
-                            <legend>
-                              Modification d'un Etablissement
-                                <div class="pull-right">
-                                    {# Definition des bouttons #}
-                                    <span class="span1">
-                                        <a href="{{ path('institution') }}" class="btn btn-info btn-block" data-toggle="tooltip" title="Retour à la liste des Etablissements">
-                                            <i class="icon-list-alt icon-white"></i>                                            
-                                            Liste
-                                        </a>
-                                    </span> 
-                                    <span class="span2">
-                                        <a href="{{ path('institution_ask_delete', { 'id': institution.id }) }}" class="btn btn-danger btn-block" data-toggle="tooltip" title="Supprimer l'Etablissement">
-                                            <i class="icon-trash icon-white"></i>
-                                            Supprimer
-                                        </a>
-                                    </span>
-                                </div>
-                            </legend>
-                            {{ form_widget(edit_form) }}
-                            <div class="pull-right">
-                                {# Definition des bouttons #}
-                                <a href="{{ path('institution_show', {id: institution.id }) }}" type="button" class="btn btn-default">
-                                    <i class="icon-chevron-left"></i>
-                                    Retour
-                                </a>
-                                <button type="submit" class="btn btn-success" data-toggle="tooltip" title="Appliquer les modifications">
-                                    <i class="icon-share-alt icon-white"></i>
-                                    Appliquer
-                                </button>
-                            </div>
-                        </fieldset>
-                    </div>
+        <form action="{{ path('institution_update', { 'id': institution.id }) }}" method="post" {{ form_enctype(edit_form) }} class="well span10 offset1">
+            <fieldset>
+                <legend>
+                  Modification d'un établissement
+                  <a href="{{ path('institution') }}" class="btn btn-default pull-right" data-toggle="tooltip" title="Retour à la liste des établissements">
+                    <i class="icon-list-alt"></i>
+                    Liste des établissements
+                  </a>
+                  <a href="{{ path('institution_ask_delete', { 'id': institution.id }) }}" class="btn btn-danger pull-right" data-toggle="tooltip" title="Supprimer l'établissement">
+                    <i class="icon-trash icon-white"></i>
+                    Supprimer l'établissement
+                  </a>
+                </legend>
+                {{ form_widget(edit_form) }}
+
+                {# Boutons #}
+                <div class="pull-right">
+                    <a href="{{ path('institution_show', {id: institution.id }) }}" type="button" class="btn btn-default">
+                        <i class="icon-chevron-left"></i>
+                        Retour
+                    </a>
+                    <button type="submit" class="btn btn-success" data-toggle="tooltip" title="Appliquer les modifications">
+                        <i class="icon-share-alt icon-white"></i>
+                        Appliquer
+                    </button>
                 </div>
-            </div>
+            </fieldset>
+            {{ form_rest(edit_form) }}
         </form>
     </div>
 {% endblock %}

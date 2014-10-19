@@ -9,45 +9,35 @@
     </div>
 
     <div class="row">
-        <form action="{{ path('laboratory_update', { 'id': laboratory.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-            <div class="span12">
-                <div class="span8">
-                    <div class="well">
-                        <fieldset>
-                            <legend>
-                              Modification d'un Laboratoire
-                                <div class="pull-right">
-                                    {# Definition des bouttons #}
-                                    <span class="span1">
-                                        <a href="{{ path('laboratory') }}" class="btn btn-info btn-block" data-toggle="tooltip" title="Retour à la liste des Laboratoires">
-                                            <i class="icon-list-alt icon-white"></i>
-                                            Liste
-                                        </a>
-                                    </span> 
-                                    <span class="span2">
-                                        <a href="{{ path('laboratory_ask_delete', { 'id': laboratory.id }) }}" class="btn btn-danger btn-block" data-toggle="tooltip" title="Supprimer le laboratoire">
-                                            <i class="icon-trash icon-white"></i>
-                                            Supprimer
-                                        </a>
-                                    </span>
-                                </div>
-                            </legend>
-                            {{ form_widget(edit_form) }}
-                            <div class="pull-right">
-                                {# Definition des bouttons #}
-                                <a href="{{ path('laboratory_show', {id: laboratory.id }) }}" type="button" class="btn btn-default">
-                                    <i class="icon-chevron-left"></i>
-                                    Retour
-                                </a>
-                                <button type="submit" class="btn btn-success" data-toggle="tooltip" title="Appliquer les modifications">
-                                    <i class="icon-share-alt icon-white"></i>
-                                    Appliquer
-                                </button>
-                            </div>
-                        </fieldset>
-                    </div>
+        <form action="{{ path('laboratory_update', { 'id': laboratory.id }) }}" method="post" {{ form_enctype(edit_form) }} class="well span10 offset1">
+            <fieldset>
+                <legend>
+                  Modification d'un laboratoire
+                  <a href="{{ path('laboratory') }}" class="btn btn-default pull-right" data-toggle="tooltip" title="Retour à la liste des Laboratoires">
+                    <i class="icon-list-alt"></i>
+                    Liste
+                  </a>
+                  <a href="{{ path('laboratory_credentials_edit', {id: laboratory.id}) }}" class="btn btn-info pull-right" data-toggle="tooltip" title="Gérer les propriétaires">
+                    <i class="icon-user icon-white"></i>
+                    Gérer les propriétaires
+                  </a>
+                  <a href="{{ path('laboratory_ask_delete', { 'id': laboratory.id }) }}" class="btn btn-danger pull-right" data-toggle="tooltip" title="Supprimer le laboratoire">
+                    <i class="icon-trash icon-white"></i>
+                    Supprimer le laboratoire
+                  </a>
+                </legend>
+                {{ form_widget(edit_form) }}
+                <div class="pull-right">
+                    <a href="{{ path('laboratory_show', {id: laboratory.id }) }}" type="button" class="btn btn-default">
+                        <i class="icon-chevron-left"></i>
+                        Retour
+                    </a>
+                    <button type="submit" class="btn btn-success" data-toggle="tooltip" title="Appliquer les modifications">
+                        <i class="icon-share-alt icon-white"></i>
+                        Appliquer
+                    </button>
                 </div>
-            </div>
+            </fieldset>
         </form>
     </div>
 {% endblock %}

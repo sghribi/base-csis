@@ -107,7 +107,7 @@ class InstitutionController extends Controller {
      * Displays a form to edit an existing Institution entity.
      * @Secure(roles="ROLE_GEST_ESTAB")
      * @Template("CSISEamBundle:Institution:edit.html.twig")
-     * @Route("{id}/edit", name="institution_edit", requirements={"id" = "\d+"})
+     * @Route("/{id}/edit", name="institution_edit", requirements={"id" = "\d+"})
      */
     public function editAction(Institution $institution)
     {

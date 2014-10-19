@@ -17,8 +17,8 @@
         <h4>Fiche de l'Etablissement : {{ institution.acronym }}</h4>
       </div>
       <div class="pull-right">
-        <a href="{{ path('institution') }}" class="btn btn-info btn-block" data-toggle="tooltip" title="Retour à la liste des Etablissements">
-          <i class="icon-list-alt icon-white"></i> Liste
+        <a href="{{ path('institution') }}" class="btn btn-default" data-toggle="tooltip" title="Retour à la liste des Etablissements">
+          <i class="icon-list-alt"></i> Liste des établissements
         </a>
       </div>
       <br/>
@@ -76,41 +76,15 @@
       {# Definition des bouttons #}
       {% if is_granted("ROLE_GEST_ESTAB") %}
         <div class="pull-right">
-          <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              Actions
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="{{ path('institution_edit', { 'id': institution.id }) }}">
-                  <i class="icon-edit"></i>&nbsp;Modifier
-                </a>
-              </li>
-              <li>
-                <a href="{{ path('institution_ask_delete', { 'id': institution.id }) }}">
-                  <i class="icon-trash"></i>&nbsp;Supprimer
-                </a>
-              </li>
-              <li>
-                <a href="{{ path('institution_credentials', { 'id': institution.id }) }}">
-                  <i class="icon-user"></i>&nbsp;Gestion des droits d'accès
-                </a>
-              </li>
-              {#
-                  <li>
-                    <a href="{{ path('institution_fusion',  {'id': institution.id}) }}">
-                      <i class="icon-resize-small"></i>&nbsp;Fusionner
-                    </a>
-                  </li>
-                  <li>
-                    <a href="">
-                      <i class="icon-resize-full"></i>&nbsp;Séparer (wip)
-                    </a>
-                  </li>
-               #}
-            </ul>
-          </div>
+          <a class="btn btn-success" href="{{ path('institution_edit', { 'id': institution.id }) }}">
+            <i class="icon-edit icon-white"></i> Éditer l'établissement
+          </a>
+          <a class="btn btn-info" href="{{ path('institution_credentials', { 'id': institution.id }) }}">
+              <i class="icon-user icon-white"></i> Gérer les propriétaires
+          </a>
+          <a class="btn btn-danger" href="{{ path('institution_ask_delete', { 'id': institution.id }) }}">
+            <i class="icon-trash icon-white"></i> Supprimer l'établissement
+          </a>
         </div>
         <br />
       {% endif %}

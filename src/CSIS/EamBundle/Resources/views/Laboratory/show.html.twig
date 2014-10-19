@@ -17,8 +17,8 @@
         <h4>Fiche du laboratoire : {{ laboratory.acronym }}</h4>
       </div>
       <div class="pull-right">
-        <a href="{{ path('laboratory') }}" class="btn btn-info span1" data-toggle="tooltip" title="Retour à la liste des laboratoires">
-          <i class="icon-list-alt icon-white"></i> Liste
+        <a href="{{ path('laboratory') }}" class="btn btn-default" data-toggle="tooltip" title="Retour à la liste des laboratoires">
+          <i class="icon-list-alt"></i> Liste des laboratoires
         </a>
       </div>
       <br/>
@@ -72,40 +72,15 @@
       
       {% if is_granted("ROLE_GEST_LAB") %}
       <div class="pull-right">
-        <div class="btn-group">
-          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-            Actions&nbsp;<span class="caret"></span>
+          <a class="btn-success btn" href="{{ path('laboratory_edit', { 'id': laboratory.id }) }}">
+            <i class="icon-edit icon-white"></i> Éditer le laboratoire
           </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a href="{{ path('laboratory_edit', { 'id': laboratory.id }) }}">
-                <i class="icon-edit"></i> Modifier
-              </a>
-            </li>
-            <li>
-              <a href="{{ path('laboratory_ask_delete', { 'id': laboratory.id }) }}">
-                <i class="icon-trash"></i> Supprimer
-              </a>
-            </li>
-            <li>
-              <a href="{{ path('laboratory_credentials', { 'id': laboratory.id }) }}">
-                <i class="icon-user"></i> Gestion des droits d'accès
-              </a>
-            </li>
-            {# Désactivé car non fonctionnel
-                <li>
-                  <a class="disabled" href="{{ path('laboratory_fusion', { 'id': laboratory.id }) }}">
-                    <i class="icon-resize-small"></i> Fusionner (/!\)
-                  </a>
-                </li>
-                <li>
-                  <a class="disabled" href="">
-                    <i class="icon-resize-full"></i> Séparer  (/!\)
-                  </a>
-                </li>
-             #}
-          </ul>
-        </div>
+          <a class="btn-info btn" href="{{ path('laboratory_credentials', { 'id': laboratory.id }) }}">
+              <i class="icon-user icon-white"></i> Gérer les propriétaires
+          </a>
+          <a class="btn-danger btn" href="{{ path('laboratory_ask_delete', { 'id': laboratory.id }) }}">
+            <i class="icon-trash icon-white"></i> Supprimer le laboratoire
+          </a>
       </div>
       <br />
       {% endif %}

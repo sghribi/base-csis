@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use CSIS\UserBundle\Entity\User;
 
@@ -13,6 +15,8 @@ use CSIS\UserBundle\Entity\User;
  * Institution
  *
  * @ORM\Table(name="institution")
+ * @UniqueEntity("name")
+ * @UniqueEntity("acronym"))
  * @ORM\Entity(repositoryClass="CSIS\EamBundle\Entity\InstitutionRepository")
  */
 class Institution {
@@ -29,6 +33,7 @@ class Institution {
     /**
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="acronym", type="string", length=255)
      */
     private $acronym;
@@ -36,6 +41,7 @@ class Institution {
     /**
      * @var string
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
@@ -49,7 +55,8 @@ class Institution {
     
     /**
      * @var string
-     * 
+     *
+     * @Assert\Url()
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     private $url;
