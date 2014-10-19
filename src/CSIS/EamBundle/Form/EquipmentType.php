@@ -22,23 +22,23 @@ class EquipmentType extends AbstractType
     $user = $this->user;
 
     $builder
-            ->add('designation', 'text', array(
+            ->add('designation', null, array(
                 'label' => 'Nom de l\'équipement :',
                 'attr' => array(),
             ))
-            ->add('brand', 'text', array(
+            ->add('brand', null, array(
                 'label' => 'Marque :',
                 'attr' => array(),
             ))
-            ->add('type', 'text', array(
+            ->add('type', null, array(
                 'label' => 'Type :',
                 'attr' => array(),
             ))
-            ->add('url', 'url', array(
+            ->add('url', null, array(
                 'label' => 'Url :',
                 'attr' => array(),
             ))
-            ->add('description', 'textarea', array(
+            ->add('description', null, array(
                 'label' => 'Description de l\'équipement :',
                 'attr' => array(
                     'rows' => '6',
@@ -61,15 +61,15 @@ class EquipmentType extends AbstractType
                 },
                 'attr' => array(),
             ))
-            ->add('building', 'text', array(
+            ->add('building', null, array(
                 'label' => 'Bâtiment :',
                 'attr' => array(),
             ))
-            ->add('floor', 'text', array(
+            ->add('floor', null, array(
                 'label' => 'Étage :',
                 'attr' => array(),
             ))
-            ->add('room', 'text', array(
+            ->add('room', null, array(
                 'label' => 'Salle :',
                 'attr' => array(),
             )) //@TODO: replace with user
