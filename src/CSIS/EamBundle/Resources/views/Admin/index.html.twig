@@ -10,17 +10,14 @@
       <li><a href="{{ path("fos_user_resetting_request") }}">Changer mon mot de passe</a></li>
      </ul>
 
-   {# @TODO: DELETE THIS ... #}
-   {% if is_granted("ROLE_GEST_PEOPLE") %}
+   {% if is_granted("ROLE_GEST_USER") %}
     <hr />
-    <h4>Gestion des Contacts et Utilisateurs</h4>
-    <ul>
-      <li><a href="{{ path('people') }}">Accéder à la liste des contacts</a></li>
-      <li><a href="{{ path('people_new') }}">Créer un nouveau contact</a></li>
-    </ul>
-  {% endif %}
-
-  {% if is_granted("ROLE_GEST_USER") %}
+    <h4>Gestion des utilisateurs</h4>
+    {% if waiting_users %}
+       <p class="text-warning">
+           {{ waiting_users }} utilisateur(s) en attente d'activation.
+       </p>
+    {% endif %}
     <ul>
       <li><a href="{{ path("fos_user_registration_register") }}">Créer un nouvel utilisateur</a></li>
       <li><a href="{{ path("csis_user_index") }}">Administrer les utilisateurs</a></li>
@@ -30,9 +27,14 @@
     {% if is_granted("ROLE_GEST_TAGS") %}
     <hr />
     <h4>Tags</h4>
+    {% if waiting_tags %}
+        <p class="text-warning">
+            {{ waiting_tags }} tag(s) en attente de modération.
+        </p>
+    {% endif %}
     <ul>
       <li><a href="{{ path("tag") }}">Gestion des tags</a></li>
-      <li><a href="{{ path("tag", {'onglet' : 'edit'}) }}">Demandes de tags en attentes</a> {% if waiting_tags is not null %}<span class="badge badge-important">{{ waiting_tags }}</span>{% endif %}</li>    
+      <li><a href="{{ path("tag", {'onglet' : 'edit'}) }}">Demandes de tags en attentes</a></li>
     </ul>
     {% endif %}
 

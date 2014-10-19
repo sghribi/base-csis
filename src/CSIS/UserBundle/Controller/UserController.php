@@ -2,6 +2,7 @@
 
 namespace CSIS\UserBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,16 +24,14 @@ class UserController extends Controller
     public function indexAction($page)
     {
         $user = $this->getUser();
+
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $userRepo = $em->getRepository('CSISUserBundle:User');
         $maxPerPage = $this->container->getParameter('csis_user_max_per_page');
         
-        if ( $user->hasRole('ROLE_ADMIN') ) {
-            $users = $userRepo->findAllOrderByNamePaginated($page, $maxPerPage);
-        } else {
-            $users = $userRepo->findBySuperiorOrderByNamePaginated($page, $maxPerPage);
-        }
-        
+        $users = $userRepo->findAllOrderByNameByEnabledPaginated($page, $maxPerPage);
+
         return array(
             'users' => $users,
             'page' => $page,
