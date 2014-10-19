@@ -4,7 +4,7 @@
 <ul class="nav nav-tabs">
     <li class="active"><a href="#informations" data-toggle="tab">Informations</a></li>
     <li><a href="#proprietaire" data-toggle="tab">Hébergeur</a></li>
-    <li><a href="#contacts" data-toggle="tab">Contacts</a></li> 
+    <li><a href="#owners" data-toggle="tab">Propriétaires</a></li>
 </ul>
 <div class="tab-content">
     <div class="tab-pane active" id="informations">
@@ -17,18 +17,18 @@
         {% include 'CSISEamBundle:Laboratory:profilCard.html.twig' %}
     </div>
 
-    <div class="tab-pane" id="contacts">
+    <div class="tab-pane" id="owners">
         <dl>
-          <dt>Contacts</dt>
+          <dt>Propriétaires</dt>
           <dd>
-            {% if equipment.contacts is not empty %}
+            {% if equipment.owners is not empty %}
             <ul>
-                {% for contact in equipment.contacts %}
-                    <li>{{ contact }} &lt;<a href="mailto:{{ contact.email }}">{{ contact.email }}</a>&gt;</li>
+                {% for owner in equipment.owners %}
+                    <li>{{ owner.firstName }} {{ owner.lastName }} &lt;<a href="mailto:{{ owner.email }}">{{ owner.email }}</a>&gt;</li>
                 {% endfor %}
             </ul>
             {% else %}
-                <span class="muted">Aucun contact</span>
+                <span class="muted">Aucun propriétaire</span>
             {% endif %}
           </dd>
         </dl>

@@ -1,115 +1,94 @@
-<div class="span6">
-  <div class="well">
-    <fieldset>
-      <legend>
-        {{ title }}
-      </legend>
-      {{ form_row(form.designation) }}
-      {{ form_row(form.brand) }}  
-      {{ form_row(form.type) }}
-      {{ form_row(form.url) }}
-      {{ form_row(form.description) }}
-      {{ form_row(form.shared) }}
-      {{ form_row(form.laboratory) }}
-    </fieldset>
-    <br />
-    <fieldset>
-      <legend>Emplacement</legend>
-      {{ form_row(form.building) }}
-      {{ form_row(form.floor) }}
-      {{ form_row(form.room) }}
-    </fieldset>
-    <br />
-    <div class="pull-right">
-      <a class="btn" href="{{ path('equipment_show', {'id': equipment.id}) }}">
-        <i class="icon-chevron-left"></i>&nbsp;{{ button_back_name }}
-      </a>
-      <button type="submit" class="btn btn-success">
-        <i class="{{ icon_type }}"></i>&nbsp;{{ button_name }}
-      </button>
-    </div>
-    <br />
-  </div>
+<div class="page-header">
+    <h3>{{ title }}</h3>
 </div>
 
-<div class="span6">
-  <div class="row">
-    
-    <div class="span6">
-      <div class="well">
-        
-        <fieldset>
-          <legend>Contacts</legend>
-        </fieldset>
-        <div class="contacts" data-prototype="{{ form_widget(form.contacts.vars.prototype)|e }}">
-        {% for c in form.contacts %}
-            {{ form_row(c) }}
-        {% endfor %}
-        </div>
-        <br />
-        <button id="add_new_contact" class="btn btn-primary">
-            <i class="icon-plus icon-white"></i>
-            &nbsp;Ajouter un contact
-        </button>
-      </div>
+{% if not form.vars.valid %}
+    <div class="alert alert-error">
+        {{ form_errors(form) }}
     </div>
-    
-  </div>
-  {# <div class="row">
-    
-    <div class="span3">
-      <div class="well">
-        
-        <fieldset>
-          <legend>Tags</legend>
-        </fieldset>
-        <div class="tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e }}">
-        {% for t in form.tags %}
-            {{ form_row(t) }}
-        {% endfor %}
-        </div>
-        <br />
-        <button id="add_new_tag" class="btn btn-primary">
-            <i class="icon-plus icon-white"></i>
-            &nbsp;Ajouter un tag
-        </button>
-      </div>
-    </div>
+{% endif %}
 
-    <div class="span3">
-      <div class="well">
-        
-        <fieldset>
-          <legend>Propositions</legend>
-        </fieldset>
-        
-        <table id="proposition-tags" class="table table-condensed table-hover">
-          <thead>
-            <tr>
-              <th>Tags</th>
-              <th>&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Aucun...</td>
-              <td>&nbsp;</td>
-            </tr>
-          </tbody>
-        </table>
-        
-        <a id="link-proposition-tags" class="btn btn-primary" href="#">
-          <i class="icon-repeat icon-white"></i>&nbsp;Rafraîchir
+<div class="well">
+    <fieldset>
+        <legend>
+            Informations générales
+        </legend>
+        {% set fields = [form.designation, form.brand, form.type, form.url, form.description, form.shared, form.laboratory, form.categories] %}
+
+        {% for field in fields %}
+            <div class="control-group">
+                <label class="control-label">{{ form_label(field) }}</label>
+                <div class="controls">
+                    {{ form_widget(field, {'attr': {'class': 'input-block-level'}}) }}
+                </div>
+                <div class="text-error">
+                    {{ form_errors(field) }}
+                </div>
+            </div>
+        {% endfor %}
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            Emplacement
+        </legend>
+        {% set fields = [form.building, form.floor, form.room] %}
+
+        {% for field in fields %}
+            <div class="control-group">
+                <label class="control-label">{{ form_label(field) }}</label>
+                <div class="controls">
+                    {{ form_widget(field, {'attr': {'class': 'input-block-level'}}) }}
+                </div>
+                <div class="text-error">
+                    {{ form_errors(field) }}
+                </div>
+            </div>
+        {% endfor %}
+    </fieldset>
+
+    <fieldset>
+        <legend>
+            Propriétaires
+        </legend>
+
+        <div class="owners offset1" data-prototype="{{ form_widget(form.owners.vars.prototype)|e }}">
+            {% for o in form.owners %}
+                {{ form_row(o) }}
+            {% endfor %}
+        </div>
+        <br/>
+        <a id="add_new_owner" class="btn btn-primary offset1">
+            <i class="icon-plus icon-white"></i>
+            &nbsp;Ajouter un propriétaire
         </a>
-        
-      </div>
+
+    </fieldset>
+
+    {{ form_rest(form) }}
+
+    <hr />
+
+    <div class="form-actions">
+        {% if equipment.id %}
+            <a class="btn" href="{{ path('equipment_show', {'id': equipment.id}) }}">
+                <i class="icon-chevron-left"></i>&nbsp;{{ button_back_name }}
+            </a>
+        {% endif %}
+        <a class="btn" href="{{ path('equipment') }}">
+            <i class="icon-list-alt"></i>&nbsp;Liste des équipements
+        </a>
+        <button type="submit" class="btn btn-success">
+            <i class="{{ icon_type }}"></i>&nbsp;{{ button_name }}
+        </button>
     </div>
-    
-  </div> #}
-  <div class="row">
-    <div class="span6">   
-        {{ form_rest(form) }}
-    </div>
-  </div>
 </div>
-<div class="clearfix"></div>
+
+
+{% block page_js %}
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            $("#csis_eambundle_equipmenttype_categories").chosen({disable_search_threshold: 10, no_results_text: "Aucun résultat",placeholder_text_multiple: 'Sélectionner les catégories', });
+        });
+    </script>
+{% endblock %}

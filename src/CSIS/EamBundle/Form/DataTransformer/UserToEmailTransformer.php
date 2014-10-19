@@ -39,7 +39,7 @@ class UserToEmailTransformer implements DataTransformerInterface
         }
         
         if (!$user instanceof User) {
-            throw new UnexpectedTypeException($user, 'CSIS\EamBundle\Entity\User');
+            throw new UnexpectedTypeException($user, 'CSIS\UserBundle\Entity\User');
         }
 
         return $user->getEmail();
@@ -50,7 +50,7 @@ class UserToEmailTransformer implements DataTransformerInterface
      *
      * @param  string $email
      * @return User|null
-     * @throws TransformationFailedException if object (people) is not found.
+     * @throws TransformationFailedException if object (user) is not found.
      */
     public function reverseTransform($email)
     {

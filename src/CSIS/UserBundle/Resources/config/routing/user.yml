@@ -3,7 +3,13 @@ csis_user_index:
     defaults: { _controller: CSISUserBundle:User:Index, page:1 }
     requirements:
         page: \d+
-        
+
+user_autocomplete:
+    pattern:  /users/autocomplete
+    defaults: { _controller: "CSISUserBundle:User:autocomplete", _format: json }
+    requirements:
+        _method: post
+
 csis_user_edit:
     pattern:  /users/{username}/edit
     defaults: { _controller: CSISUserBundle:User:Edit }
@@ -31,3 +37,4 @@ csis_user_add_lab:
 csis_user_add_institution:
     pattern: /register/addInstitution
     defaults: { _controller: CSISUserBundle:Registration:addInstitutionDependance }
+

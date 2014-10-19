@@ -1,25 +1,22 @@
 {% extends 'CSISEamBundle::layout.html.twig' %}
 
 {% block csis_body %}
+    <div class="row">
+        <div class="offset1 span10">
+            <form action="{{ path('equipment_update', {'id' : equipment.id}) }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
 
-<div class="row">
-  
-  <form action="{{ path('equipment_update', {'id' : equipment.id}) }}" method="post" {{ form_enctype(form) }}>
-  
-    {% include "CSISEamBundle:Equipment:form_content.html.twig" with 
-      {
-        'title': 'Modification d\'un équipement',
-        'icon_type'  : 'icon-refresh icon-white',
-        'button_name': 'Mise à jour',
-        'button_back_name': 'Retour'
-      }
-    %}
-
-  </form>
-
- </div>
-  <hr/>
-  {{ render(controller('CSISEamBundle:Equipment:editTags', { 'equipment': equipment.id })) }}
+            {% include "CSISEamBundle:Equipment:form_content.html.twig" with
+              {
+                'title': 'Modification d\'un équipement',
+                'icon_type'  : 'icon-refresh icon-white',
+                'button_name': 'Mettre à jour l\'équipement',
+                'button_back_name': 'Retour'
+              }
+            %}
+        </form>
+      </div>
+    </div>
+    <hr/>
 {% endblock %}
 
 {% block page_js %}

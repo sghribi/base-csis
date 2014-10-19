@@ -11,20 +11,22 @@
 <div class="row">
   {# Notifications #}
   {% include 'CSISEamBundle:Eam:flash.html.twig' %}
-  
-  {# Formulaire de création d'équipement #}
-  <form action="{{ path('equipment_create') }}" method="post" {{ form_enctype(form) }}>
-  
-  {% include "CSISEamBundle:Equipment:form_content.html.twig" with 
-      {
-        'title': 'Création d\'un équipement',
-        'icon_type'  : 'icon-plus icon-white',
-        'button_name': 'Ajout',
-        'button_back_name': 'Annuler'
-      }
-    %}
-    
-  </form>
+
+  <div class="offset1 span10">
+      {# Formulaire de création d'équipement #}
+      <form action="{{ path('equipment_create') }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
+
+          {% include "CSISEamBundle:Equipment:form_content.html.twig" with
+          {
+              'title': 'Création d\'un équipement',
+              'icon_type'  : 'icon-plus icon-white',
+              'button_name': 'Créer l\'équipement',
+              'button_back_name': 'Annuler'
+          }
+          %}
+
+      </form>
+  </div>
 </div>
 
 {% endblock %}

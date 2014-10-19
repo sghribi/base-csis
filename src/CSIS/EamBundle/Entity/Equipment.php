@@ -16,7 +16,6 @@ use CSIS\UserBundle\Entity\User;
  */
 class Equipment
 {
-
     /**
      * @var integer
      *
@@ -46,7 +45,7 @@ class Equipment
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
@@ -83,6 +82,7 @@ class Equipment
     /**
      * @var boolean
      *
+     * @Assert\NotBlank()
      * @ORM\Column(name="shared", type="boolean")
      */
     private $shared = false;
@@ -108,7 +108,7 @@ class Equipment
     private $type;
 
     /**
-     * @var CSISEamBundle\Entity\Laboratory
+     * @var Laboratory
      * 
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Laboratory", inversedBy="equipments")
      * @ORM\JoinColumn(nullable=false)
@@ -118,7 +118,7 @@ class Equipment
     /**
      * @deprecated: to delete
      * @TODO: à supprimer
-     * @var CSISEamBundle\Entity\People
+     * @var People
      * 
      * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\People")
      */
@@ -133,13 +133,13 @@ class Equipment
 
     /**
      * @var User
-     * 
+     *
      * @ORM\ManyToMany(targetEntity="CSIS\UserBundle\Entity\User")
      */
     private $owners;
 
     /**
-     * @var datetime $lastEditDate
+     * @var \DateTime $lastEditDate
      *
      * @Gedmo\Timestampable(on="create", on="update")
      * @ORM\Column(type="datetime")
@@ -576,14 +576,14 @@ class Equipment
     }
 
     /**
-     * Add owners
+     * Add owner
      *
-     * @param \CSIS\UserBundle\Entity\User $owners
+     * @param User $owner
      * @return Equipment
      */
-    public function addOwner(\CSIS\UserBundle\Entity\User $owners)
+    public function addOwner(\CSIS\UserBundle\Entity\User $owner = null)
     {
-        $this->owners[] = $owners;
+        $this->owners[] = $owner;
 
         return $this;
     }

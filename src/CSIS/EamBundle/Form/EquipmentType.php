@@ -24,36 +24,24 @@ class EquipmentType extends AbstractType
     $builder
             ->add('designation', 'text', array(
                 'label' => 'Nom de l\'équipement :',
-                'attr' => array(
-                    'class' => 'span5',
-                ),
+                'attr' => array(),
             ))
             ->add('brand', 'text', array(
                 'label' => 'Marque :',
-                'attr' => array(
-                    'class' => 'span5',
-                ),
-                'required' => false,
+                'attr' => array(),
             ))
             ->add('type', 'text', array(
                 'label' => 'Type :',
-                'attr' => array(
-                    'class' => 'span5',
-                ),
-                'required' => false,
+                'attr' => array(),
             ))
             ->add('url', 'url', array(
                 'label' => 'Url :',
-                'attr' => array(
-                    'class' => 'span5',
-                ),
-                'required' => false,
+                'attr' => array(),
             ))
             ->add('description', 'textarea', array(
                 'label' => 'Description de l\'équipement :',
                 'attr' => array(
-                    'class' => 'span5',
-                    'rows' => '10',
+                    'rows' => '6',
                 ),
             ))
             ->add('shared', 'choice', array(
@@ -62,9 +50,7 @@ class EquipmentType extends AbstractType
                     '0' => 'Non',
                     '1' => 'Oui',
                 ),
-                'attr' => array(
-                    'class' => 'span5',
-                ),
+                'attr' => array(),
                 'multiple' => false,
             ))
             ->add('laboratory', 'entity', array(
@@ -73,33 +59,22 @@ class EquipmentType extends AbstractType
                 'query_builder' => function(LaboratoryRepository $er) use ($user) {
                   return $er->getQbReachableLaboratoriesOrderedByAcronym($user);
                 },
-                'attr' => array(
-                    'class' => 'span5',
-                ),
+                'attr' => array(),
             ))
             ->add('building', 'text', array(
                 'label' => 'Bâtiment :',
-                'attr' => array(
-                    'class' => 'span5',
-                ),
-                'required' => false,
+                'attr' => array(),
             ))
             ->add('floor', 'text', array(
                 'label' => 'Étage :',
-                'attr' => array(
-                    'class' => 'span5',
-                ),
-                'required' => false,
+                'attr' => array(),
             ))
             ->add('room', 'text', array(
                 'label' => 'Salle :',
-                'attr' => array(
-                    'class' => 'span5',
-                ),
-                'required' => false,
+                'attr' => array(),
             )) //@TODO: replace with user
-            ->add('contacts', 'collection', array(
-                'type' => 'csis_people_selector',
+            ->add('owners', 'collection', array(
+                'type' => 'csis_user_selector',
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,

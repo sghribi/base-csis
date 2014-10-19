@@ -2,49 +2,51 @@
   jQuery(document).ready(function() {
 
     // Récupère le div qui contient la collection des contacts
-    var collectionHolderContact = $('div.contacts');
-    var add_buttonContact = $('#add_new_contact');
+    var collectionHolderOwner = $('div.owners');
+    var add_buttonOwner = $('#add_new_owner');
     
 
     // ajoute un lien de suppression à tous les éléments li de
-    // formulaires de contacts existants
-    collectionHolderContact.children('div').each(function() {
-      attachAjax($(this).children('input'), '{{ url('people_autocomplete') }}');
-      addContactFormDeleteLink($(this));
+    // formulaires de owners existants
+    collectionHolderOwner.children('div').each(function() {
+      attachAjax($(this).children('input'), '{{ url('user_autocomplete') }}');
+      addOwnerFormDeleteLink($(this));
     });
 
-    add_buttonContact.on('click', function(e) {
+    add_buttonOwner.on('click', function(e) {
       // ajoute un nouveau formulaire contact (voir le prochain bloc de code)
       e.preventDefault();
-      addContactForm(collectionHolderContact);
+      $newForm = addOwnerForm(collectionHolderOwner);
     });
 
   });
 
-  function addContactForm(collectionHolder) {
+  function addOwnerForm(collectionHolder) {
     // Récupère l'élément ayant l'attribut data-prototype
     var prototype = collectionHolder.attr('data-prototype');
     var length = collectionHolder.children().length;
     // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
     // la longueur de la collection courante
-    var $newForm = $('<div><label>Adresse email du contact :</label>' + prototype.replace(/__name__/g, length) + '</div>');
+    var $newForm = $('<div><label>Adresse email du propriétaire :</label>' + prototype.replace(/__name__/g, length) + '</div>');
 
-    // Affiche le formulaire dans la page dans un div, avant le lien "ajouter un contact"
+    // Affiche le formulaire dans la page dans un div, avant le lien "ajouter un owner"
     collectionHolder.append($newForm);
-    attachAjax($newForm.children('input'), '{{ url('people_autocomplete') }}');
+    attachAjax($newForm.children('input'), '{{ url('user_autocomplete') }}');
     // ajoute un lien de suppression au nouveau formulaire
-    addContactFormDeleteLink($newForm);
+    addOwnerFormDeleteLink($newForm);
+
+    return $newForm;
   }
 
-  function addContactFormDeleteLink($tagForm) {
-    var $removeFormButton = $('<button class="btn btn-warning"><i class="icon-trash icon-white"></i></button>');
+  function addOwnerFormDeleteLink($tagForm) {
+    var $removeFormButton = $('<a class="btn btn-warning"><i class="icon-trash icon-white"></i></a>');
     var $input = $tagForm.children('input');
 
     $input.wrap('<div class="input-append" />');
     $input.parent().append($removeFormButton);
 
     $removeFormButton.on('click', function(e) {
-      // supprime l'élément div pour le formulaire de contact
+      // supprime l'élément div pour le formulaire d'owner
       e.preventDefault();
       $tagForm.remove();
     });
@@ -62,7 +64,10 @@
           },
           success: function(donnee) {
             reponse(donnee);
-          }
+          },
+//          select: function(event, ui) {
+//              $input.addClass('uneditable-input');
+//          }
         });
       }
     });

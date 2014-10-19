@@ -9,8 +9,11 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use CSIS\UserBundle\Entity\User;
 use CSIS\UserBundle\Form\AddLabType;
 use CSIS\UserBundle\Form\AddInstitutionType;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
     
     /**
      * Find and displays all users beneath me
@@ -183,4 +186,33 @@ class UserController extends Controller {
         ;
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws AccessDeniedHttpException
+     * @Secure(roles="ROLE_GEST_USER")
+     */
+    public function autocompleteAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userRepo = $em->getRepository('CSISUserBundle:User');
+        $input = $request->request->get('input');
+
+        if ($request->isXmlHttpRequest() ) {
+            $users = $userRepo->findAutocomplete($input);
+            $data = array();
+            if (count($users) > 0) {
+                /** @var User $user */
+                foreach ($users as $user) {
+                    $data[] = $user->getEmail();
+                }
+            }
+            return new Response(json_encode($data));
+
+        } else {
+            throw new AccessDeniedHttpException(
+                'La page à laquelle vous tentez d\'accéder ne fonctionne que par ajax'
+            );
+        }
+    }
 }

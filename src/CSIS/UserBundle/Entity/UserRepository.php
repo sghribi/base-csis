@@ -117,4 +117,17 @@ class UserRepository extends EntityRepository {
         return $qb->setFirstResult(($start - 1) * $limit)
                   ->setMaxResults($limit);
     }
+
+    public function findAutocomplete($email)
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        return $qb->where($qb->expr()->like('u.email', ':email'))
+            ->orderBy('u.email')
+            ->setParameter('email', '%'.$email.'%')
+            ->setFirstResult(0)
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
 }

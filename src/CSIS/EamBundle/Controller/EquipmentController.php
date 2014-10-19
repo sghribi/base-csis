@@ -11,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use CSIS\EamBundle\Entity\Equipment;
-use CSIS\EamBundle\Entity\People;
 use CSIS\EamBundle\Entity\Tag;
 use CSIS\EamBundle\Form\EquipmentType;
 use CSIS\EamBundle\Form\EquipmentAddOwnerType;
@@ -74,9 +73,7 @@ class EquipmentController extends Controller
     {
         $equipment = new Equipment();
 
-        // @TODO: WTF ??
-        $equipment->getContacts()->add(new People()); // Enlever le label
-        $equipment->getTags()->add(new Tag()); // Enlever le label
+        $equipment->getOwners()->add($this->getUser());
         $form = $this->createForm(new EquipmentType($this->getUser()), $equipment);
 
         return array(
@@ -90,7 +87,7 @@ class EquipmentController extends Controller
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:new.html.twig")
-     * @Route("/", name="equipment_create")
+     * @Route("/new", name="equipment_create")
      * @Method({"POST"})
      */
     public function createAction(Request $request)
@@ -102,7 +99,8 @@ class EquipmentController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $equipment->getOwners()->add($this->getUser());
+
+            /** @TODO: Handle here the owners */
 
             $em->persist($equipment);
             $em->flush();
@@ -113,7 +111,7 @@ class EquipmentController extends Controller
             $this->addFlash(
                     'valid', sprintf('
                         L\'équipement %s a été ajouté ! Des tags on été ' .
-                            'ajoutés automatiquement vous pourrez les modifier', $equipment->getDesignation()
+                            'ajoutés automatiquement vous pourrez les modifier.', $equipment->getDesignation()
                     )
             );
 
@@ -136,8 +134,8 @@ class EquipmentController extends Controller
      */
     public function editAction(Equipment $equipment)
     {
-        if ($equipment->getContacts()->isEmpty()) {
-            $equipment->getContacts()->add(new People());
+        if ($equipment->getOwners()->isEmpty()) {
+            $equipment->getOwners()->add(new User());
         }
 
         $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment);
@@ -231,74 +229,6 @@ class EquipmentController extends Controller
         );
 
         return $this->redirect($this->generateUrl('equipment'));
-    }
-
-    /**
-     * Displays the list of Equipment's owners
-     * 
-     * @Secure(roles="ROLE_GEST_EQUIP")
-     * @Template("CSISEamBundle:Equipment:credentials.html.twig")
-     * @Route("/{id}/credentials", name="equipment_credentials", requirements={"id" = "\d+"})
-     * @Method({"GET"})
-     */
-    public function credentialsAction( Equipment $equipment )
-    {
-        return array(
-            'equipment' => $equipment,
-            'owners' => $equipment->getOwners(),
-        );
-    }
-
-    /**
-     * Removes an owner from an equipment
-     * 
-     * @Secure(roles="ROLE_GEST_EQUIP")
-     * @Route("/{id}/credentials/{owner}/remove", name="equipment_credentials_remove", requirements={"id" = "\d+", "owner" = "\d+"})
-     * @Method({"GET"})
-     */
-    public function credentialsRemoveAction( Equipment $equipment, User $owner )
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        if ( $equipment->getOwners()->contains($owner) ) {
-            $equipment->getOwners()->removeElement($owner);
-            $this->addFlash(
-                    'main_valid', sprintf('Propriétaire %s supprimé.', $owner)
-            );
-        } else {
-            $this->addFlash(
-                    'main_error', sprintf('Erreur lors de la supression du propriétaire %s.', $owner)
-            );
-        }
-
-        $em->flush();
-
-        return $this->redirect($this->generateUrl('equipment_credentials', array( 'id' => $equipment->getId() )));
-    }
-
-    /**
-     * Adds an owner to an equipment
-     * 
-     * @Secure(roles="ROLE_GEST_EQUIP")
-     * @Template("CSISEamBundle:Equipment:addOwner.html.twig")
-     * @Route("/{id}/credentials/add", name="equipment_credentials_add", requirements={"id" = "\d+"})
-     * @Method({"GET", "POST"})
-     */
-    public function credentialsAddAction(Request $request, Equipment $equipment)
-    {
-        $form = $this->createForm(new EquipmentAddOwnerType($this->getUser()), $equipment);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->flush();
-            return $this->redirect($this->generateUrl('equipment_credentials', array( 'id' => $equipment->getId() )));
-        }
-
-        return array(
-                    'equipment' => $equipment,
-                    'form' => $form->createView(),
-        );
     }
 
     /**

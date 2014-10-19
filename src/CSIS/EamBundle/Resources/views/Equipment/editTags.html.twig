@@ -1,275 +1,289 @@
-<div id="tagsEdition">
-  <h3 class="pull-center">Gestion des tags de cet équipement</h3>
-  <div class="row">
-    {# Tags acceptés #}
-    <div class="span4" id="acceptedTagsBox">
-      <div class="row-fluid text-center">
-        <h4>Tags acceptés</h4>
-        <ul class="nav nav-tabs nav-stacked tags">
-          {# Ici seront insérés les tags #}
-        </ul>
-      </div>
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{# @TODO: séparer html/js #}
+
+
+{% block csis_body %}
+    <div class="row">
+        {# Notifications #}
+        {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+
+        <div id="tagsEdition">
+            <h3 class="pull-center">Gestion des tags de cet équipement</h3>
+            <div class="row">
+                {# Tags acceptés #}
+                <div class="span4" id="acceptedTagsBox">
+                    <div class="row-fluid text-center">
+                        <h4>Tags acceptés</h4>
+                        <ul class="nav nav-tabs nav-stacked tags">
+                            {# Ici seront insérés les tags #}
+                        </ul>
+                    </div>
+                </div>
+
+                {# Tags rejetés #}
+                <div class="span4" id="rejectedTagsBox">
+                    <div class="row-fluid text-center">
+                        <h4>Tags rejetés</h4>
+                        <ul class="nav nav-tabs nav-stacked tags">
+                            {# Ici seront insérés les tags #}
+                        </ul>
+                    </div>
+                </div>
+
+                {# Tags suggérés #}
+                <div class="span4" id="suggestedTagsBox">
+                    <div class="row-fluid text-center">
+                        <h4>Tags suggérés <a href="#" id="refreshBtn" class="icon icon-refresh tips" title="Mettre à jour les tags et rafraîchir les suggestions"></a></h4>
+                        <ul class="nav nav-tabs nav-stacked tags">
+                            {# Ici seront insérés les tags #}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="buttons" class="pull-center">
+                <a class="btn btn-default" href="{{ path('equipment_show', {id: equipment.id}) }}"><i class="icon icon-chevron-left"></i> Retour à la fiche équipement</a>
+                <button class="btn btn-success" id="updateBtn" data-loading-text="Mise à jour..." disabled="disabled"><i class="icon icon-refresh icon-white"></i> Mettre à jour les tags</button>
+            </div>
+        </div>
     </div>
 
-    {# Tags rejetés #}
-    <div class="span4" id="rejectedTagsBox">
-      <div class="row-fluid text-center">
-        <h4>Tags rejetés</h4>
-        <ul class="nav nav-tabs nav-stacked tags">
-          {# Ici seront insérés les tags #}
-        </ul>
-      </div>
-    </div>
+    <script type="text/javascript">
 
-    {# Tags suggérés #}
-    <div class="span4" id="suggestedTagsBox">
-      <div class="row-fluid text-center">
-        <h4>Tags suggérés <a href="#" id="refreshBtn" class="icon icon-refresh tips" title="Mettre à jour les tags et rafraîchir les suggestions"></a></h4>
-        <ul class="nav nav-tabs nav-stacked tags">
-          {# Ici seront insérés les tags #}
-        </ul>
-      </div>
-    </div>
-  </div>
+      // Active les tooltips
+      $('.tips').tooltip();
 
-  <div id="buttons" class="pull-center">
-    <button class="btn btn-success" id="updateBtn" data-loading-text="Mise à jour..." disabled="disabled"><i class="icon icon-refresh icon-white"></i> Mettre à jour les tags</button>
-  </div> 
-</div>
+      var updateBtn = $('#updateBtn');
+      var refreshBtn = $('#refreshBtn');
+      var initialUpdateBtnText = updateBtn.html();
 
-<script type="text/javascript">
+      function prepare(element)
+      {
+        // Activer les tooltip
+        $(element + ' .tips').tooltip();
 
-  // Active les tooltips
-  $('.tips').tooltip();
+        // Listener sur .acceptBtn
+        $(element + ' .acceptBtn').on('click', function(e) {
+          e.preventDefault();
 
-  var updateBtn = $('#updateBtn');
-  var refreshBtn = $('#refreshBtn');
-  var initialUpdateBtnText = updateBtn.html();
+          // On récupère le nom du tag
+          var tag = $(this).parent().parent().parent()
+          var name = tag.find('.name').html();
+          var status = tag.find('.status').attr('data-status');
 
-  function prepare(element)
-  {
-    // Activer les tooltip
-    $(element + ' .tips').tooltip();
+          // On l'ajoute à la liste des tags acceptés
+          addAcceptedTag({'name' : name, 'status': status});
 
-    // Listener sur .acceptBtn
-    $(element + ' .acceptBtn').on('click', function(e) {
-      e.preventDefault();
+          // On réactive le bouton update
+          updateBtn.removeAttr('disabled');
+          updateBtn.removeClass('disabled');
 
-      // On récupère le nom du tag
-      var tag = $(this).parent().parent().parent()
-      var name = tag.find('.name').html();
-      var status = tag.find('.status').attr('data-status');
-
-      // On l'ajoute à la liste des tags acceptés
-      addAcceptedTag({'name' : name, 'status': status});
-
-      // On réactive le bouton update
-      updateBtn.removeAttr('disabled');
-      updateBtn.removeClass('disabled');
-
-      // On le supprime de son emplacement actuel
-      tag.remove();
-    });
-
-    // Listener sur .rejectBtn
-    $(element + ' .rejectBtn').on('click', function(e) {
-      e.preventDefault();
-
-      // On récupère le nom du tag
-      var tag = $(this).parent().parent().parent()
-      var name = tag.find('.name').html();
-      var status = tag.find('.status').attr('data-status');
-
-      // On l'ajoute à la liste des tags acceptés
-      addRejectedTag({'name' : name, 'status': status});
-
-      // On réactive le bouton update
-      updateBtn.removeAttr('disabled');
-      updateBtn.removeClass('disabled');
-
-      // On le supprime de son emplacement actuel
-      tag.remove();
-    });
-
-    // Listener sur .deleteBtn
-    $(element + ' .deleteBtn').on('click', function(e) {
-      e.preventDefault();
-
-      // On récupère le tag
-      var tag = $(this).parent().parent().parent()
-
-      // On réactive le bouton update
-      updateBtn.removeAttr('disabled');
-      updateBtn.removeClass('disabled');
-
-      // On le supprime de son emplacement actuel
-      tag.remove();
-    });
-  }
-
-  function generateHtmlStatus(status)
-  {
-    var html;
-    if(status == 0)
-    {
-      html = '<i class="icon icon-time tips" title="Ce tag est en attente de validation par un administrateur"></i>';
-    }
-    else if(status == 1)
-    {
-      html = '<i class="icon icon-ok tips" title="Ce tag a été validé par un administrateur"></i>';
-    }
-    else if(status == 2)
-    {
-      html = '<i class="icon icon-warning-sign tips" title="Ce tag a été refusé par un administrateur"></i>';
-    }
-
-    return html;
-  }
-
-  // Méthode pour ajouter un tag aux tags acceptés
-  function addAcceptedTag(tag) {
-    // On crée le HTML
-    var statusHtml = generateHtmlStatus(tag['status']);
-    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove deleteBtn" title="Enlever le tag"></a>&nbsp;<a href="#" class="tips icon icon-ban-circle rejectBtn" title="Rejeter le tag"></a></p>';
-    var liHtml = '<li class="tag"><a class="span10"><span class="pull-left status" data-status="' + tag['status'] + '">' + statusHtml + '</span><span class="name">' + tag['name'] + '</a><span class="span2">' + buttonsHtml + '</span>';
-
-    // On l'insère dans le DOM
-    $('#acceptedTagsBox .tags').append(liHtml);
-
-    // On met bien à jour les listeners sur cet élément
-    prepare('#acceptedTagsBox .tag:last');
-  }
-
-  // Méthode pour ajouter un tag aux tags rejetés
-  function addRejectedTag(tag) {
-    // On crée le HTML
-    var statusHtml = generateHtmlStatus(tag['status']);
-    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove deleteBtn" title="Enlever le tag"></a>&nbsp;<a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a></p>';
-    var liHtml = '<li class="tag"><a class="span10"><span class="pull-left status" data-status="' + tag['status'] + '">' + statusHtml + '</span><span class="name">' + tag['name'] + '</a><span class="span2">' + buttonsHtml + '</span>';
-
-    // On l'insère dans le DOM
-    $('#rejectedTagsBox .tags').append(liHtml);
-
-    // On met bien à jour les listeners sur cet élément
-    prepare('#rejectedTagsBox .tag:last');
-  }
-
-  // Méthode pour ajouter un tag aux tags suggérés
-  function addSuggestedTag(tag) {
-    // On crée le HTML
-    var statusHtml = generateHtmlStatus(tag['status']);
-    var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a>&nbsp;<a href="#" class="tips icon icon-ban-circle rejectBtn" title="Rejeter le tag"></a></p>';
-    var liHtml = '<li class="tag"><a class="span10"><span class="pull-left status" data-status="' + tag['status'] + '">' + statusHtml + '</span><span class="name">' + tag['name'] + '</a><span class="span2">' + buttonsHtml + '</span>';
-
-    // On l'insère dans le DOM
-    $('#suggestedTagsBox .tags').append(liHtml);
-
-    // On met bien à jour les listeners sur cet élément
-    prepare('#suggestedTagsBox .tag:last');
-  }
-
-  function fetchAcceptedAndRejectedTags() {
-    $.ajax({
-      url: "{{ path('equipment_fetch_tags', {'id': equipment.id}) }}",
-      dataType: 'json',
-      type: 'GET',
-      success: function(data) {
-        // On ajoute les tags acceptés
-        $.each(data['accepted'], function(i, tag){
-          addAcceptedTag(tag);
+          // On le supprime de son emplacement actuel
+          tag.remove();
         });
 
-        // On ajoute les tags refusés
-        $.each(data['rejected'], function(i, tag){
-          addRejectedTag(tag);
+        // Listener sur .rejectBtn
+        $(element + ' .rejectBtn').on('click', function(e) {
+          e.preventDefault();
+
+          // On récupère le nom du tag
+          var tag = $(this).parent().parent().parent()
+          var name = tag.find('.name').html();
+          var status = tag.find('.status').attr('data-status');
+
+          // On l'ajoute à la liste des tags acceptés
+          addRejectedTag({'name' : name, 'status': status});
+
+          // On réactive le bouton update
+          updateBtn.removeAttr('disabled');
+          updateBtn.removeClass('disabled');
+
+          // On le supprime de son emplacement actuel
+          tag.remove();
+        });
+
+        // Listener sur .deleteBtn
+        $(element + ' .deleteBtn').on('click', function(e) {
+          e.preventDefault();
+
+          // On récupère le tag
+          var tag = $(this).parent().parent().parent()
+
+          // On réactive le bouton update
+          updateBtn.removeAttr('disabled');
+          updateBtn.removeClass('disabled');
+
+          // On le supprime de son emplacement actuel
+          tag.remove();
         });
       }
-    });
-  }
 
-  function fetchRelativeTags(clearDiv) {
-    // Vide-t-on la liste des tags suggérés
-    if(clearDiv) {
-      $('#suggestedTagsBox .tag').each(function(i, tag){
-        tag.remove();
+      function generateHtmlStatus(status)
+      {
+        var html;
+        if(status == 0)
+        {
+          html = '<i class="icon icon-time tips" title="Ce tag est en attente de validation par un administrateur"></i>';
+        }
+        else if(status == 1)
+        {
+          html = '<i class="icon icon-ok tips" title="Ce tag a été validé par un administrateur"></i>';
+        }
+        else if(status == 2)
+        {
+          html = '<i class="icon icon-warning-sign tips" title="Ce tag a été refusé par un administrateur"></i>';
+        }
+
+        return html;
+      }
+
+      // Méthode pour ajouter un tag aux tags acceptés
+      function addAcceptedTag(tag) {
+        // On crée le HTML
+        var statusHtml = generateHtmlStatus(tag['status']);
+        var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove deleteBtn" title="Enlever le tag"></a>&nbsp;<a href="#" class="tips icon icon-ban-circle rejectBtn" title="Rejeter le tag"></a></p>';
+        var liHtml = '<li class="tag"><a class="span10"><span class="pull-left status" data-status="' + tag['status'] + '">' + statusHtml + '</span><span class="name">' + tag['name'] + '</a><span class="span2">' + buttonsHtml + '</span>';
+
+        // On l'insère dans le DOM
+        $('#acceptedTagsBox .tags').append(liHtml);
+
+        // On met bien à jour les listeners sur cet élément
+        prepare('#acceptedTagsBox .tag:last');
+      }
+
+      // Méthode pour ajouter un tag aux tags rejetés
+      function addRejectedTag(tag) {
+        // On crée le HTML
+        var statusHtml = generateHtmlStatus(tag['status']);
+        var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-remove deleteBtn" title="Enlever le tag"></a>&nbsp;<a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a></p>';
+        var liHtml = '<li class="tag"><a class="span10"><span class="pull-left status" data-status="' + tag['status'] + '">' + statusHtml + '</span><span class="name">' + tag['name'] + '</a><span class="span2">' + buttonsHtml + '</span>';
+
+        // On l'insère dans le DOM
+        $('#rejectedTagsBox .tags').append(liHtml);
+
+        // On met bien à jour les listeners sur cet élément
+        prepare('#rejectedTagsBox .tag:last');
+      }
+
+      // Méthode pour ajouter un tag aux tags suggérés
+      function addSuggestedTag(tag) {
+        // On crée le HTML
+        var statusHtml = generateHtmlStatus(tag['status']);
+        var buttonsHtml = '<p style="padding-top: 0.5em;"><a href="#" class="tips icon icon-ok acceptBtn" title="Accepter le tag"></a>&nbsp;<a href="#" class="tips icon icon-ban-circle rejectBtn" title="Rejeter le tag"></a></p>';
+        var liHtml = '<li class="tag"><a class="span10"><span class="pull-left status" data-status="' + tag['status'] + '">' + statusHtml + '</span><span class="name">' + tag['name'] + '</a><span class="span2">' + buttonsHtml + '</span>';
+
+        // On l'insère dans le DOM
+        $('#suggestedTagsBox .tags').append(liHtml);
+
+        // On met bien à jour les listeners sur cet élément
+        prepare('#suggestedTagsBox .tag:last');
+      }
+
+      function fetchAcceptedAndRejectedTags() {
+        $.ajax({
+          url: "{{ path('equipment_fetch_tags', {'id': equipment.id}) }}",
+          dataType: 'json',
+          type: 'GET',
+          success: function(data) {
+            // On ajoute les tags acceptés
+            $.each(data['accepted'], function(i, tag){
+              addAcceptedTag(tag);
+            });
+
+            // On ajoute les tags refusés
+            $.each(data['rejected'], function(i, tag){
+              addRejectedTag(tag);
+            });
+          }
+        });
+      }
+
+      function fetchRelativeTags(clearDiv) {
+        // Vide-t-on la liste des tags suggérés
+        if(clearDiv) {
+          $('#suggestedTagsBox .tag').each(function(i, tag){
+            tag.remove();
+          });
+        }
+
+        $.ajax({
+          url: "{{ path('equipment_fetch_relative_tags', {'id': equipment.id}) }}",
+          dataType: 'json',
+          type: 'GET',
+          success: function(data) {
+            // On ajoute les tags suggérés
+            $.each(data['suggested'], function(i, tag){
+              addSuggestedTag(tag);
+            });
+
+            // On réactive un boutons
+            refreshBtn.removeAttr('disabled');
+          }
+        });
+      }
+
+      function updateTags() {
+        // On désactive le bouton
+        updateBtn.attr('disabled','disabled');
+        updateBtn.button('loading');
+
+        // On forme le JSON
+        tags = {};
+        $('#acceptedTagsBox .tag').each(function() {
+          var name = $(this).find('.name').html();
+          tags[name] = 'accepted';
+        });
+        $('#rejectedTagsBox .tag').each(function() {
+          var name = $(this).find('.name').html();
+          tags[name] = 'rejected';
+        });
+        dataJSON = {'tags': tags};
+
+        // On envoie les tags
+        $.ajax({
+          url: "{{ path('equipment_update_tags', {'id': equipment.id}) }}",
+          dataType: 'json',
+          data: dataJSON,
+          cache: false,
+          type: 'POST',
+          success: function() {
+            // On remet le texte du bouton
+            updateBtn.html(initialUpdateBtnText);
+          }
+        });
+      }
+
+      // Au chargement du document
+      jQuery(document).ready(function() {
+        // On désactive les boutons
+        updateBtn.attr('disabled','disabled');
+
+        // On charge les tags acceptés et refusés
+        fetchAcceptedAndRejectedTags();
+
+        // On charge les tags suggérés
+        fetchRelativeTags(false);
+
+        // On met un listener sur le bouton #updateBtn
+        updateBtn.on('click', function(event){
+          event.preventDefault();
+
+          // Sauvegarde des tags
+          updateTags();
+        });
+
+        // On met un listener sur le bouton #refreshBtn
+        refreshBtn.on('click', function(event) {
+          event.preventDefault();
+
+          // Sauvegarde des tags puis récupération des suggestions
+          updateTags();
+          fetchRelativeTags(true);
+        });
+
       });
-    }
 
-    $.ajax({
-      url: "{{ path('equipment_fetch_relative_tags', {'id': equipment.id}) }}",
-      dataType: 'json',
-      type: 'GET',
-      success: function(data) {
-        // On ajoute les tags suggérés
-        $.each(data['suggested'], function(i, tag){
-          addSuggestedTag(tag);
-        });
+    </script>
 
-        // On réactive un boutons
-        refreshBtn.removeAttr('disabled');
-      }
-    });
-  }
-
-  function updateTags() {
-    // On désactive le bouton
-    updateBtn.attr('disabled','disabled');
-    updateBtn.button('loading');
-
-    // On forme le JSON
-    tags = {};
-    $('#acceptedTagsBox .tag').each(function() {
-      var name = $(this).find('.name').html();
-      tags[name] = 'accepted';
-    });
-    $('#rejectedTagsBox .tag').each(function() {
-      var name = $(this).find('.name').html();
-      tags[name] = 'rejected';
-    });
-    dataJSON = {'tags': tags};
-
-    // On envoie les tags
-    $.ajax({
-      url: "{{ path('equipment_update_tags', {'id': equipment.id}) }}",
-      dataType: 'json',
-      data: dataJSON,
-      cache: false,
-      type: 'POST',
-      success: function() {
-        // On remet le texte du bouton
-        updateBtn.html(initialUpdateBtnText);
-      }
-    });
-  }
-
-  // Au chargement du document
-  jQuery(document).ready(function() {
-    // On désactive les boutons
-    updateBtn.attr('disabled','disabled');
-
-    // On charge les tags acceptés et refusés
-    fetchAcceptedAndRejectedTags();
-
-    // On charge les tags suggérés
-    fetchRelativeTags(false);
-
-    // On met un listener sur le bouton #updateBtn
-    updateBtn.on('click', function(event){
-      event.preventDefault();
-
-      // Sauvegarde des tags
-      updateTags();
-    });
-
-    // On met un listener sur le bouton #refreshBtn
-    refreshBtn.on('click', function(event) {
-      event.preventDefault();
-
-      // Sauvegarde des tags puis récupération des suggestions
-      updateTags();
-      fetchRelativeTags(true);
-    });
-
-  });
-
-</script>
+{% endblock %}
