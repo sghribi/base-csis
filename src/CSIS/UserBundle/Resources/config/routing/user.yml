@@ -1,8 +1,7 @@
 csis_user_index:
-    pattern:  /users/{page}
+    pattern:  /users/list/{page}
     defaults: { _controller: CSISUserBundle:User:Index, page:1 }
-    requirements:
-        page: \d+
+
 
 user_autocomplete:
     pattern:  /users/autocomplete
@@ -11,23 +10,31 @@ user_autocomplete:
         _method: post
 
 csis_user_edit:
-    pattern:  /users/{username}/edit
+    pattern:  /users/{id}/edit
     defaults: { _controller: CSISUserBundle:User:Edit }
+    requirements:
+        id: \d+
   
 csis_user_show:
-    pattern:  /users/{username}
+    pattern:  /users/{id}
     defaults: { _controller: CSISUserBundle:User:Show }
+    requirements:
+        id: \d+
     
 csis_user_delete:
-    pattern:  /users/{username}/delete
+    pattern:  /users/{id}/delete
     defaults: { _controller: CSISUserBundle:User:Delete }
+    requirements:
+        id: \d+
 
 csis_user_edit_lab:
-    pattern: /users/{username}/editLab
+    pattern: /users/{id}/editLab
     defaults: { _controller: CSISUserBundle:User:editLaboratoryDependance }
+    requirements:
+        id: \d+
 
 csis_user_edit_institution:
-    pattern: /users/{username}/editInstitution
+    pattern: /users/{id}/editInstitution
     defaults: { _controller: CSISUserBundle:User:editInstitutionDependance }
 
 csis_user_add_lab:

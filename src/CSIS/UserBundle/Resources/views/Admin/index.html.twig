@@ -17,7 +17,7 @@
           <th>Email</th>
           <th>Web</th>
           <th>Téléphone</th>
-          <th colspan="2">Actions</th>
+          <th>Action</th>
           <th>État</th>
         </tr>
       </thead>
@@ -31,13 +31,8 @@
           <td>{{ user.url }}</td>
           <td>{{ user.phoneNumber }}</td>
           <td>
-            <a href="{{ path('csis_user_show', {'username' : user.username}) }}" data-toggle="tooltip" title="Voir">
+            <a href="{{ path('csis_user_show', {'id' : user.id}) }}" data-toggle="tooltip" title="Voir">
               <i class="icon-eye-open"></i>
-            </a>
-          </td>
-          <td>
-            <a href="{{ path('csis_user_edit', {'username' : user.username}) }}" data-toggle="tooltip" title="Modifier">
-              <i class="icon-edit"></i>
             </a>
           </td>
           <td>

@@ -2,7 +2,7 @@
 
 {% block fos_user_content %}
 
-<form class="well span9 offset1" action="{{ path('csis_user_edit_institution', {'username': user.username}) }}" {{ form_enctype(form) }} method="POST">
+<form class="well span9 offset1" action="{{ path('csis_user_edit_institution', {'id': user.id}) }}" {{ form_enctype(form) }} method="POST">
     <fieldset>
       <legend>Modifier l'établissement de l'utilisateur {{ user.lastname}} {{ user.firstname }}</legend>
       {{ form_widget(form) }}

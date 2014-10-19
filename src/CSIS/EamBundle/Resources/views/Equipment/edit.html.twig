@@ -1,6 +1,14 @@
 {% extends 'CSISEamBundle::layout.html.twig' %}
 
 {% block csis_body %}
+
+    <div class="row">
+        <div class="span12">
+            {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+        </div>
+    </div>
+
+
     <div class="row">
         <div class="offset1 span10">
             <form action="{{ path('equipment_update', {'id' : equipment.id}) }}" method="post" {{ form_enctype(form) }} class="form-horizontal">

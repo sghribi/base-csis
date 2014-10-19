@@ -58,4 +58,4 @@ class PromoteContactsCommand extends Command
 
         $output->writeln(sprintf('Created user <comment>%s</comment>', $username));
     }
-} 
+}

@@ -2,7 +2,7 @@
 
 {% block fos_user_content %}
 
-<form class="well span9 offset1" action="{{ path('csis_user_edit_lab', {'username': user.username}) }}" {{ form_enctype(form) }} method="POST">
+<form class="well span9 offset1" action="{{ path('csis_user_edit_lab', {'id': user.id}) }}" {{ form_enctype(form) }} method="POST">
     <fieldset>
       <legend>Modifier le laboratoire de l'utilisateur {{ user.lastName}} {{ user.firstName }}</legend>
       {{ form_widget(form) }}

@@ -5,25 +5,38 @@
 {% block fos_user_content %}
 <div class="span12">
   <div class="row">
-    <form action="{{ path('csis_user_edit', {'username': user.username}) }}" {{ form_enctype(form) }} class="well span4 offset2" method="POST">
+    <form action="{{ path('csis_user_edit', {'id': user.id}) }}" {{ form_enctype(form) }} class="well span4 offset2" method="POST">
       <fieldset>
-          <legend>Modifier un utilisateur</legend>
+          <legend>
+              {% if form.plainPassword is defined %}
+                  Modifier un utilisateur
+              {% else %}
+                  Activer un utilisateur
+              {% endif %}
+          </legend>
           {{ form_row(form.firstName) }}
           {{ form_row(form.lastName) }}
           {{ form_row(form.username) }}
           {{ form_row(form.email) }}
           {{ form_row(form.url) }}
           {{ form_row(form.phoneNumber) }}
-          {{ form_row(form.plainPassword) }}
+          {% if form.plainPassword is defined %}
+            {{ form_row(form.plainPassword) }}
+          {% endif %}
           {{ form_row(form.roles) }}
           {{ form_rest(form) }}
           <br />
+          {% if form.plainPassword is not defined %}
+          <p class="muted">
+              Un mail sera envoyé à l'utilisateur pour qu'il puisse définir son mot de passe.
+          </p>
+          {% endif %}
           <p>
-            <a href="{{ path('csis_user_show', {'username': user.username}) }}" class="btn">
+            <a href="{{ path('csis_user_show', {'id': user.id}) }}" class="btn">
               <i class="icon-chevron-left"></i>&nbsp;Annuler
             </a>
             <button type="submit" class="btn btn-success">
-              <i class="icon-edit icon-white"></i>&nbsp;Modifier
+              <i class="icon-edit icon-white"></i>&nbsp;{% if form.plainPassword is defined %}Modifier{% else %}Activer{% endif %}
             </button>
           </p>
       </fieldset>

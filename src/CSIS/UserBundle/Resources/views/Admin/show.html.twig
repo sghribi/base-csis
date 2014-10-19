@@ -7,6 +7,10 @@
   <h2>Utilisateur</h2>
 
   <div class="well">
+    {% if not user.enabled %}
+      <p class="text-error">Ce compte n'a pas encore été activé, car il manque des informations sur l'utilisateur. Vous pouvez activer ce compte en cliquant sur "Actier l'utilisateur", vous pourrez alors soit définir un mot de passe, soit envoyer un mail à l'utilisateur.</p>
+    {%  endif %}
+
     <dl class="dl-horizontal">
       <dt>Prénom</dt>
       <dd>{{ user.firstName }}</dd>
@@ -43,13 +47,19 @@
     </dl>
   </div>
 
-  <form action="{{ path('csis_user_delete', {'username': user.username}) }}" {{ form_enctype(delete_form) }} method="POST">
+  <form action="{{ path('csis_user_delete', {'id': user.id}) }}" {{ form_enctype(delete_form) }} method="POST">
     <a href="{{ path('csis_user_index') }}" class="btn">
       <i class="icon-chevron-left"></i>&nbsp;Retour liste utilisateurs
     </a>
-    <a href="{{ path('csis_user_edit', {'username': user.username}) }}" class="btn btn-success">
-      <i class="icon-edit icon-white"></i>&nbsp;Modifier l'utilisateur
-    </a>
+    {% if user.enabled %}
+        <a href="{{ path('csis_user_edit', {'id': user.id}) }}" class="btn btn-success">
+          <i class="icon-edit icon-white"></i>&nbsp;Modifier l'utilisateur
+        </a>
+    {% else %}
+        <a href="{{ path('csis_user_edit', {'id': user.id}) }}" class="btn btn-success">
+          <i class="icon-arrow-up icon-white"></i>&nbsp;Activer l'utilisateur
+        </a>
+    {% endif %}
     <button type="submit" class="btn btn-warning">
       <i class="icon-trash icon-white"></i>&nbsp;Supprimer l'utilisateur
     </button>

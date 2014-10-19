@@ -3,6 +3,7 @@
 namespace CSIS\UserBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,6 +44,7 @@ class UserController extends Controller
      * Finds and displays a User.
      * @Secure(roles="ROLE_GEST_USER")
      * @Template("CSISUserBundle:Admin:show.html.twig")
+     * @ParamConverter("user", class="CSISUserBundle:User")
      */
     public function showAction(User $user)
     {
@@ -57,14 +59,23 @@ class UserController extends Controller
     /**
      * Edits an existing User.
      * @Secure(roles="ROLE_GEST_USER")
+     * @ParamConverter("user", class="CSISUserBundle:User")
      */
-    public function editAction(Request $request, User $user) {
-        $form = $this->createForm($this->container->get('csis.user.form'), $user);
+    public function editAction(Request $request, User $user)
+    {
+        $form = $this->createForm($this->container->get('csis.user.form'), $user, array('password' => $user->isEnabled()));
         
         if ( $request->isMethod('POST') ) {
             $form->handleRequest($request);
             
             if ($form->isValid()) {
+
+                //
+                if (!$user->isEnabled()) {
+                    $user->setEnabled(true);
+
+                }
+
                 $this->get('fos_user.user_manager')->updateUser($user);
                 
                 $route = 'csis_user_show';
@@ -79,7 +90,7 @@ class UserController extends Controller
                     }
                 }
 
-                return $this->redirect($this->generateUrl($route, array('username' => $user->getUsername())));
+                return $this->redirect($this->generateUrl($route, array('id' => $user->getId())));
             }
         }
         return $this->render('CSISUserBundle:Admin:edit.html.twig', array(
@@ -92,6 +103,7 @@ class UserController extends Controller
     /**
      * Deletes a User.
      * @Secure(roles="ROLE_GEST_USER")
+     * @ParamConverter("user", class="CSISUserBundle:User")
      */
     public function deleteAction(Request $request, User $user) {
         $form = $this->createDeleteForm($user);
@@ -118,6 +130,7 @@ class UserController extends Controller
      * Edits a User.
      * @Secure(roles="ROLE_GEST_USER")
      * @Template("CSISUserBundle:Admin:editLab.html.twig")
+     * @ParamConverter("user", class="CSISUserBundle:User")
      */
     public function editLaboratoryDependanceAction(Request $request, User $user) {
         $form = $this->createForm(
@@ -134,7 +147,7 @@ class UserController extends Controller
                 $user->setInstitution(null);
                 $userManager->updateUser($user);
 
-                return $this->redirect($this->generateUrl('csis_user_show', array('username' => $user->getUsername())));
+                return $this->redirect($this->generateUrl('csis_user_show', array('id' => $user->getId())));
             }
         }
         
@@ -147,6 +160,7 @@ class UserController extends Controller
     /**
      * Edits a User.
      * @Secure(roles="ROLE_GEST_USER")
+     * @ParamConverter("user", class="CSISUserBundle:User")
      */
     public function editInstitutionDependanceAction(Request $request, User $user) {
         $form = $this->createForm(
@@ -163,7 +177,7 @@ class UserController extends Controller
                 $user->setLab(null);
                 $userManager->updateUser($user);
 
-                return $this->redirect($this->generateUrl('csis_user_show', array('username' => $user->getUsername())));
+                return $this->redirect($this->generateUrl('csis_user_show', array('id' => $user->getId())));
             }
         }
         
@@ -177,6 +191,7 @@ class UserController extends Controller
      * Creates a form to delete a User by id.
      * @param mixed $id The entity id
      * @return \Symfony\Component\Form\Form The form
+     * @ParamConverter("user", class="CSISUserBundle:User")
      */
     private function createDeleteForm(User $user) {
         return $this->createFormBuilder(array('id' => $user->getId()))
