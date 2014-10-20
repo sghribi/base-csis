@@ -248,27 +248,6 @@ class Laboratory {
     }
 
     /**
-     * Get Responsible
-     * 
-     * @return \CSIS\EamBundle\Entity\People
-     */
-    public function getResponsible() {
-        return $this->responsible;
-    }
-
-    /**
-     * Set Responsible
-     * 
-     * @param \CSIS\EamBundle\Entity\People $responsible
-     * @return \CSIS\EamBundle\Entity\Laboratory
-     */
-    public function setResponsible(\CSIS\EamBundle\Entity\People $responsible) {
-        $this->responsible = $responsible;
-
-        return $this;
-    }
-
-    /**
      * Get the owners
      * 
      * @return \Doctrine\Common\Collections\ArrayCollection

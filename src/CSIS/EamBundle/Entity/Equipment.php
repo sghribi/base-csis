@@ -116,15 +116,6 @@ class Equipment
     private $laboratory;
 
     /**
-     * @deprecated: to delete
-     * @TODO: à supprimer
-     * @var People
-     * 
-     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\People")
-     */
-    private $contacts;
-
-    /**
      * @var Category
      * 
      * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Category", inversedBy="equipments")
@@ -162,7 +153,6 @@ class Equipment
     {
 	    $this->equipmentTags = new ArrayCollection();
         $this->tags = new ArrayCollection();
-        $this->contacts = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->owners = new ArrayCollection();
         $this->lastEditDate = new \DateTime();
@@ -507,39 +497,6 @@ class Equipment
     public function getLaboratory()
     {
         return $this->laboratory;
-    }
-
-    /**
-     * Add contacts
-     *
-     * @param \CSIS\EamBundle\Entity\People $contacts
-     * @return Equipment
-     */
-    public function addContact(\CSIS\EamBundle\Entity\People $contacts)
-    {
-        $this->contacts[] = $contacts;
-
-        return $this;
-    }
-
-    /**
-     * Remove contacts
-     *
-     * @param \CSIS\EamBundle\Entity\People $contacts
-     */
-    public function removeContact(\CSIS\EamBundle\Entity\People $contacts)
-    {
-        $this->contacts->removeElement($contacts);
-    }
-
-    /**
-     * Get contacts
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getContacts()
-    {
-        return $this->contacts;
     }
 
     /**

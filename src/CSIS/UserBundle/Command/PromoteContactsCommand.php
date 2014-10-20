@@ -3,8 +3,6 @@
 namespace CSIS\UserBundle\Command;
 
 use CSIS\EamBundle\Entity\Equipment;
-use CSIS\EamBundle\Entity\Institution;
-use CSIS\EamBundle\Entity\Laboratory;
 use CSIS\UserBundle\Entity\User;
 use CSIS\EamBundle\Entity\People;
 use Symfony\Component\Console\Command\Command;
@@ -14,6 +12,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManager;
 
+/**
+ * @deprecated
+ */
 class PromoteContactsCommand extends Command
 {
     /**
