@@ -22,7 +22,7 @@ class PromoteContactsCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('csis:user:create')
+            ->setName('csis:users:create')
             ->setDescription('Update contacts to users');
     }
 
@@ -37,25 +37,55 @@ class PromoteContactsCommand extends Command
 
         /** @var People $people */
         foreach ($peoples as $people) {
+
+            $user = $em->getRepository('CSISUserBundle:User')->findOneBy(array('email' => $people->getEmail()));
+
+            if ($user) {
+                $output->writeln(sprintf('User with email <comment>%s</comment> already exists', $people->getEmail()));
+                continue;
+            }
+
+            $output->writeln(sprintf('Created user with email <comment>%s</comment>', $people->getEmail()));
+
             $user = new User();
             $user->setFirstName($people->getFirstName());
             $user->setLastName($people->getName());
             $user->setEmail($people->getEmail());
             $user->setUrl($people->getUrl());
             $user->setPhoneNumber($people->getPhoneNumber());
-            $user->setEnabled(true);
+            $user->setEnabled(false);
 
-            /**
-             * S'occuper de :
-             *
-             * $lab = new Laboratory();
-            $lab->getOwners();
+            // Hack to have unique username
+            $suffix = '';
+            do {
+                $username = $user->getEmail() . $suffix;
+                $suffix .= '_';
+            } while ($em->getRepository('CSISUserBundle:User')->findOneBy(array('username' => $username )));
+            $user->setUsername($username);
 
-            $eq = new Equipment();
-            $eq->getOwners();
-             */
+            // Password
+            $length = 8;
+            $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+;:,.?";
+            $password = substr(str_shuffle($chars), 0, $length);
+            $user->setPlainPassword($password);
+
+            $equipmentRepo= $em->getRepository('CSISEamBundle:Equipment');
+            $equipments = $equipmentRepo->createQueryBuilder('e')
+                ->where(':people MEMBER OF e.contacts')
+                ->setParameter('people', $people)
+                ->getQuery()
+                ->getResult();
+
+            /** @var Equipment $equipment **/
+            foreach ($equipments as $equipment) {
+                $output->writeln(sprintf('-> Add equipment : %s', $equipment->getDesignation()));
+                $equipment->addOwner($user);
+                $em->persist($equipment);
+            }
+
+            $em->persist($user);
+
+            $em->flush();
         }
-
-        $output->writeln(sprintf('Created user <comment>%s</comment>', $username));
     }
 }
