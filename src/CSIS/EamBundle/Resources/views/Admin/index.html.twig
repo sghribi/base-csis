@@ -37,16 +37,6 @@
       <li><a href="{{ path("tag", {'onglet' : 'edit'}) }}">Demandes de tags en attentes</a></li>
     </ul>
     {% endif %}
-
-  {% if is_granted("ROLE_GEST_CATEGORY") %}
-    <hr />
-    <h4>Familles</h4>
-    <ul>
-        <li><a href="{{ path('category') }}">Accéder à la liste des familles</a></li>
-        <li><a href="{{ path('category_new') }}">Créer une nouvelle famille</a></li>
-    </ul>
-  {% endif %}
-    
   </div>
 
   <div class="span5">

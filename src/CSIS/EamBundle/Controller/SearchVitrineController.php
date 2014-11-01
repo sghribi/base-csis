@@ -35,10 +35,7 @@ class SearchVitrineController extends Controller
 				case "equipments":
 				$em->getRepository('CSISEamBundle:Equipment');
 				$equipment = $em->find($id);
-				
-				$em->getRepository('CSISEamBundle:Category');
-				$categories = $em->find($equipment.categories);
-				
+
 				$em->getRepository('CSISEamBundle:Laboratory');
 				$laboratory = $em->find($equipment.laboratory);
 				
@@ -50,8 +47,7 @@ class SearchVitrineController extends Controller
 										'vitrine' => $vitrine, 
 										'card' => $card, 'id' => $id, 
 										'equipment' => $equipment, 
-										'categories' => $categories, 
-										'laboratory' => $laboratory, 
+										'laboratory' => $laboratory,
 										'institution' => $institution,
 										'nb' => sizeof($equipments)));   
 				break;			

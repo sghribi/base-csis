@@ -85,12 +85,6 @@ class EquipmentType extends AbstractType
             //     'allow_delete' => true,
             //     'by_reference' => false,
             // ))
-            ->add('categories', 'entity', array(
-                'class' => 'CSISEamBundle:Category',
-                'property' => 'name',
-                'multiple' => true,
-                'required' => false,
-            ))
     ;
   }
 

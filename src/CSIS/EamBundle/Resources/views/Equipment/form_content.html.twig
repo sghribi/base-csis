@@ -13,7 +13,7 @@
         <legend>
             Informations générales
         </legend>
-        {% set fields = [form.designation, form.brand, form.type, form.url, form.description, form.shared, form.laboratory, form.categories] %}
+        {% set fields = [form.designation, form.brand, form.type, form.url, form.description, form.shared, form.laboratory] %}
 
         {% for field in fields %}
             <div class="control-group">
@@ -83,12 +83,3 @@
         </button>
     </div>
 </div>
-
-
-{% block page_js %}
-    <script type="text/javascript">
-        jQuery(document).ready(function() {
-            $("#csis_eambundle_equipmenttype_categories").chosen({disable_search_threshold: 10, no_results_text: "Aucun résultat",placeholder_text_multiple: 'Sélectionner les catégories', });
-        });
-    </script>
-{% endblock %}

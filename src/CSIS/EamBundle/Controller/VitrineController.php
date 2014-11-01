@@ -28,13 +28,6 @@ class VitrineController extends Controller
                         return $this->render('CSISEamBundle:Vitrine:layout.html.twig', array('equipements' =>  $this->splitEqpmtsByLetter($equipments), 'vitrine' => $vitrine, 'card' => $card, 'id' => $id, 'equipment' => $equipment,));
                     break;
 
-                    case "category":
-                        $repository = $em->getRepository('CSISEamBundle:Category');
-                        $category = $repository->find($id);
-
-                        return $this->render('CSISEamBundle:Vitrine:layout.html.twig', array('equipements' =>  $this->splitEqpmtsByLetter($equipments), 'vitrine' => $vitrine, 'card' => $card, 'id' => $id, 'category' => $category,));
-                    break;
-
                     case "laboratory":
                         $repository = $em->getRepository('CSISEamBundle:Laboratory');
                         $laboratory = $repository->find($id);
@@ -56,48 +49,6 @@ class VitrineController extends Controller
 
             break;
 
-            case "categories" :
-
-                $repository = $em->getRepository('CSISEamBundle:Category');
-                $categories = $repository->findAll();
-
-                switch($card)
-                {
-                    case "equipment":
-                        $repository = $em->getRepository('CSISEamBundle:Equipment');
-                        $equipment = $repository->find($id);
-
-                        return $this->render('CSISEamBundle:Vitrine:layout.html.twig', array('categories' => $categories, 'vitrine' => $vitrine, 'card' => $card, 'id' => $id, 'equipment' => $equipment,));
-                    break;
-
-                    case "category":
-                        $repository = $em->getRepository('CSISEamBundle:Category');
-                        $category = $repository->find($id);
-
-                        return $this->render('CSISEamBundle:Vitrine:layout.html.twig', array('categories' => $categories, 'vitrine' => $vitrine, 'card' => $card, 'id' => $id, 'category' => $category,));
-                    break;
-
-                    case "laboratory":
-                        $repository = $em->getRepository('CSISEamBundle:Laboratory');
-                        $laboratory = $repository->find($id);
-
-                        return $this->render('CSISEamBundle:Vitrine:layout.html.twig', array('categories' => $categories, 'vitrine' => $vitrine, 'card' => $card, 'id' => $id, 'laboratory' => $laboratory,));
-                    break;
-
-                    case "institution":
-                        $repository = $em->getRepository('CSISEamBundle:Institution');
-                        $institution = $repository->find($id);
-
-                        return $this->render('CSISEamBundle:Vitrine:layout.html.twig', array('categories' => $categories, 'vitrine' => $vitrine, 'card' => $card, 'id' => $id, 'institution' => $institution,));
-                    break;
-
-                    default :
-                        return $this->render('CSISEamBundle:Vitrine:layout.html.twig',array('categories' => $categories, 'vitrine' => $vitrine, 'card' => $card, 'id' => $id,));
-                    break;
-                }
-
-            break;
-
             case "laboratories" :
 
                 $repository = $em->getRepository('CSISEamBundle:Institution');
@@ -110,13 +61,6 @@ class VitrineController extends Controller
                         $equipment = $repository->find($id);
 
                         return $this->render('CSISEamBundle:Vitrine:layout.html.twig', array('institutions' => $institutions, 'vitrine' => $vitrine, 'card' => $card, 'id' => $id, 'equipment' => $equipment,));
-                    break;
-
-                    case "category":
-                        $repository = $em->getRepository('CSISEamBundle:Category');
-                        $category = $repository->find($id);
-
-                        return $this->render('CSISEamBundle:Vitrine:layout.html.twig', array('institutions' => $institutions, 'vitrine' => $vitrine, 'card' => $card, 'id' => $id, 'category' => $category,));
                     break;
 
                     case "laboratory":
@@ -141,6 +85,8 @@ class VitrineController extends Controller
             break;
 
             default :
+                $repository = $em->getRepository('CSISEamBundle:Equipment');
+                $equipments = $repository->findAllOrderByDesignation();
                 return $this->render('CSISEamBundle:Vitrine:layout.html.twig', array('equipements' =>  $this->splitEqpmtsByLetter($equipments), 'vitrine' => $vitrine, 'card' => $card, 'id' => $id,));
             break;
         }
@@ -157,13 +103,6 @@ class VitrineController extends Controller
                 $equipment = $repository->find($id);
 
                 return $this->render('CSISEamBundle:Vitrine:card_equipment.html.twig', array('equipment' => $equipment,));
-            break;
-
-            case "category":
-                $repository = $em->getRepository('CSISEamBundle:Category');
-                $category = $repository->find($id);
-
-                return $this->render('CSISEamBundle:Vitrine:card_category.html.twig', array('category' => $category,));
             break;
 
             case "laboratory":

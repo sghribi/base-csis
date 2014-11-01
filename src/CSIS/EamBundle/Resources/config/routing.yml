@@ -9,10 +9,6 @@ CSISEamBundle_admin:
     resource: "@CSISEamBundle/Controller/AdminController.php"
     type:     annotation
 
-CSISEamBundle_category:
-    resource: "@CSISEamBundle/Controller/CategoryController.php"
-    type:     annotation
-
 CSISEamBundle_equipment:
     resource: "@CSISEamBundle/Controller/EquipmentController.php"
     type:     annotation

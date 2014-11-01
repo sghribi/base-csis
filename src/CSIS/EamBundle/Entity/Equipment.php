@@ -116,13 +116,6 @@ class Equipment
     private $laboratory;
 
     /**
-     * @var Category
-     * 
-     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Category", inversedBy="equipments")
-     */
-    private $categories;
-
-    /**
      * @var User
      *
      * @ORM\ManyToMany(targetEntity="CSIS\UserBundle\Entity\User")
@@ -147,13 +140,11 @@ class Equipment
 
     /**
      * Constructor of the class
-     * Initialize contacts, categories and tags as Doctrine ArrayCollection
      */
     function __construct()
     {
 	    $this->equipmentTags = new ArrayCollection();
         $this->tags = new ArrayCollection();
-        $this->categories = new ArrayCollection();
         $this->owners = new ArrayCollection();
         $this->lastEditDate = new \DateTime();
     }
@@ -497,39 +488,6 @@ class Equipment
     public function getLaboratory()
     {
         return $this->laboratory;
-    }
-
-    /**
-     * Add categories
-     *
-     * @param \CSIS\EamBundle\Entity\Category $categories
-     * @return Equipment
-     */
-    public function addCategory(\CSIS\EamBundle\Entity\Category $categories)
-    {
-        $this->categories[] = $categories;
-
-        return $this;
-    }
-
-    /**
-     * Remove categories
-     *
-     * @param \CSIS\EamBundle\Entity\Category $categories
-     */
-    public function removeCategory(\CSIS\EamBundle\Entity\Category $categories)
-    {
-        $this->categories->removeElement($categories);
-    }
-
-    /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCategories()
-    {
-        return $this->categories;
     }
 
     /**

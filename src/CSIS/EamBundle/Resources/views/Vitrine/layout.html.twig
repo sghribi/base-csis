@@ -12,7 +12,6 @@
                     <a class="btn dropdown-toggle span3" style="margin-left: 10px" data-toggle="dropdown" href="#">{{ vitrine }}  <span class="caret pull-right"></span></a>
                     <ul class="dropdown-menu span3" style="margin-left: 10px">
                         <li><a href="{{ path('vitrine', { 'vitrine' : 'alphabetique' }) }}">Alphabetique</a></li>
-                        {#<li><a href="{{ path('vitrine', { 'vitrine' : 'categories' }) }}">Categories</a></li>#}
                         <li><a href="{{ path('vitrine', { 'vitrine' : 'laboratories' }) }}">Etablissements/Laboratoires</a></li>
                     </ul>
                 </div>
@@ -25,10 +24,7 @@
 
                 {% include 'CSISEamBundle:Vitrine:alphabetique.html.twig' %}
                 
-            {% elseif vitrine ==  "categories" %}  
-                
-                {% include 'CSISEamBundle:Vitrine:categories.html.twig' %}
-            
+
             {% elseif vitrine ==  "laboratories" %} 
                 
                 {% include 'CSISEamBundle:Vitrine:laboratories.html.twig' %}
@@ -54,10 +50,6 @@
 
                 {% include 'CSISEamBundle:Vitrine:card_institution.html.twig' %}
 
-            {% elseif card ==  "category" %}
-
-                {% include 'CSISEamBundle:Vitrine:card_category.html.twig' %}
-                
             {% else %}
 
                 {% include 'CSISEamBundle:Vitrine:card_vide.html.twig' %}
@@ -107,11 +99,7 @@
                 case 'equipment' :
                     var entity = $('#equipment_{{ id }}');
                 break;
-                
-                case 'category' :
-                    var entity = $('#category_{{ id }}');
-                break;
-                
+
                 case 'laboratory' :
                     var entity = $('#laboratory_{{ id }}');
                 break;
