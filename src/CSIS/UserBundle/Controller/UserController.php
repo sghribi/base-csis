@@ -24,8 +24,6 @@ class UserController extends Controller
      */
     public function indexAction($page)
     {
-        $user = $this->getUser();
-
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $userRepo = $em->getRepository('CSISUserBundle:User');
@@ -35,6 +33,7 @@ class UserController extends Controller
 
         return array(
             'users' => $users,
+            'maxPerPage' => $maxPerPage,
             'page' => $page,
             'nbPages'  => ceil( count($users) / $maxPerPage ),
         );

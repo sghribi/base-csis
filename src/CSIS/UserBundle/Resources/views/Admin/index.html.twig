@@ -13,22 +13,22 @@
         <tr>
           <th>#</th>
           <th>Nom</th>
-          <th>login</th>
+          <th>Prénom</th>
+          <th>Login</th>
           <th>Email</th>
-          <th>Web</th>
           <th>Téléphone</th>
-          <th>Action</th>
+          <th>Voir</th>
           <th>État</th>
         </tr>
       </thead>
       <tbody>
       {% for user in users %}
         <tr>
-          <td>{{ loop.index}}</td>
-          <td>{{ user.lastName }} {{ user.firstName }}</td>
+          <td>{{ loop.index + (page-1)*maxPerPage }}</td>
+          <td>{{ user.lastName }}</td>
+          <td>{{ user.firstName }}</td>
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
-          <td>{{ user.url }}</td>
           <td>{{ user.phoneNumber }}</td>
           <td>
             <a href="{{ path('csis_user_show', {'id' : user.id}) }}" data-toggle="tooltip" title="Voir">

@@ -106,7 +106,8 @@ class UserRepository extends EntityRepository
     
     private function qbOrderByName(QueryBuilder $qb)
     {
-        return $qb->orderBy('u.lastName, u.firstName', 'ASC');
+        return $qb->orderBy('u.lastName', 'ASC')
+                ->addOrderBy('u.firstName', 'ASC');
     }
 
     private function qbOrderByEnabled(QueryBuilder $qb)

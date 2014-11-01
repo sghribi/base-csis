@@ -2,6 +2,8 @@
 
 namespace CSIS\UserBundle\Entity;
 
+use CSIS\EamBundle\Entity\Institution;
+use CSIS\EamBundle\Entity\Laboratory;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -72,11 +74,19 @@ class User extends BaseUser
      */
     protected $institution;
 
-    public function __toString() {
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
         return $this->getLastName() . ' ' . $this->getFirstName() . ' <' . $this->getEmail() . '>';
     }
 
-    public function getFormatedRoles() {
+    /**
+     * @return array
+     */
+    public function getFormatedRoles()
+    {
         $roles = $this->getRoles();
         array_walk($roles, function(&$role) {
             $role = ucwords(strtolower(str_replace('_', ' ', substr($role, 5))));
@@ -93,29 +103,6 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return User
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -213,10 +200,10 @@ class User extends BaseUser
     /**
      * Set lab
      *
-     * @param \CSIS\EamBundle\Entity\Laboratory $lab
+     * @param Laboratory $lab
      * @return User
      */
-    public function setLab(\CSIS\EamBundle\Entity\Laboratory $lab = null)
+    public function setLab(Laboratory $lab = null)
     {
         $this->lab = $lab;
 
@@ -226,7 +213,7 @@ class User extends BaseUser
     /**
      * Get lab
      *
-     * @return \CSIS\EamBundle\Entity\Laboratory
+     * @return Laboratory
      */
     public function getLab()
     {
@@ -236,10 +223,11 @@ class User extends BaseUser
     /**
      * Set institution
      *
-     * @param \CSIS\EamBundle\Entity\Institution $institution
+     * @param Institution $institution
+     *
      * @return User
      */
-    public function setInstitution(\CSIS\EamBundle\Entity\Institution $institution = null)
+    public function setInstitution(Institution $institution = null)
     {
         $this->institution = $institution;
 
@@ -249,7 +237,7 @@ class User extends BaseUser
     /**
      * Get institution
      *
-     * @return \CSIS\EamBundle\Entity\Institution
+     * @return Institution
      */
     public function getInstitution()
     {
