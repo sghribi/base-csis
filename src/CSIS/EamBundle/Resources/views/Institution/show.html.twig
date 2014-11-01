@@ -56,7 +56,6 @@
                   <td>{{ laboratory.institution.name }}</td> {# Nom francais du labo #}
                   <td>{{ laboratory.nameFr }}</td> {# Nom francais du labo #}
                   <td>{{ laboratory.nameEn }}</td> {# Nom francais du labo #}
-                  <td>{% if laboratory.belongToCSIS=='0' %} Non {% else %} Oui {% endif %}</td> {# Nom francais du labo #}
                   <td>{% if laboratory.researchLaboratory=='0' %} Non {% else %} Oui {% endif %}</td>{# Nom francais du labo #}
                   <td><a href="{{ path('laboratory_show', { 'id': laboratory.id }) }}" class="icon-eye-open" data-toggle="tooltip" title="Afficher" ></a></td>
                 </tr>

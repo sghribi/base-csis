@@ -57,14 +57,6 @@ class Laboratory {
      * @var boolean
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="belongToCSIS", type="boolean")
-     */
-    private $belongToCSIS = false;
-
-    /**
-     * @var boolean
-     *
-     * @Assert\NotBlank()
      * @ORM\Column(name="researchLaboratory", type="boolean")
      */
     private $researchLaboratory = true;
@@ -182,27 +174,6 @@ class Laboratory {
      */
     public function getNameEn() {
         return $this->nameEn;
-    }
-
-    /**
-     * Set belongToCSIS
-     *
-     * @param boolean $belongToCSIS
-     * @return \CSIS\EamBundle\Entity\Laboratory
-     */
-    public function setBelongToCSIS($belongToCSIS) {
-        $this->belongToCSIS = $belongToCSIS;
-
-        return $this;
-    }
-
-    /**
-     * Get belongToCSIS
-     *
-     * @return boolean 
-     */
-    public function getBelongToCSIS() {
-        return $this->belongToCSIS;
     }
 
     /**

@@ -34,15 +34,6 @@ class LaboratoryType extends AbstractType {
                     'label' => 'Name (EN)',
                     'attr' => array('class' => 'span7',),
                 ))
-                ->add('belongToCSIS', 'choice', array(
-                    'label' => 'Fait parti du CSIS',
-                    'choices' => array(
-                        '0' => 'Non',
-                        '1' => 'Oui',
-                    ),
-                    'multiple' => false,
-                    'attr' => array('class' => 'span7',),
-                ))
                 ->add('researchLaboratory', 'choice', array(
                     'label' => 'Est un labo de recherche',
                     'choices' => array(
