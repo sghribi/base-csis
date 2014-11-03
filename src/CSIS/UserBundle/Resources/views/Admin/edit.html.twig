@@ -3,6 +3,21 @@
 {% import 'CSISEamBundle:Eam:pagination.html.twig' as pagination %}
 
 {% block fos_user_content %}
+
+<div class="span12">
+    <ul class="breadcrumb">
+        <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('csis_eam_admin_index') }}">Administration</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('csis_user_index') }}">Les utilisateurs</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('csis_user_show', {id: user.id}) }}">{{ user.firstName }} {{ user.lastName }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        {% if form.plainPassword is defined %}
+            <li class="active">Édition</li>
+        {% else %}
+            <li class="active">Activation</li>
+        {% endif %}
+    </ul>
+</div>
+
 <div class="span12">
   <div class="row">
     <form action="{{ path('csis_user_edit', {'id': user.id}) }}" {{ form_enctype(form) }} class="well span4 offset2" method="POST">

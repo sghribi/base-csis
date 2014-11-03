@@ -29,3 +29,8 @@ services:
             - "@security.context"
         tags:
             - { name: form.type, alias: csis_institution_selector }
+
+    csis.twig.csis_extension:
+        class: CSIS\EamBundle\Twig\TwigFilters
+        tags:
+            - { name: twig.extension }

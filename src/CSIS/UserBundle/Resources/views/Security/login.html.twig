@@ -1,6 +1,14 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
 {% block fos_user_content %}
+
+    <div class="span12">
+    <ul class="breadcrumb">
+        <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li class="active">Connexion</li>
+    </ul>
+</div>
+
 {% if error %}
 <div class="alert alert-error offset1 span9">
     <button type="button" class="close" data-dismiss="alert">&times;</button>

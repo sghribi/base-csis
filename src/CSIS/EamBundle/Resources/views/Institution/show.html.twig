@@ -6,6 +6,12 @@
   <div class="span12">
     {% include 'CSISEamBundle:Eam:flash.html.twig' %}
     {% include 'CSISEamBundle:Eam:mainflash.html.twig' %}
+
+  <ul class="breadcrumb">
+      <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+      <li class="active">{{ institution.name }}</li>
+  </ul>
+
   </div>
 </div>
 

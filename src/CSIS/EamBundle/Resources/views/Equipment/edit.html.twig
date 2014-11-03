@@ -8,6 +8,13 @@
         </div>
     </div>
 
+    <ul class="breadcrumb">
+        <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('institution_show', {id: equipment.laboratory.institution.id}) }}">{{ equipment.laboratory.institution.name }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('laboratory_show', {id: equipment.laboratory.id}) }}">{{ equipment.laboratory.nameFr|slice }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href={{ path('equipment_show', {id: equipment.id}) }}>{{ equipment.designation|slice }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li class="active">Édition</li>
+    </ul>
 
     <div class="row">
         <div class="offset1 span10">

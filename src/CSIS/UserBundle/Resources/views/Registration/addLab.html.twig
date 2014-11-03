@@ -2,6 +2,16 @@
 
 {% block fos_user_content %}
 
+<div class="span12">
+    <ul class="breadcrumb">
+        <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('csis_eam_admin_index') }}">Administration</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('csis_user_index') }}">Les utilisateurs</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('csis_user_show', {id: user.id}) }}">{{ user.firstName }} {{ user.lastName }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li class="active">Choix du laboratoire</li>
+    </ul>
+</div>
+
 <form class="well span9 offset1" action="{{ path('csis_user_add_lab') }}" {{ form_enctype(form) }} method="POST">
     <fieldset>
       <legend>Ajouter un laboratoire à l'utilisateur {{ user.lastname}} {{ user.firstname }}</legend>

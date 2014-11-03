@@ -5,6 +5,13 @@
         <div class="span12">
             {% include 'CSISEamBundle:Eam:flash.html.twig' %}
             {% include 'CSISEamBundle:Eam:mainflash.html.twig' %}
+
+            <ul class="breadcrumb">
+                <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+                <li><a href="{{ path('institution_show', {id: laboratory.institution.id}) }}">{{ laboratory.institution.name }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+                <li><a href="{{ path('laboratory_show', {id: laboratory.id}) }}">{{ laboratory.nameFr }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+                <li class="active">Édition</li>
+            </ul>
         </div>
     </div>
 

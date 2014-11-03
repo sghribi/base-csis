@@ -1,6 +1,12 @@
 {% extends 'CSISEamBundle::layout.html.twig' %}
 
 {% block csis_body %}
+
+<ul class="breadcrumb">
+    <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+    <li class="active">Tous les équipements</li>
+</ul>
+
 <h2>Vitrine des équipements</h2>
 
 <div class="row">

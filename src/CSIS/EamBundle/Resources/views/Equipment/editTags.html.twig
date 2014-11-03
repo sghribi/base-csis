@@ -5,46 +5,56 @@
 
 {% block csis_body %}
     <div class="row">
-        {# Notifications #}
-        {% include 'CSISEamBundle:Eam:flash.html.twig' %}
+        <div class="offset1 row10">
+            {# Notifications #}
+            {% include 'CSISEamBundle:Eam:flash.html.twig' %}
 
-        <div id="tagsEdition">
-            <h3 class="pull-center">Gestion des tags de cet équipement</h3>
-            <div class="row">
-                {# Tags acceptés #}
-                <div class="span4" id="acceptedTagsBox">
-                    <div class="row-fluid text-center">
-                        <h4>Tags acceptés</h4>
-                        <ul class="nav nav-tabs nav-stacked tags">
-                            {# Ici seront insérés les tags #}
-                        </ul>
+            <ul class="breadcrumb">
+                <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+                <li><a href="{{ path('institution_show', {id: equipment.laboratory.institution.id}) }}">{{ equipment.laboratory.institution.name }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+                <li><a href="{{ path('laboratory_show', {id: equipment.laboratory.id}) }}">{{ equipment.laboratory.nameFr|slice }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+                <li><a href={{ path('equipment_show', {id: equipment.id}) }}>{{ equipment.designation|slice }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+                <li class="active">Tags</li>
+            </ul>
+
+            <div id="tagsEdition">
+                <h3 class="pull-center">Gestion des tags de cet équipement</h3>
+                <div class="row-fluid">
+                    {# Tags acceptés #}
+                    <div class="span4" id="acceptedTagsBox">
+                        <div class="row-fluid text-center">
+                            <h4>Tags acceptés</h4>
+                            <ul class="nav nav-tabs nav-stacked tags">
+                                {# Ici seront insérés les tags #}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {# Tags rejetés #}
+                    <div class="span4" id="rejectedTagsBox">
+                        <div class="row-fluid text-center">
+                            <h4>Tags rejetés</h4>
+                            <ul class="nav nav-tabs nav-stacked tags">
+                                {# Ici seront insérés les tags #}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {# Tags suggérés #}
+                    <div class="span4" id="suggestedTagsBox">
+                        <div class="row-fluid text-center">
+                            <h4>Tags suggérés <a href="#" id="refreshBtn" class="icon icon-refresh tips" title="Mettre à jour les tags et rafraîchir les suggestions"></a></h4>
+                            <ul class="nav nav-tabs nav-stacked tags">
+                                {# Ici seront insérés les tags #}
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
-                {# Tags rejetés #}
-                <div class="span4" id="rejectedTagsBox">
-                    <div class="row-fluid text-center">
-                        <h4>Tags rejetés</h4>
-                        <ul class="nav nav-tabs nav-stacked tags">
-                            {# Ici seront insérés les tags #}
-                        </ul>
-                    </div>
+                <div id="buttons" class="pull-center">
+                    <a class="btn btn-default" href="{{ path('equipment_show', {id: equipment.id}) }}"><i class="icon icon-chevron-left"></i> Retour à la fiche équipement</a>
+                    <button class="btn btn-success" id="updateBtn" data-loading-text="Mise à jour..." disabled="disabled"><i class="icon icon-refresh icon-white"></i> Mettre à jour les tags</button>
                 </div>
-
-                {# Tags suggérés #}
-                <div class="span4" id="suggestedTagsBox">
-                    <div class="row-fluid text-center">
-                        <h4>Tags suggérés <a href="#" id="refreshBtn" class="icon icon-refresh tips" title="Mettre à jour les tags et rafraîchir les suggestions"></a></h4>
-                        <ul class="nav nav-tabs nav-stacked tags">
-                            {# Ici seront insérés les tags #}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div id="buttons" class="pull-center">
-                <a class="btn btn-default" href="{{ path('equipment_show', {id: equipment.id}) }}"><i class="icon icon-chevron-left"></i> Retour à la fiche équipement</a>
-                <button class="btn btn-success" id="updateBtn" data-loading-text="Mise à jour..." disabled="disabled"><i class="icon icon-refresh icon-white"></i> Mettre à jour les tags</button>
             </div>
         </div>
     </div>

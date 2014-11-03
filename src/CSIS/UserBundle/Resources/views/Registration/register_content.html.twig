@@ -1,3 +1,11 @@
+<div class="span12">
+    <ul class="breadcrumb">
+        <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('csis_eam_admin_index') }}">Administration</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li class="active">Créer un nouvel utilisateur</li>
+    </ul>
+</div>
+
 <form class="well span4 offset2" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
     <fieldset>
       <legend>Créer un nouveau utilisateur</legend>

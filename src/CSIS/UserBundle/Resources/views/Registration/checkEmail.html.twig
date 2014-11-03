@@ -1,6 +1,17 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
 {% block fos_user_content %}
+
+<div class="span12">
+    <ul class="breadcrumb">
+        <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('csis_eam_admin_index') }}">Administration</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('csis_user_index') }}">Les utilisateurs</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li><a href="{{ path('csis_user_show', {id: user.id}) }}">{{ user.firstName }} {{ user.lastName }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li class="active">Vérification e-mail</li>
+    </ul>
+</div>
+
 <div class="span10 offset1">
   <div class="well">
     <p>
