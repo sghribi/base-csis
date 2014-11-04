@@ -76,10 +76,16 @@
             </a>
         {% endif %}
         <a class="btn" href="{{ path('equipment') }}">
-            <i class="icon-list-alt"></i>&nbsp;Liste des équipements
+            <i class="icon-list-alt"></i>&nbsp;Liste équipements
         </a>
+        {% if with_tags %}
+            <a class="btn btn-info"  href="{{ path('equipment_edit_tags', { 'id': equipment.id }) }}">
+                <i class="icon-tag icon-white"></i> Gérer les tags
+            </a>
+        {% endif %}
         <button type="submit" class="btn btn-success">
             <i class="{{ icon_type }}"></i>&nbsp;{{ button_name }}
         </button>
+
     </div>
 </div>
