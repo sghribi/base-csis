@@ -5,6 +5,15 @@
         <div class="span12">
             {% include 'CSISEamBundle:Eam:flash.html.twig' %}
             {% include 'CSISEamBundle:Eam:mainflash.html.twig' %}
+
+            <div class="span12">
+                <ul class="breadcrumb">
+                    <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+                    <li><a href={{ path('csis_eam_admin_index') }}>Administration</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+                    <li><a href={{ path('laboratory') }}>Les laboratoires</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+                    <li class="active">Création</li>
+                </ul>
+            </div>
         </div>
     </div>
 

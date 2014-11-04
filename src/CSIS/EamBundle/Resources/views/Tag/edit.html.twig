@@ -3,6 +3,15 @@
 {% block csis_body %}
 <div class="row">
 
+    <div class="span12">
+        <ul class="breadcrumb">
+            <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+            <li><a href={{ path('csis_eam_admin_index') }}>Administration</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+            <li><a href={{ path('tag') }}>Les tags</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+            <li class="active">Tag : <strong>{{ tag.tag }}</strong></li>
+        </ul>
+    </div>
+
     {# Partie gauche #}
     <div class="span4">
         <div class="well">

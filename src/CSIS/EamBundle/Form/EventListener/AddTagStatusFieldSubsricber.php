@@ -37,7 +37,8 @@ class AddTagStatusFieldSubsricber implements EventSubscriberInterface
                         '0' => 'En attente',
                         '1' => 'Validé', 
                         '2' => 'Refusé')
-                    ,'multiple' => false)));
+                    ,'multiple' => false,
+                    'auto_initialize' => false)));
         }
     }
 }
