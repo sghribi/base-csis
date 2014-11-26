@@ -26,9 +26,10 @@
         </div>
       </h4>
    
-      {% include 'CSISEamBundle:Equipment:profilCard.html.twig' %}
-      
+      {% include 'CSISEamBundle:Vitrine:card_equipment.html.twig' %}
+
       {% if is_granted("ROLE_GEST_EQUIP") %}
+      <hr/>
       <div class="pull-right">
           <a class="btn btn-success" href="{{ path('equipment_edit', { 'id': equipment.id }) }}">
             <i class="icon-edit icon-white"></i> Éditer l'équipement
