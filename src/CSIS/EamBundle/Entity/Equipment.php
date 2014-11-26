@@ -83,9 +83,14 @@ class Equipment
      * @var boolean
      *
      * @Assert\NotBlank()
-     * @ORM\Column(name="shared", type="boolean")
+     * @ORM\Column(name="shared", type="integer")
      */
-    private $shared = false;
+    private $shared;
+
+    const NOT_SHARED = 0;
+    const SHARED = 1;
+    const DISCUTABLE = 2;
+
 
     /**
      * @var string
@@ -277,7 +282,7 @@ class Equipment
     /**
      * Set shared
      *
-     * @param boolean $shared
+     * @param integer $shared
      * @return Equipment
      */
     public function setShared($shared)
@@ -290,7 +295,7 @@ class Equipment
     /**
      * Get shared
      *
-     * @return boolean 
+     * @return integer
      */
     public function getShared()
     {

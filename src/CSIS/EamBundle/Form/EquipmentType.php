@@ -48,6 +48,7 @@ class EquipmentType extends AbstractType
                 'label' => 'Disponible :',
                 'choices' => array(
                     '0' => 'Non',
+                    '2' => 'À discuter',
                     '1' => 'Oui',
                 ),
                 'attr' => array(),

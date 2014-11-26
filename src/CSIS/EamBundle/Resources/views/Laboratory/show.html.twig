@@ -60,7 +60,15 @@
                   <td style="text-align:center;">{{ entity.building }}</td>
                   <td style="text-align:center;">{{ entity.floor }}</td>
                   <td style="text-align:center;">{{ entity.room }}</td>
-                  <td style="text-align:center;">{% if entity.shared=='0' %}Oui{% else %}Non{% endif %}</td>
+                  <td style="text-align:center;">
+                      {% if entity.shared == constant('CSIS\\EamBundle\\Entity\\Equipment::SHARED') %}
+                          Oui
+                      {% elseif entity.shared == constant('CSIS\\EamBundle\\Entity\\Equipment::DISCUTABLE') %}
+                          À discuter
+                      {% elseif entity.shared == constant('CSIS\\EamBundle\\Entity\\Equipment::NOT_SHARED') %}
+                          Non
+                      {%  endif  %}
+                  </td>
                   <td><a href="{{ path('equipment_show', { 'id': entity.id }) }}" class="icon-eye-open" title="Afficher" ></a></td>
                 </tr>
                {% else %}
