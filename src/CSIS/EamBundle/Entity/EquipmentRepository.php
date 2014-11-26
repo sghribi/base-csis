@@ -232,4 +232,20 @@ class EquipmentRepository extends EntityRepository
 
         return $query->getResult();
     }
+
+    /**
+     * @param Laboratory $laboratory
+     *
+     * @return bool
+     */
+    public function isLaboratoryUsed(Laboratory $laboratory)
+
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->select('count(e)')
+            ->where('e.laboratory = :laboratory')
+            ->setParameter('laboratory', $laboratory);
+
+        return count($qb->getQuery()->getSingleScalarResult()) > 0;
+    }
 }

@@ -105,27 +105,4 @@ class LaboratoryRepository extends EntityRepository {
         return $qb->setFirstResult(($start - 1) * $limit)
                   ->setMaxResults($limit);
     }
-    
-    public function isLaboratoryUsed($id)
-    {
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('CSISEamBundle:Equipment', 'e', 'equipment');
-        $rsm->addFieldResult('e', 'id', 'id');
-        $rsm->addScalarResult('nb', 'nb');
-        
-        $query = $this->_em->createNativeQuery('SELECT id, count(id) as nb 
-                                                FROM `equipment`
-                                                WHERE `equipment`.laboratory_id = ?'
-                                                , $rsm);
-        
-        $query->setParameter(1, $id);
-        
-        $equipement = $query->getResult();
-        
-        if ($equipement[0]['nb'] == 0) return false;
-        
-        else return true;
-        
-    }
-  
 }
