@@ -239,7 +239,6 @@ class EquipmentRepository extends EntityRepository
      * @return bool
      */
     public function isLaboratoryUsed(Laboratory $laboratory)
-
     {
         $qb = $this->createQueryBuilder('e')
             ->select('count(e)')

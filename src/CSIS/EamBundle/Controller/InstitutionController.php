@@ -134,14 +134,14 @@ class InstitutionController extends Controller {
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $em->persist($institution);  
+            $em->persist($institution);
             $em->flush();
 
             /* Creation auto des tags */
             // @TODO: WTF ???
             // $repo = $em->getRepository('CSISEamBundle:Tag');
             // $repo->AddTag($institution->getAcronym()." ".$institution->getName());
-            
+
             $this->get('session')->getFlashBag()->add('valid', 'Etablissement modifié !');
             return $this->redirect($this->generateUrl('institution_show', array('id' => $institution->getId())));
         }
@@ -158,11 +158,10 @@ class InstitutionController extends Controller {
      */
     public function askDeleteAction(Institution $institution)
     {
-        $repo = $this->getDoctrine()->getRepository('CSISEamBundle:Institution');
+        $repo = $this->getDoctrine()->getRepository('CSISEamBundle:Laboratory');
 
         // On vérifie si l'Etablissement existe
-        $exist = $repo->isInstitutionUsed($institution->getId());
-        if ($exist) {
+        if ($repo->isInstitutionUsed($institution)) {
             $this->get('session')->getFlashBag()->add('error', 'Suppression impossible : l\'établissement <strong>' . $institution->getAcronym() . '</strong>, est utilisé dans les laboratoires.');
         } else {
             // Message de confirmation
@@ -171,6 +170,7 @@ class InstitutionController extends Controller {
             $message .= '&nbsp;&nbsp<a href="' . $this->generateUrl('institution') . '">Non</a>';
             $this->get('session')->getFlashBag()->add('main_valid', $message);
         }
+
         // Redirection vers la page principale
         return $this->redirect($this->generateUrl('institution'));
     }
@@ -201,7 +201,7 @@ class InstitutionController extends Controller {
     {
         return array('institution' => $institution);
     }
-    
+
     /**
      * Remove an owner from an institution
      * @Secure(roles="ROLE_GEST_ESTAB")
@@ -212,7 +212,7 @@ class InstitutionController extends Controller {
         $em = $this->getDoctrine()->getManager();
         if( $institution->getOwners()->contains($owner) ) {
             $institution->getOwners()->removeElement($owner);
-            $this->container->get('session')->getFlashBag()->set('main_valid', 
+            $this->container->get('session')->getFlashBag()->set('main_valid',
                 'Propriétaire '. $owner->getLastName() . ' ' . $owner->getFirstName() .' supprimé.'
             );
         } else {
@@ -221,10 +221,10 @@ class InstitutionController extends Controller {
             );
         }
         $em->flush();
-        
+
         return $this->redirect($this->generateUrl('institution_credentials', array('id' => $institution->getId())));
     }
-    
+
     /**
      * Add an owner to an institution
      * @Secure(roles="ROLE_GEST_ESTAB")
@@ -248,7 +248,7 @@ class InstitutionController extends Controller {
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * Make a fusion between multiple institutions
      * @Secure(roles="ROLE_GEST_ESTAB")

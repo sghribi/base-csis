@@ -105,4 +105,19 @@ class LaboratoryRepository extends EntityRepository {
         return $qb->setFirstResult(($start - 1) * $limit)
                   ->setMaxResults($limit);
     }
+
+    /**
+     * @param Laboratory $laboratory
+     *
+     * @return bool
+     */
+    public function isInstitutionUsed(Institution $institution)
+    {
+        $qb = $this->createQueryBuilder('l')
+            ->select('count(l)')
+            ->where('l.institution = :institution')
+            ->setParameter('institution', $institution);
+
+        return count($qb->getQuery()->getSingleScalarResult()) > 0;
+    }
 }

@@ -112,27 +112,4 @@ class InstitutionRepository extends EntityRepository
         return $qb->setFirstResult(($start - 1) * $limit)
                   ->setMaxResults($limit);
     }
-    
-    public function isInstitutionUsed($id)
-    {
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('CSISEamBundle:Laboratory', 'l', 'laboratory');
-        $rsm->addFieldResult('l', 'id', 'id');
-        $rsm->addScalarResult('nb', 'nb');
-        
-        $query = $this->_em->createNativeQuery('SELECT id, count(id) as nb 
-                                                FROM `laboratory`
-                                                WHERE `laboratory`.institution_id = ?'
-                                                , $rsm);
-        
-        $query->setParameter(1, $id);
-        
-        $laboratory = $query->getScalarResult();
-        
-        if ($laboratory[0]['nb'] == 0) return false;
-        
-        else return true;
-        
-    }
-    
 }
