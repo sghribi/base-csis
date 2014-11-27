@@ -2,6 +2,8 @@
 
 namespace CSIS\UserBundle\Controller;
 
+use CSIS\EamBundle\Entity\Equipment;
+use CSIS\EamBundle\Entity\Laboratory;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -142,7 +144,7 @@ class UserController extends Controller
             
             if ($form->isValid()) {
                 $userManager = $this->container->get('fos_user.user_manager');
-                
+
                 $user->setInstitution(null);
                 $userManager->updateUser($user);
 

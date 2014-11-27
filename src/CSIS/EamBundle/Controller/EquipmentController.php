@@ -164,7 +164,7 @@ class EquipmentController extends Controller
      * 
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:edit.html.twig")
-     * @Route("/{id}/update", name="equipment_update", requirements={"id" = "\d+"})
+     * @Route("/{id}/edit", name="equipment_update", requirements={"id" = "\d+"})
      * @Method({"POST"})
      */
     public function updateAction(Request $request, Equipment $equipment)

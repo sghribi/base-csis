@@ -64,15 +64,39 @@ class EquipmentRepository extends EntityRepository
     }
 
     private function qbByOwners(QueryBuilder $qb, User $user) {
-        if ( !$user->hasRole('ROLE_ADMIN') ) {
+        if ($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_GEST_ESTAB')) {
+            return $qb;
+        } elseif ($user->hasRole('ROLE_GEST_LAB') && $user->getInstitution()) {
+            $institution = $user->getInstitution();
+
+            return $qb->leftJoin('e.laboratory', 'l')
+                ->leftJoin('l.institution', 'i')
+                ->orWhere(':user MEMBER OF e.owners')
+                ->orWhere(':user MEMBER OF l.owners')
+                ->orWhere(':user MEMBER OF i.owners')
+                ->orWhere('l.institution = :institution')
+                ->setParameter('institution', $institution)
+                ->setParameter('user', $user);
+
+        } elseif ($user->hasRole('ROLE_GEST_EQUIP') && $user->getLab()) {
+            $laboratory = $user->getLab();
+
+            return $qb->leftJoin('e.laboratory', 'l')
+                ->leftJoin('l.institution', 'i')
+                ->orWhere(':user MEMBER OF e.owners')
+                ->orWhere(':user MEMBER OF l.owners')
+                ->orWhere(':user MEMBER OF i.owners')
+                ->orWhere('e.laboratory = :laboratory')
+                ->setParameter('laboratory', $laboratory)
+                ->setParameter('user', $user);
+
+        } else {
             return $qb->leftJoin('e.laboratory', 'l')
                       ->leftJoin('l.institution', 'i')
                       ->orWhere(':user MEMBER OF e.owners')
                       ->orWhere(':user MEMBER OF l.owners')
                       ->orWhere(':user MEMBER OF i.owners')
                       ->setParameter('user', $user);
-        } else {
-            return $qb;
         }
     }
 
