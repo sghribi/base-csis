@@ -26,7 +26,7 @@ class Equipment
     private $id;
 
      /**
-      * @ORM\OneToMany(targetEntity="CSIS\EamBundle\Entity\EquipmentTag", cascade={"persist"}, mappedBy="equipment")
+      * @ORM\OneToMany(targetEntity="CSIS\EamBundle\Entity\EquipmentTag", cascade={"persist", "remove"}, mappedBy="equipment")
       */
     private $equipmentTags;
 
@@ -148,8 +148,7 @@ class Equipment
      */
     function __construct()
     {
-	    $this->equipmentTags = new ArrayCollection();
-        $this->tags = new ArrayCollection();
+        $this->equipmentTags = new ArrayCollection();
         $this->owners = new ArrayCollection();
         $this->lastEditDate = new \DateTime();
     }
@@ -394,78 +393,48 @@ class Equipment
         return $this->url;
     }
 
-
     /**
-     * Get Tags
+     * Add equipmentTag
      *
-     */
-    public function getTags()
-    {
-        $equipmentTags = $this->equipmentTags;
-
-        $tags = new ArrayCollection();
-
-        foreach ($equipmentTags as $equipmentTag)
-        {
-            $tags[] = $equipmentTag->getTag();
-        }
-
-        return $tags;
-    }
-
-    /**
-     * Set Tags
+     * @param EquipmentTag $equipmentTag
      *
-     * @author Samy
-     */
-    public function setTags($tags)
-    {
-        $equipmentTags = $this->getEquipmentTags();
-
-        foreach ($equipmentTags as $equipmentTag)
-        {
-            $this->removeEquipmentTag($equipmentTag);
-        }
-
-        foreach ($tags as $tag)
-        {
-            $equipmentTag = new EquipmentTag();
-
-            $equipmentTag->setEquipment($this);
-            $equipmentTag->setTag($tag);
-
-            $this->addEquipmentTag($equipmentTag);
-        }
-    }
-
-    /**
-     * Add equipmentTags
-     *
-     * @param \CSIS\EamBundle\Entity\EquipmentTag $equipmentTags
      * @return Equipment
      */
-    public function addEquipmentTag(\CSIS\EamBundle\Entity\EquipmentTag $equipmentTags)
+    public function addEquipmentTag(EquipmentTag $equipmentTag)
     {
-        $this->equipmentTags[] = $equipmentTags;
-		//$tagEquipments->setTag($this);
+        $this->equipmentTags[] = $equipmentTag;
+        $equipmentTag->setEquipment($this);
+
         return $this;
     }
 
     /**
-     * Remove equipmentTags
+     * Remove equipmentTag
      *
-     * @param \CSIS\EamBundle\Entity\EquipmentTag $equipmentTags
+     * @param EquipmentTag $equipmentTag
      */
-    public function removeEquipmentTag(\CSIS\EamBundle\Entity\EquipmentTag $equipmentTags)
+    public function removeEquipmentTag(EquipmentTag $equipmentTag)
     {
-        $this->equipmentTags->removeElement($equipmentTags);
-		//$tagEquipment->setTag(null);
+        $this->equipmentTags->removeElement($equipmentTag);
+    }
+
+
+    public function setEquipmentTags($equipmentTags)
+    {
+        /** @var EquipmentTag $equipmentTag */
+        foreach ($equipmentTags as $equipmentTag) {
+            $equipmentTag->setEquipment($this);
+        }
+
+        $this->equipmentTags = $equipmentTags;
+
+        return $this;
     }
 
     /**
      * Get equipmentTags
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return ArrayCollection
      */
     public function getEquipmentTags()
     {
@@ -475,10 +444,11 @@ class Equipment
     /**
      * Set laboratory
      *
-     * @param \CSIS\EamBundle\Entity\Laboratory $laboratory
+     * @param Laboratory $laboratory
+     *
      * @return Equipment
      */
-    public function setLaboratory(\CSIS\EamBundle\Entity\Laboratory $laboratory)
+    public function setLaboratory(Laboratory $laboratory)
     {
         $this->laboratory = $laboratory;
 
@@ -488,7 +458,7 @@ class Equipment
     /**
      * Get laboratory
      *
-     * @return \CSIS\EamBundle\Entity\Laboratory 
+     * @return Laboratory
      */
     public function getLaboratory()
     {

@@ -57,5 +57,4 @@ class TagSelectorType extends AbstractType
     {
         return 'csis_tag_selector';
     }
-
 }

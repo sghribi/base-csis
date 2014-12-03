@@ -26,7 +26,7 @@ class EquipmentController extends Controller
 {
     /**
      * Displays all reachable Equipments to the user
-     * 
+     *
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:index.html.twig")
      * @Route("/", name="equipment")
@@ -50,7 +50,7 @@ class EquipmentController extends Controller
 
     /**
      * Displays the requested Equipment
-     * 
+     *
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Route("/{id}", name="equipment_show", requirements={"id" = "\d+"})
      * @Method({"GET"})
@@ -63,7 +63,7 @@ class EquipmentController extends Controller
 
     /**
      * Displays a form for Equipment creation
-     * 
+     *
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:new.html.twig")
      * @Route("/new", name="equipment_new")
@@ -74,7 +74,7 @@ class EquipmentController extends Controller
         $equipment = new Equipment();
 
         $equipment->getOwners()->add($this->getUser());
-        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment);
+        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true));
 
         return array(
             'equipment' => $equipment,
@@ -83,8 +83,8 @@ class EquipmentController extends Controller
     }
 
     /**
-     * Receives the POST data in order to create an Equipment 
-     * 
+     * Receives the POST data in order to create an Equipment
+     *
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:new.html.twig")
      * @Route("/new", name="equipment_create")
@@ -94,7 +94,7 @@ class EquipmentController extends Controller
     {
         $equipment = new Equipment();
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment);
+        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true));
 
         $form->handleRequest($request);
 
@@ -126,7 +126,7 @@ class EquipmentController extends Controller
 
     /**
      * Displays a form for Equipment edition
-     *  
+     *
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:edit.html.twig")
      * @Route("/{id}/edit", name="equipment_edit", requirements={"id" = "\d+"})
@@ -138,7 +138,7 @@ class EquipmentController extends Controller
             $equipment->getOwners()->add(new User());
         }
 
-        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment);
+        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true));
 
         return array(
             'equipment' => $equipment,
@@ -148,20 +148,33 @@ class EquipmentController extends Controller
 
     /**
      * Displays a widget for tags edition for an Equipment
-     *  
+     *
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:editTags.html.twig")
      * @Route("/{id}/edit/tags", name="equipment_edit_tags", requirements={"id" = "\d+"})
-     * @Method({"GET"})
+     * @Method({"GET", "POST"})
      */
-    public function editTagsAction(Equipment $equipment)
+    public function editTagsAction(Equipment $equipment, Request $request)
     {
-        return array('equipment' => $equipment);
+        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('tags' => true));
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Les tags ont correctement été mis à jour.');
+        }
+
+        return array(
+            'equipment' => $equipment,
+            'form' => $form->createView(),
+        );
     }
 
     /**
-     * Receives the POST data in order to edit an Equipment 
-     * 
+     * Receives the POST data in order to edit an Equipment
+     *
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:edit.html.twig")
      * @Route("/{id}/edit", name="equipment_update", requirements={"id" = "\d+"})
@@ -169,7 +182,7 @@ class EquipmentController extends Controller
      */
     public function updateAction(Request $request, Equipment $equipment)
     {
-        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment);
+        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true));
 
         $editForm->handleRequest($request);
 
@@ -194,7 +207,7 @@ class EquipmentController extends Controller
 
     /**
      * Displays to the user a message in order to confirm the removal of the Equipment entity
-     * 
+     *
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Route("/{id}/ask_delete", name="equipment_ask_delete", requirements={"id" = "\d+"})
      */
@@ -212,7 +225,7 @@ class EquipmentController extends Controller
 
     /**
      * Remove the requested Equipment
-     * 
+     *
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Route("/{id}/delete", name="equipment_delete", requirements={"id" = "\d+"})
      * @Method({"GET"})
@@ -274,7 +287,7 @@ class EquipmentController extends Controller
     {
         if (!$request->isXmlHttpRequest())
             throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
-        
+
         $tags = $equipment->getTags();
 
         // On attache les pseudos tags
@@ -306,7 +319,7 @@ class EquipmentController extends Controller
     {
         if (!$request->isXmlHttpRequest())
             throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
-        
+
         $em = $this->getDoctrine()->getManager();
         $tagRepo = $em->getRepository('CSISEamBundle:Tag');
 
@@ -365,7 +378,7 @@ class EquipmentController extends Controller
 
     /**
      * Scan the Equipment and attach tags to it
-     * 
+     *
      * @param \CSIS\EamBundle\Entity\Equipment $equipment
      */
     protected function attachTags( Equipment $equipment, $andFlush = true )

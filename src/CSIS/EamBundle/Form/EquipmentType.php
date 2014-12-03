@@ -21,7 +21,8 @@ class EquipmentType extends AbstractType
   {
     $user = $this->user;
 
-    $builder
+    if ($options['summary']) {
+        $builder
             ->add('designation', null, array(
                 'label' => 'Nom de l\'équipement :',
                 'attr' => array(),
@@ -58,8 +59,8 @@ class EquipmentType extends AbstractType
                 'label' => 'Laboratoire :',
                 'class' => 'CSISEamBundle:Laboratory',
                 'query_builder' => function(LaboratoryRepository $er) use ($user) {
-                  return $er->getQbReachableLaboratoriesOrderedByAcronym($user);
-                },
+                        return $er->getQbReachableLaboratoriesOrderedByAcronym($user);
+                    },
                 'attr' => array(),
             ))
             ->add('building', null, array(
@@ -73,26 +74,35 @@ class EquipmentType extends AbstractType
             ->add('room', null, array(
                 'label' => 'Salle :',
                 'attr' => array(),
-            )) //@TODO: replace with user
+            ))
             ->add('owners', 'collection', array(
                 'type' => 'csis_user_selector',
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-            ))
-            // ->add('tags', 'collection', array(
-            //     'type' => 'csis_tag_selector',
-            //     'allow_add' => true,
-            //     'allow_delete' => true,
-            //     'by_reference' => false,
-            // ))
-    ;
+            ));
+    }
+
+      if ($options['tags']) {
+          $builder
+              ->add('equipmentTags', 'collection', array(
+                  'type' => new EquipmentTagType(),
+                  'allow_add' => true,
+                  'allow_delete' => true,
+                  'by_reference' => false,
+                  'prototype' => true,
+              ))
+          ;
+      }
   }
 
   public function setDefaultOptions ( OptionsResolverInterface $resolver )
   {
     $resolver->setDefaults(array(
-        'data_class' => 'CSIS\EamBundle\Entity\Equipment'
+        'data_class' => 'CSIS\EamBundle\Entity\Equipment',
+        'cascade_validation' => true,
+        'summary' => false,
+        'tags' => false,
     ));
   }
 

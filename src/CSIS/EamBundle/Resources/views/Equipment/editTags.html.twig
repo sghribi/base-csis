@@ -56,6 +56,52 @@
                     <button class="btn btn-success" id="updateBtn" data-loading-text="Mise à jour..." disabled="disabled"><i class="icon icon-refresh icon-white"></i> Mettre à jour les tags</button>
                 </div>
             </div>
+
+            <form action="{{ path('equipment_edit_tags', {id: equipment.id}) }}" method="POST" {{ form_enctype(form) }}>
+
+                <h3>Tags</h3>
+
+                <h3 class="pull-center">Gestion des tags de cet équipement</h3>
+                <div class="row-fluid">
+
+                    <div class="span6 text-center">
+
+                        {# Tags acceptés #}
+                        <h4>Tags acceptés</h4>
+                        <ul class="nav nav-tabs nav-stacked tags" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="accepted">
+                            {% for equipmentTag in form.equipmentTags if equipmentTag.vars.value.status is constant('CSIS\\EamBundle\\Entity\\EquipmentTag::ACCEPTED') %}
+                                <li>
+                                    {{ form_row(equipmentTag.tag) }}
+                                    {{ form_row(equipmentTag.status) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        {# Tags rejetés #}
+                        <h4>Tags rejetés</h4>
+                        <ul class="nav nav-tabs nav-stacked tags" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="refused">
+                            {% for equipmentTag in form.equipmentTags if equipmentTag.vars.value.status is constant('CSIS\\EamBundle\\Entity\\EquipmentTag::REFUSED') %}
+                                <li>
+                                    {{ form_row(equipmentTag.tag) }}
+                                    {{ form_row(equipmentTag.status) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="span6 text-center">
+                        {# Tags rejetés #}
+                        <h4>Tags rejetés</h4>
+
+                    </div>
+
+                </div>
+
+                {{ form_row(form._token) }}
+
+                <button class="btn btn-success" type="submit"><i class="icon icon-refresh"></i> Mettre à jour</button>
+            </form>
+
         </div>
     </div>
 

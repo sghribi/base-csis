@@ -28,7 +28,6 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @Assert\NotBlank(message="Entrez un prénom s'il vous plait")
      * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
      */
     protected $firstName;
@@ -36,7 +35,6 @@ class User extends BaseUser
     /**
      * @var string
      *
-     * @Assert\NotBlank(message="Entrez un nom s'il vous plait")
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
      */
     protected $lastName;

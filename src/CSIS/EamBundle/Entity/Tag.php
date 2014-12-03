@@ -12,7 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="tag")
  * @ORM\Entity(repositoryClass="CSIS\EamBundle\Entity\TagRepository")
  */
-class Tag {
+class Tag
+{
 
     /**
      * @var integer
@@ -36,12 +37,6 @@ class Tag {
      */
     private $tag;
 
-   /**
-    * @ORM\OneToMany(targetEntity="CSIS\EamBundle\Entity\EquipmentTag", cascade={"persist"}, mappedBy="tag")
-    * @ORM\JoinColumn(nullable=false)
-    */
-    private $tagEquipments;
-
     /**
      * @var boolean
      *
@@ -50,7 +45,7 @@ class Tag {
     private $status;
 
     /**
-     * @var datetime $lastEditDate
+     * @var \DateTime $lastEditDate
      *
      * @Gedmo\Timestampable(on="create", on="update")
      * @ORM\Column(type="datetime")
@@ -126,40 +121,6 @@ class Tag {
     public function getLastEditDate()
     {
         return $this->lastEditDate;
-    }
-
-    /**
-     * Add tagEquipments
-     *
-     * @param \CSIS\EamBundle\Entity\EquipmentTag $tagEquipments
-     * @return Tag
-     */
-    public function addTagEquipment(\CSIS\EamBundle\Entity\EquipmentTag $tagEquipments)
-    {
-        $this->tagEquipments[] = $tagEquipments;
-		addEquipmentTag : $equipmentTags->setEquipment($this);
-        return $this;
-    }
-
-    /**
-     * Remove tagEquipments
-     *
-     * @param \CSIS\EamBundle\Entity\EquipmentTag $tagEquipments
-     */
-    public function removeTagEquipment(\CSIS\EamBundle\Entity\EquipmentTag $tagEquipments)
-    {
-        $this->tagEquipments->removeElement($tagEquipments);
-		removeEquipmentTag : $equipmentTag->setEquipment(null);
-    }
-
-    /**
-     * Get tagEquipments
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTagEquipments()
-    {
-        return $this->tagEquipments;
     }
 
     /**

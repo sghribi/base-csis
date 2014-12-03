@@ -5,10 +5,12 @@ namespace CSIS\EamBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * EquipmentTag
  *
+ * @UniqueEntity(fields={"equipment", "tag"})
  * @ORM\Table(name="equipment_tag")
  * @ORM\Entity(repositoryClass="CSIS\EamBundle\Entity\EquipmentTagRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -26,13 +28,15 @@ class EquipmentTag
 
     /**
      * @ORM\JoinColumn(name="equipment_id", referencedColumnName="id")
-     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Equipment", inversedBy="equipmentTags")
+     *
+     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Equipment", inversedBy="equipmentTags", cascade={"persist", "remove"})
      */
     private $equipment;
 
     /**
      * @ORM\JoinColumn(name="tag_id", referencedColumnName="id")
-     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Tag", inversedBy="tagEquipments")
+     *
+     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Tag", cascade={"persist"})
      */
     private $tag;
 
@@ -84,10 +88,11 @@ class EquipmentTag
     /**
      * Set equipment
      *
-     * @param \CSIS\EamBundle\Entity\Equipment $equipment
+     * @param Equipment $equipment
+     *
      * @return EquipmentTag
      */
-    public function setEquipment(\CSIS\EamBundle\Entity\Equipment $equipment = null)
+    public function setEquipment(Equipment $equipment = null)
     {
         $this->equipment = $equipment;
 
@@ -97,7 +102,7 @@ class EquipmentTag
     /**
      * Get equipment
      *
-     * @return \CSIS\EamBundle\Entity\Equipment 
+     * @return Equipment
      */
     public function getEquipment()
     {
@@ -107,10 +112,10 @@ class EquipmentTag
     /**
      * Set tag
      *
-     * @param \CSIS\EamBundle\Entity\Tag $tag
+     * @param Tag $tag
      * @return EquipmentTag
      */
-    public function setTag(\CSIS\EamBundle\Entity\Tag $tag = null)
+    public function setTag(Tag $tag)
     {
         $this->tag = $tag;
 
@@ -120,7 +125,7 @@ class EquipmentTag
     /**
      * Get tag
      *
-     * @return \CSIS\EamBundle\Entity\Tag 
+     * @return Tag
      */
     public function getTag()
     {
