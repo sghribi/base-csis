@@ -27,7 +27,7 @@ class EquipmentTag
     private $id;
 
     /**
-     * @ORM\JoinColumn(name="equipment_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="equipment_id", referencedColumnName="id", nullable=false)
      *
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Equipment", inversedBy="equipmentTags", cascade={"persist", "remove"})
      */

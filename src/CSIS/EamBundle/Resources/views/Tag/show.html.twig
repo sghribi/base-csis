@@ -1,9 +1,11 @@
+{% if onglet is not defined %}{% set onglet = 'edit' %}{%  endif %}
+
 <div class="span8">
     <div class="well"> 
       <ul class="nav nav-tabs"> 
         <li{% if onglet != 'edit' %} class="active"{% endif %}><a href="#list" data-toggle="tab">Liste des tags</a></li>
         {% if is_granted("ROLE_GEST_TAGS") %}
-          <li{% if onglet == 'edit' %} class="active"{% endif %}><a href="#edit" data-toggle="tab">En attente</a></li> 
+          <li{% if onglet == 'edit' %} class="active"{% endif %}><a href="#edit" data-toggle="tab">En attente</a></li>
         {% endif %} 
       </ul>
         
