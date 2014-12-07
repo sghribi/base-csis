@@ -34,7 +34,7 @@ class EquipmentTag
     private $equipment;
 
     /**
-     * @ORM\JoinColumn(name="tag_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="tag_id", referencedColumnName="id", nullable=false)
      *
      * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Tag", cascade={"persist"})
      */

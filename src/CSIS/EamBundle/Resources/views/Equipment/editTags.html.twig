@@ -91,8 +91,15 @@
 
                     <div class="span6 text-center">
                         {# Tags rejetés #}
-                        <h4>Tags rejetés</h4>
-
+                        <h4>Tags suggérés</h4>
+                        <ul class="nav nav-tabs nav-stacked tags" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="refused">
+                            {% for equipmentTag in form.equipmentTags if equipmentTag.vars.value.status is constant('CSIS\\EamBundle\\Entity\\EquipmentTag::REFUSED') %}
+                                <li>
+                                    {{ form_row(equipmentTag.tag) }}
+                                    {{ form_row(equipmentTag.status) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
 
                 </div>

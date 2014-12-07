@@ -27,12 +27,22 @@
             {# Affiche tous les tags par ordre alphabétique #}
             {% for tag in tags_all %}
               <tr>
-                <td>{{ tag.tag }}</td> {# Nom du tag #}
-                <td>{% if tag.status=='0' %} En attente {% elseif tag.status=='1' %} Validé {% else %} Refusé {% endif %}</td> {# Statut du tag #}
-                <td style="text-align:center;">{{ tag.nb }}</td> {# Nombre d'utilisation #}
+                <td>{{ tag.tag.tag }}</td> {# Nom du tag #}
+                <td>
+                    {% if tag.tag.status is constant('CSIS\\EamBundle\\Entity\\Tag::PENDING')%}
+                        En attente
+                    {% elseif tag.tag.status is constant('CSIS\\EamBundle\\Entity\\Tag::ACCEPTED')%}
+                        Validé
+                    {% elseif tag.tag.status is constant('CSIS\\EamBundle\\Entity\\Tag::REFUSED')%}
+                        Refusé
+                    {% endif %}
+                </td>
+                <td style="text-align:center;">
+                    {{ tag.nb }}
+                </td>
                 {% if is_granted("ROLE_GEST_TAGS") %} 
-                <td><a href="{{ path('tag_edit', { 'id': tag['tag'].id }) }}" class="icon-edit" title="Modifier" ></a></td> {# Modifier #}
-                <td><a href="{{ path('tag_ask_delete', { 'id': tag['tag'].id }) }}" class="icon-remove" title="Supprimer" ></a></td> {# Supprimer #}
+                    <td><a href="{{ path('tag_edit', { 'id': tag.tag.id }) }}" class="icon-edit" title="Modifier" ></a></td> {# Modifier #}
+                    <td><a href="{{ path('tag_ask_delete', { 'id': tag.tag.id }) }}" class="icon-remove" title="Supprimer" ></a></td> {# Supprimer #}
                 {% endif %} 
               </tr>
               {% else %}
@@ -66,14 +76,14 @@
             <tbody>
               {# Affiche tous les tags par ordre alphabétique en attente #}
               {% for tag in tags_att %}
-                {% if tag['tag'].status=='0' %}
-                <tr>
-                  <td>{{ tag['tag'].tag }}</td> {# Nom du tag #}
-                  <td>En attente</td> {# Statut du tag #}
-                  <td style="text-align:center;">{{ tag['nb'] }}</td> {# Nombre d'utilisation #}
-                  <td><a href="{{ path('tag_edit', { 'id': tag['tag'].id }) }}" class="icon-edit" title="Modifier" ></a></td> {# Modifier #}
-                  <td><a href="{{ path('tag_ask_delete', { 'id': tag['tag'].id }) }}" class="icon-remove" title="Supprimer" ></a></td> {# Supprimer #}
-                </tr>
+                  {% if tag.tag.status is constant('CSIS\\EamBundle\\Entity\\Tag::PENDING')%}
+                    <tr>
+                      <td>{{ tag.tag.tag }}</td> {# Nom du tag #}
+                      <td>En attente</td> {# Statut du tag #}
+                      <td style="text-align:center;">{{ tag.nb }}</td> {# Nombre d'utilisation #}
+                      <td><a href="{{ path('tag_edit', { id: tag.tag.id }) }}" class="icon-edit" title="Modifier" ></a></td> {# Modifier #}
+                      <td><a href="{{ path('tag_ask_delete', { id: tag.tag.id }) }}" class="icon-remove" title="Supprimer" ></a></td> {# Supprimer #}
+                    </tr>
                 {% endif %}
               {% else %}
                 <tr>

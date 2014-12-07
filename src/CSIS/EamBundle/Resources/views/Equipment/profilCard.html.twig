@@ -43,30 +43,14 @@
 </dl>
 
 <dl>
-  <dt>Tags</dt>
-  <dd>
-	{# On n'affiche que les tags valides #}
-	{% set tags=[] %}
-	{% for et in equipment.equipmentTags %}
-		{% if et.tag.status == 1 and et.status == 0 %}
-			{% set tags=[et.tag]|merge(tags) %}
-		{% endif %}
-	{% endfor %}
-
-	{% if equipment.tags is not empty %}
-	<ul class="inline">
-		{# Tri par ordre alphabétique #}
-		{% set tagCanonical={} %}
-		{% for tag in tags %}
-			{% set tagCanonical={ (tag.tag) : (tag.tagCanonical) }|merge(tagCanonical) %}
-		{% endfor %}
-
-		{% for name, nameCanonical in tagCanonical|sort %}
-			<li>{{ name }}</li>
-		{% endfor %}
-	</ul>
-	{% else %}
-		<span class="muted">Aucun tag associé</span>
-	{% endif %}
+    <dt>Tags</dt>
+    <dd>
+        <ul class="inline">
+            {% for equipmentTag in equipment.equipmentTags if equipmentTag.status is constant('CSIS\\EamBundle\\Entity\\EquipmentTag::ACCEPTED') and equipmentTag.tag.status is constant('CSIS\\EamBundle\\Entity\\Tag::ACCEPTED')  %}
+                <li>{{ equipmentTag.tag.tag }}</li>
+            {% else %}
+                <li class="muted">Aucun tag associé</li>
+            {% endfor %}
+        </ul>
 	</dd>
 </dl>

@@ -44,6 +44,10 @@ class Tag
      */
     private $status;
 
+    const PENDING = 0;
+    const ACCEPTED = 1;
+    const REFUSED = 2;
+
     /**
      * @var \DateTime $lastEditDate
      *
@@ -62,10 +66,11 @@ class Tag
         $this->lastEditDate = new \DateTime();
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->tag;
     }
-    
+
 
     /**
      * Get id
