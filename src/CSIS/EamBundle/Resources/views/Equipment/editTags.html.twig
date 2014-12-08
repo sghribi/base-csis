@@ -17,45 +17,45 @@
                 <li class="active">Tags</li>
             </ul>
 
-            <div id="tagsEdition">
-                <h3 class="pull-center">Gestion des tags de cet équipement</h3>
-                <div class="row-fluid">
-                    {# Tags acceptés #}
-                    <div class="span4" id="acceptedTagsBox">
-                        <div class="row-fluid text-center">
-                            <h4>Tags acceptés</h4>
-                            <ul class="nav nav-tabs nav-stacked tags">
-                                {# Ici seront insérés les tags #}
-                            </ul>
-                        </div>
-                    </div>
+            {#<div id="tagsEdition">#}
+                {#<h3 class="pull-center">Gestion des tags de cet équipement</h3>#}
+                {#<div class="row-fluid">#}
+                    {#&#123;&#35; Tags acceptés &#35;&#125;#}
+                    {#<div class="span4" id="acceptedTagsBox">#}
+                        {#<div class="row-fluid text-center">#}
+                            {#<h4>Tags acceptés</h4>#}
+                            {#<ul class="nav nav-tabs nav-stacked tags">#}
+                                {#&#123;&#35; Ici seront insérés les tags &#35;&#125;#}
+                            {#</ul>#}
+                        {#</div>#}
+                    {#</div>#}
 
-                    {# Tags rejetés #}
-                    <div class="span4" id="rejectedTagsBox">
-                        <div class="row-fluid text-center">
-                            <h4>Tags rejetés</h4>
-                            <ul class="nav nav-tabs nav-stacked tags">
-                                {# Ici seront insérés les tags #}
-                            </ul>
-                        </div>
-                    </div>
+                    {#&#123;&#35; Tags rejetés &#35;&#125;#}
+                    {#<div class="span4" id="rejectedTagsBox">#}
+                        {#<div class="row-fluid text-center">#}
+                            {#<h4>Tags rejetés</h4>#}
+                            {#<ul class="nav nav-tabs nav-stacked tags">#}
+                                {#&#123;&#35; Ici seront insérés les tags &#35;&#125;#}
+                            {#</ul>#}
+                        {#</div>#}
+                    {#</div>#}
 
-                    {# Tags suggérés #}
-                    <div class="span4" id="suggestedTagsBox">
-                        <div class="row-fluid text-center">
-                            <h4>Tags suggérés <a href="#" id="refreshBtn" class="icon icon-refresh tips" title="Mettre à jour les tags et rafraîchir les suggestions"></a></h4>
-                            <ul class="nav nav-tabs nav-stacked tags">
-                                {# Ici seront insérés les tags #}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                    {#&#123;&#35; Tags suggérés &#35;&#125;#}
+                    {#<div class="span4" id="suggestedTagsBox">#}
+                        {#<div class="row-fluid text-center">#}
+                            {#<h4>Tags suggérés <a href="#" id="refreshBtn" class="icon icon-refresh tips" title="Mettre à jour les tags et rafraîchir les suggestions"></a></h4>#}
+                            {#<ul class="nav nav-tabs nav-stacked tags">#}
+                                {#&#123;&#35; Ici seront insérés les tags &#35;&#125;#}
+                            {#</ul>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
 
-                <div id="buttons" class="pull-center">
-                    <a class="btn btn-default" href="{{ path('equipment_show', {id: equipment.id}) }}"><i class="icon icon-chevron-left"></i> Retour à la fiche équipement</a>
-                    <button class="btn btn-success" id="updateBtn" data-loading-text="Mise à jour..." disabled="disabled"><i class="icon icon-refresh icon-white"></i> Mettre à jour les tags</button>
-                </div>
-            </div>
+                {#<div id="buttons" class="pull-center">#}
+                    {#<a class="btn btn-default" href="{{ path('equipment_show', {id: equipment.id}) }}"><i class="icon icon-chevron-left"></i> Retour à la fiche équipement</a>#}
+                    {#<button class="btn btn-success" id="updateBtn" data-loading-text="Mise à jour..." disabled="disabled"><i class="icon icon-refresh icon-white"></i> Mettre à jour les tags</button>#}
+                {#</div>#}
+            {#</div>#}
 
             <form action="{{ path('equipment_edit_tags', {id: equipment.id}) }}" method="POST" {{ form_enctype(form) }}>
 
@@ -71,8 +71,8 @@
                         <ul class="nav nav-tabs nav-stacked tags" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="accepted">
                             {% for equipmentTag in form.equipmentTags if equipmentTag.vars.value.status is constant('CSIS\\EamBundle\\Entity\\EquipmentTag::ACCEPTED') %}
                                 <li>
-                                    {{ form_row(equipmentTag.tag) }}
-                                    {{ form_row(equipmentTag.status) }}
+                                    <label>{{ equipmentTag.vars.value.tag }}</label>
+                                    {{ form_row(equipmentTag) }}
                                 </li>
                             {% endfor %}
                         </ul>
@@ -80,10 +80,11 @@
                         {# Tags rejetés #}
                         <h4>Tags rejetés</h4>
                         <ul class="nav nav-tabs nav-stacked tags" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="refused">
+                            {{ form.equipmentTags }}
                             {% for equipmentTag in form.equipmentTags if equipmentTag.vars.value.status is constant('CSIS\\EamBundle\\Entity\\EquipmentTag::REFUSED') %}
                                 <li>
-                                    {{ form_row(equipmentTag.tag) }}
-                                    {{ form_row(equipmentTag.status) }}
+                                    <label>{{ equipmentTag.vars.value.tag }}</label>
+                                    {{ form_row(equipmentTag) }}
                                 </li>
                             {% endfor %}
                         </ul>
@@ -93,12 +94,7 @@
                         {# Tags rejetés #}
                         <h4>Tags suggérés</h4>
                         <ul class="nav nav-tabs nav-stacked tags" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="refused">
-                            {% for equipmentTag in form.equipmentTags if equipmentTag.vars.value.status is constant('CSIS\\EamBundle\\Entity\\EquipmentTag::REFUSED') %}
-                                <li>
-                                    {{ form_row(equipmentTag.tag) }}
-                                    {{ form_row(equipmentTag.status) }}
-                                </li>
-                            {% endfor %}
+
                         </ul>
                     </div>
 

@@ -3,6 +3,8 @@
 namespace CSIS\EamBundle\Form;
 
 use CSIS\EamBundle\Entity\EquipmentTag;
+use CSIS\EamBundle\Entity\Tag;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -22,8 +24,18 @@ class EquipmentTagType extends AbstractType
           $form->add('tag', null, array(
               'read_only' => true,
           ));
-        } else {
-            $form->add('tag');
+        } elseif ($equipmentTag && !$equipmentTag->getId()) {
+            $form->add('tag', 'entity', array(
+                'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('t')
+                            ->where('t.status = :tagAccepted')
+                            ->orWhere('t.status = :tagPending')
+                            ->setParameter('tagAccepted', Tag::ACCEPTED)
+                            ->setParameter('tagPending', Tag::PENDING)
+                            ->orderBy('t.tag');
+                    },
+                'class' => 'CSISEamBundle:Tag',
+            ));
         }
         $form->add('status', 'hidden');
     });

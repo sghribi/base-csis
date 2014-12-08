@@ -161,9 +161,11 @@ class EquipmentController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $em->persist($equipment);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Les tags ont correctement été mis à jour.');
+            $this->addFlash('valid', 'Les tags ont correctement été mis à jour.');
+            $this->redirect($this->generateUrl('equipment_edit_tags', array('id' => $equipment->getId())));
         }
 
         return array(
@@ -431,15 +433,5 @@ class EquipmentController extends Controller
             $em->persist($equipment);
             $em->flush();
         }
-    }
-
-    /**
-     * ShortMethod to add flashes to the session
-     * @param string $type    The type name for flashbag
-     * @param string $message The message of the flash
-     */
-    private function addFlash( $type, $message )
-    {
-        $this->get('session')->getFlashBag()->add($type, $message);
     }
 }
