@@ -29,7 +29,7 @@ class EquipmentTag
     /**
      * @ORM\JoinColumn(name="equipment_id", referencedColumnName="id", nullable=false)
      *
-     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Equipment", inversedBy="equipmentTags", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Equipment", inversedBy="equipmentTags", cascade={"persist"})
      */
     private $equipment;
 
@@ -92,9 +92,10 @@ class EquipmentTag
      *
      * @return EquipmentTag
      */
-    public function setEquipment(Equipment $equipment = null)
+    public function setEquipment(Equipment $equipment)
     {
         $this->equipment = $equipment;
+        $equipment->addEquipmentTag($this);
 
         return $this;
     }

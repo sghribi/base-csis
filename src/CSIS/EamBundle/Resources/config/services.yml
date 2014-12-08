@@ -34,3 +34,8 @@ services:
         class: CSIS\EamBundle\Twig\TwigFilters
         tags:
             - { name: twig.extension }
+
+    csis.form.type.custom_equipment_tag_collection:
+      class: CSIS\EamBundle\Form\CustomEquipmentTagCollectionType
+      tags:
+        - { name: form.type, alias: custom_equipment_tag_collection }

@@ -165,7 +165,7 @@ class EquipmentController extends Controller
             $em->flush();
 
             $this->addFlash('valid', 'Les tags ont correctement été mis à jour.');
-            $this->redirect($this->generateUrl('equipment_edit_tags', array('id' => $equipment->getId())));
+            $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('tags' => true));
         }
 
         return array(

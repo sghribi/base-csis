@@ -85,7 +85,7 @@ class EquipmentType extends AbstractType
 
       if ($options['tags']) {
           $builder
-              ->add('equipmentTags', 'collection', array(
+              ->add('equipmentTags', 'custom_equipment_tag_collection', array(
                   'type' => new EquipmentTagType(),
                   'allow_add' => true,
                   'allow_delete' => true,

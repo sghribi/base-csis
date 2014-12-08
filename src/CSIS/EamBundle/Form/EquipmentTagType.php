@@ -23,6 +23,10 @@ class EquipmentTagType extends AbstractType
         if ($equipmentTag && $equipmentTag->getId()) {
           $form->add('tag', null, array(
               'read_only' => true,
+              'attr' => array(
+                  'class' => 'equipment-tag-label-new',
+              ),
+              'label' => false,
           ));
         } elseif ($equipmentTag && !$equipmentTag->getId()) {
             $form->add('tag', 'entity', array(
@@ -35,10 +39,19 @@ class EquipmentTagType extends AbstractType
                             ->orderBy('t.tag');
                     },
                 'class' => 'CSISEamBundle:Tag',
+                'attr' => array(
+                    'class' => 'equipment-tag-label-new',
+                ),
+                'label' => false,
             ));
         }
-        $form->add('status', 'hidden');
     });
+    $builder->add('status', null, array(
+        'label' => false,
+        'attr' => array(
+            'class' => 'equipment-tag-status',
+        ),
+    ));
   }
 
   public function setDefaultOptions ( OptionsResolverInterface $resolver )
