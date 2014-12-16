@@ -22,16 +22,17 @@
             <form action="{{ path('equipment_edit_tags', {id: equipment.id}) }}" method="POST" {{ form_enctype(form) }}>
 
                 <h3 class="pull-center">Gestion des tags de cet équipement</h3>
-                <div class="row-fluid">
 
+                <p class="text-error">{{ form_errors(form) }}</p>
+                <div class="row-fluid">
                     <div class="span6 text-center">
 
                         {# Tags acceptés #}
                         <h4>Tags acceptés</h4>
-                        <table class="tags table" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="accepted">
+                        <table class="tags table" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="accepted" data-status="{{ constant('CSIS\\EamBundle\\Entity\\EquipmentTag::ACCEPTED') }}">
                             <tbody>
                                 {% for equipmentTag in form.equipmentTags if equipmentTag.vars.value.status is constant('CSIS\\EamBundle\\Entity\\EquipmentTag::ACCEPTED') %}
-                                    <tr class="tag success" data-status="{{ constant('CSIS\\EamBundle\\Entity\\EquipmentTag::ACCEPTED') }}">
+                                    <tr class="tag success">
                                         <td>
                                             {{ form_row(equipmentTag.status) }}
                                             {{ form_row(equipmentTag.tag) }}
@@ -46,10 +47,10 @@
 
                         {# Tags rejetés #}
                         <h4>Tags rejetés</h4>
-                        <table class="tags table" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="refused">
+                        <table class="tags table" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="refused"  data-status="{{ constant('CSIS\\EamBundle\\Entity\\EquipmentTag::REFUSED') }}">
                             <tbody>
                                 {% for equipmentTag in form.equipmentTags if equipmentTag.vars.value.status is constant('CSIS\\EamBundle\\Entity\\EquipmentTag::REFUSED') %}
-                                    <tr class="tag error" data-status="{{ constant('CSIS\\EamBundle\\Entity\\EquipmentTag::REFUSED') }}">
+                                    <tr class="tag error">
                                         <td>
                                             {{ form_row(equipmentTag.tag) }}
                                             {{ form_row(equipmentTag.status) }}
@@ -90,11 +91,11 @@
                                 Le tag proposé sera lié à cet équipement, mais sera sujet à modération. Une fois le tag accepté par un modérateur, il sera visible sur la fiche d'équipement sans action de votre part.
                             </p>
 
-                            <form class="well">
-                                <input type="text" />
-                                <br/>
-                                <a href="#" class="btn btn-default">Proposer un nouveau tag</a>
-                            </form>
+                            {#<form class="well">#}
+                                {#<input type="text" />#}
+                                {#<br/>#}
+                                {#<a href="#" class="btn btn-default">Proposer un nouveau tag</a>#}
+                            {#</form>#}
                         </div>
                     </div>
 
@@ -102,7 +103,7 @@
                 {{ form_row(form._token) }}
                 <hr/>
 
-                <button class="btn btn-success pull-center" type="submit"><i class="icon icon-refresh icon-white"></i> Mettre à jour</button>
+                <button class="btn btn-success" type="submit"><i class="icon icon-refresh icon-white"></i> Mettre à jour</button>
             </form>
 
         </div>
@@ -131,6 +132,14 @@
             addDeleteBtn($(this));
         });
 
+        $('#refused').find('.tag').each(function() {
+            addUpButton($(this));
+        });
+
+        $('#accepted').find('.tag').each(function() {
+            addDownButton($(this));
+        });
+
         function addDeleteBtn(element) {
             var $deleteBtn = $('<td><a href="#" class="delete-btn"><i class="icon icon-trash"></i></a></td>');
             $deleteBtn.appendTo(element);
@@ -140,6 +149,61 @@
                 element.remove();
             });
         }
+
+        function addUpButton(element) {
+            var $upBtn = $('<a href="#" class="accept-btn" title="Accept this tag"><i class="icon icon-arrow-up"></i></a>');
+            var $actionTd = element.find('td').last();
+
+            $upBtn.appendTo($actionTd);
+
+            $upBtn.on('click', function(e) {
+                e.preventDefault();
+                var $tr = $upBtn.closest('tr');
+                $tr.appendTo($('#accepted').find('tbody'))
+                $tr.find('.accept-btn').each(function() { $(this).remove();});
+                $tr.removeClass('error').addClass('success');
+                addDownButton($tr);
+                updateTagStatus($tr);
+            });
+        }
+
+        function updateTagStatus($tag) {
+            $input = $tag.find('input.equipment-tag-status');
+            status = $tag.closest('tags').attr('data-status');
+            $input.val(status);
+        }
+
+        function addDownButton(element) {
+            var $downBtn = $('<a href="#" title="Refuse this tag" class="refuse-btn"><i class="icon icon-arrow-down"></i></a>');
+            var $actionTd = element.find('td').last();
+
+            $downBtn.appendTo($actionTd);
+
+            $downBtn.on('click', function(e) {
+                e.preventDefault();
+                var $tr = $downBtn.closest('tr');
+                $tr.appendTo($('#refused').find('tbody'))
+                $tr.find('.refuse-btn').each(function() { $(this).remove();});
+                $tr.removeClass('success').addClass('error');
+                addUpButton($tr);
+                updateTagStatus($tr);
+            });
+        }
+
+        $('.tags').each(function() {
+            $addBtn = $(this).next('a');
+            $dataProtoype = $(this).attr('data-prototype');
+            debugger;
+
+            $addBtn.on('click', function(e) {
+                e.preventDefault();
+                var newForm = $dataProtoype.replace(/__name__/g, $('.tag').children().length);
+
+                var $newForm = $('<td></td>').append(newForm);
+                $newForm = $('<tr class="tag success"></tr>').append($newForm);
+                $addBtn.before('.tags').append($newForm);
+            });
+        });
 
     </script>
 
