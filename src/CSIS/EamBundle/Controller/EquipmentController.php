@@ -160,15 +160,6 @@ class EquipmentController extends Controller
         $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('tags' => true));
         $form->handleRequest($request);
 
-        /** @var EquipmentTag $equipmentTag */
-        $tags = new ArrayCollection();
-        foreach ($equipment->getEquipmentTags() as $equipmentTag) {
-            if ($equipmentTag->getStatus() == EquipmentTag::ACCEPTED) {
-                $tags->add($equipmentTag->getTag());
-            }
-        }
-        $suggestedTags = $this->getDoctrine()->getManager()->getRepository('CSISEamBundle:Tag')->findRelativeTags($tags);
-
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($equipment);
@@ -177,6 +168,16 @@ class EquipmentController extends Controller
             $this->addFlash('valid', 'Les tags ont correctement été mis à jour.');
             $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('tags' => true));
         }
+
+        /** @var EquipmentTag $equipmentTag */
+        $tags = new ArrayCollection();
+        foreach ($equipment->getEquipmentTags() as $equipmentTag) {
+            if ($equipmentTag->getStatus() == EquipmentTag::ACCEPTED && $equipmentTag->getId()) {
+                $tags->add($equipmentTag->getTag());
+            }
+        }
+        $suggestedTags = $this->getDoctrine()->getManager()->getRepository('CSISEamBundle:Tag')->findRelativeTags($tags);
+
 
         return array(
             'equipment' => $equipment,

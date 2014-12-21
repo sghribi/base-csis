@@ -418,19 +418,6 @@ class Equipment
         $this->equipmentTags->removeElement($equipmentTag);
     }
 
-
-    public function setEquipmentTags($equipmentTags)
-    {
-        /** @var EquipmentTag $equipmentTag */
-        foreach ($equipmentTags as $equipmentTag) {
-            $equipmentTag->setEquipment($this);
-        }
-
-        $this->equipmentTags = $equipmentTags;
-
-        return $this;
-    }
-
     /**
      * Get equipmentTags
      *

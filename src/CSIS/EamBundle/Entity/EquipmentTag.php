@@ -95,7 +95,6 @@ class EquipmentTag
     public function setEquipment(Equipment $equipment)
     {
         $this->equipment = $equipment;
-        $equipment->addEquipmentTag($this);
 
         return $this;
     }
