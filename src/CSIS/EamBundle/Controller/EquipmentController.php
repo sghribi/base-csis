@@ -2,6 +2,7 @@
 
 namespace CSIS\EamBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -159,6 +160,15 @@ class EquipmentController extends Controller
         $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('tags' => true));
         $form->handleRequest($request);
 
+        /** @var EquipmentTag $equipmentTag */
+        $tags = new ArrayCollection();
+        foreach ($equipment->getEquipmentTags() as $equipmentTag) {
+            if ($equipmentTag->getStatus() == EquipmentTag::ACCEPTED) {
+                $tags->add($equipmentTag->getTag());
+            }
+        }
+        $suggestedTags = $this->getDoctrine()->getManager()->getRepository('CSISEamBundle:Tag')->findRelativeTags($tags);
+
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($equipment);
@@ -170,6 +180,7 @@ class EquipmentController extends Controller
 
         return array(
             'equipment' => $equipment,
+            'suggestedTags' => $suggestedTags,
             'form' => $form->createView(),
         );
     }

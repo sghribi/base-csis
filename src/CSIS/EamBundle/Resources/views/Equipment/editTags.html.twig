@@ -68,11 +68,10 @@
                         <p class="muted">Ces tags sont suggérés à partir des tags acceptés/rejetés, et à partir de la description donnée à l'équipement (À venir...).</p>
                         <table class="table" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="refused">
                             <tbody>
-                            {% set suggestedTags = ['example 1', 'example 2', 'example 3'] %} {# TODO #}
                             {% for tag in suggestedTags %}
                                 <tr class="tag info">
                                     <td>
-                                        {{ tag }}
+                                        {{ tag.tag }}
                                     </td>
                                     <td>
                                         <a href="#"><i class="icon icon-ok"></i></a>
