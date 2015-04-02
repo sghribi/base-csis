@@ -22,7 +22,13 @@
     "jms/di-extra-bundle": "dev-master",
     "kriswallsmith/assetic": "dev-master",
     "stof/doctrine-extensions-bundle": "dev-master",
-    "friendsofsymfony/user-bundle": "*"
+    "friendsofsymfony/user-bundle": "*",
+    "jms/serializer-bundle": "~0.13",
+    "friendsofsymfony/rest-bundle": "~1.5",
+    "twitter/typeahead.js": "dev-master",
+    "hammerjs/hammer.js": "2.0.4",
+    "hammerjs/jquery.hammer.js": "2.0.0",
+    "friendsofsymfony/jsrouting-bundle": "2.0.*@dev"
   },
   "scripts": {
     "post-install-cmd": [
@@ -46,6 +52,32 @@
     "symfony-web-dir": "web",
     "branch-alias": {
       "dev-master": "2.5-dev"
+    },
+    "incenteev-parameters": {
+      "file": "app/config/parameters.yml"
     }
-  }
-}
+  },
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "hammerjs/hammer.js",
+        "version": "2.0.4",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/hammerjs/hammer.js/2.0.4/hammer.js",
+          "type": "file"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "hammerjs/jquery.hammer.js",
+        "version": "2.0.0",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/hammerjs/jquery.hammer.js/2.0.0/jquery.hammer.js",
+          "type": "file"
+        }
+      }
+    }
+  ]}

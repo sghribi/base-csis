@@ -21,6 +21,10 @@ CSISEamBundle_laboratory:
     resource: "@CSISEamBundle/Controller/LaboratoryController.php"
     type:     annotation
 
+CSISEamBundle_search:
+    resource: "@CSISEamBundle/Controller/SearchController.php"
+    type:     annotation
+
 CSISEamBundle_tag:
     resource: "@CSISEamBundle/Resources/config/routing/tag.yml"
     prefix:   /tags

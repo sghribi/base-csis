@@ -13,3 +13,4 @@
 *.swo
 .idea/*
 /csis_sql/
+/web/js/

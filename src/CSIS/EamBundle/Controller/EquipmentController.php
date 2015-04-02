@@ -53,7 +53,7 @@ class EquipmentController extends Controller
      * Displays the requested Equipment
      *
      * @Secure(roles="ROLE_GEST_EQUIP")
-     * @Route("/{id}", name="equipment_show", requirements={"id" = "\d+"})
+     * @Route("/{id}", name="equipment_show", requirements={"id" = "\d+"}, options={"expose": true})
      * @Method({"GET"})
      * @Template("CSISEamBundle:Equipment:show.html.twig")
      */

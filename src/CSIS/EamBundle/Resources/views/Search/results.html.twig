@@ -1,0 +1,66 @@
+{% extends 'CSISEamBundle::layout.html.twig' %}
+
+{% block csis_body %}
+
+    <ul class="breadcrumb">
+        <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
+        <li class="active">Recherche : <strong>{{ app.session.flashbag.get('notice').0 }}</strong> ({{ nb }} résultat{% if nb > 1 %}s{% endif %})</li>
+    </ul>
+
+    <h2>Résultats de la recherche</h2>
+
+    {# Affichage de la requête recherchée #}
+    <p>
+        <a class="btn btn-link pull-right" type="button" onclick="history.go(-1);"><i class="icon-pencil"></i> Modifier la recherche</a>
+    </p>
+
+    <div class="row">
+        <div class="span4">
+            <div class="well" style="max-width: 340px; padding: 8px 0;">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Arborescence :</li>
+
+                    <li class="divider"></li>
+                </ul>
+
+                <div style="height:400px;overflow:auto">
+
+                    {% if vitrine ==  "alphabetique" %}
+
+                        {% include 'CSISEamBundle:SuperSearch:alphabetique.html.twig' %}
+
+                    {% elseif vitrine ==  "laboratories" %}
+
+                        {% include 'CSISEamBundle:Vitrine:laboratories.html.twig' %}
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="span8">
+            <div class="well" id="card_container">
+
+                {% if card ==  "equipment" %}
+
+                    {% include 'CSISEamBundle:Vitrine:card_equipment.html.twig' %}
+
+                {% elseif card ==  "laboratory" %}
+
+                    {% include 'CSISEamBundle:Vitrine:card_laboratory.html.twig' %}
+
+                {% elseif card ==  "institution" %}
+
+                    {% include 'CSISEamBundle:Vitrine:card_institution.html.twig' %}
+
+                {% else %}
+
+                    {% include 'CSISEamBundle:Vitrine:card_vide.html.twig' %}
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

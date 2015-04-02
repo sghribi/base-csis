@@ -17,6 +17,19 @@
 <script type="text/javascript" src="{{ asset("js/bootstrap-2.3.1.min.js") }}"></script>
 <script type="text/javascript" src="{{ asset("js/chosen.jquery.min.js") }}"></script>
 <script>$("[data-toggle='tooltip']").tooltip();</script>
+{% javascripts output="js/csis.js"
+    '../vendor/hammerjs/hammer.js/hammer.js'
+    '../vendor/hammerjs/jquery.hammer.js/jquery.hammer.js'
+    '../vendor/twitter/typeahead.js/dist/bloodhound.js'
+    '../vendor/twitter/typeahead.js/dist/typeahead.bundle.js'
+    '../vendor/twitter/typeahead.js/dist/typeahead.jquery.js'
+    'bundles/fosjsrouting/js/router.js'
+    '@CSISEamBundle/Resources/public/js/csis-search.js'
+    '@CSISEamBundle/Resources/public/js/csis.js'
+%}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 {% block page_js %}{% endblock %}
 {% endblock %}
 
@@ -32,20 +45,38 @@
       <div class="navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav">
-            <li><a href="http://csissaclay.wordpress.com/">&larr; Retour au site du CSIS</a></li>
+            <li><a href="http://csissaclay.wordpress.com/">&larr; Retour CSIS</a></li>
             <li><a href="{{ path('vitrine') }}">Vitrine</a></li>
-			<li><a href="{{ path('supersearch') }}">Recherche</a></li> 
+              {% if is_granted("ROLE_USER") %}
+                  <li><a href="{{ path("csis_eam_admin_index") }}">Administration</a></li>
+              {% endif %}
+              {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                  <li><a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
+              {% else %}
+                  <li><a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
+              {% endif %}
+              <li>
           </ul>
           <div class="pull-right">
             <ul class="nav">
-              {% if is_granted("ROLE_USER") %}
-                <li><a href="{{ path("csis_eam_admin_index") }}">Administration</a></li>
-              {% endif %}
-              {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                <li><a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
-              {% else %}
-                <li><a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
-              {% endif %}
+
+                    <div class="input-group search-bar-group">
+                        <input
+                                type="text"
+                                class="form-control typeahead"
+                                placeholder="Recherche"
+                                id="search-bar-input"
+                                name="query"
+                                aria-describedby="search-bar-addon"
+                                autocomplete="off"
+                                autocorrect="off"
+                                autocapitalize="off"
+                                spellcheck="false"
+                                data-search-equipement-name-limit="{{ constant('CSIS\\EamBundle\\Controller\\SearchController::SEARCH_EQUIPMENTS_NAME_RESULTS') }}"
+                                data-search-equipement-tags-limit="{{ constant('CSIS\\EamBundle\\Controller\\SearchController::SEARCH_EQUIPMENTS_TAGS_RESULTS') }}"
+                                />
+                    </div>
+                </li>
             </ul>
           </div>
         </div>

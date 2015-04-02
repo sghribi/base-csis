@@ -7,12 +7,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use CSIS\UserBundle\Entity\User;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Equipment
  *
  * @ORM\Table(name="equipment")
  * @ORM\Entity(repositoryClass="CSIS\EamBundle\Entity\EquipmentRepository")
+ * @Serializer\ExclusionPolicy("all")
  */
 class Equipment
 {
@@ -22,6 +24,7 @@ class Equipment
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Serializer\Expose
      */
     private $id;
 
@@ -38,7 +41,8 @@ class Equipment
      * @Assert\Length( 
      *      min=1, 
      *      max=255
-     * ) 
+     * )
+     * @Serializer\Expose
      */
     private $designation;
 
@@ -46,6 +50,7 @@ class Equipment
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
+     * @Serializer\Expose
      */
     private $description;
 

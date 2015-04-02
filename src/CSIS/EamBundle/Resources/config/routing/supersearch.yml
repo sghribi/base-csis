@@ -12,4 +12,4 @@ supersearch_vitrine:
   
 supersearch_test:
     pattern:  /{vitrine}/{card}/{id}
-    defaults: { _controller: "CSISEamBundle:SearchVitrine:index" }	  
+    defaults: { _controller: "CSISEamBundle:SearchVitrine:index" }
