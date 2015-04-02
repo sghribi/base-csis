@@ -74,46 +74,6 @@ class SearchController extends Controller
      */
     public function resultsAction (Request $request)
     {
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        $query = $request->get('query');
-
-        if ($query != '') {
-            // Look for floors
-            $floorRep = $em->getRepository('MyECPRoomingBundle:Floor');
-            if($floor = $floorRep->findOneBy(array('name' => strtoupper($query)))) {
-                return $this->redirect($this->generateUrl('floor_list', array('floor' => $floor->getName())));
-            }
-
-            // Look for members
-            $slugQuery = $this->get('slug_service')->slug($query);
-            $memberRep = $em->getRepository('MyECPCoreBundle:Member');
-            $members = $memberRep->search($slugQuery);
-
-            // Look for gangs
-            $gangsRep = $em->getRepository('MyECPCoreBundle:Gang');
-            $gangs = $gangsRep->search($query);
-
-            // Look for disciplines
-            $disciplinesRep = $em->getRepository('MyECPClassBundle:ClassDiscipline');
-            $disciplines = $disciplinesRep->search($query);
-
-            // Look for events
-            $events = null;
-        }
-        else {
-            $members = null;
-            $gangs = null;
-            $disciplines = null;
-            $events = null;
-        }
-
-        return array(
-            'query' => $query,
-            'members' => $members,
-            'gangs' => $gangs,
-            'disciplines' => $disciplines,
-            'events' => $events
-        );
+        return array();
     }
 }

@@ -28,7 +28,9 @@
     "twitter/typeahead.js": "dev-master",
     "hammerjs/hammer.js": "2.0.4",
     "hammerjs/jquery.hammer.js": "2.0.0",
-    "friendsofsymfony/jsrouting-bundle": "2.0.*@dev"
+    "friendsofsymfony/jsrouting-bundle": "2.0.*@dev",
+    "oyejorge/less.php": "~1.5",
+    "components/handlebars.js": "3.0.0"
   },
   "scripts": {
     "post-install-cmd": [
@@ -76,6 +78,17 @@
         "version": "2.0.0",
         "dist": {
           "url": "https://raw.githubusercontent.com/hammerjs/jquery.hammer.js/2.0.0/jquery.hammer.js",
+          "type": "file"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "components/handlebars.js",
+        "version": "3.0.0",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/components/handlebars.js/v3.0.0/handlebars.js",
           "type": "file"
         }
       }

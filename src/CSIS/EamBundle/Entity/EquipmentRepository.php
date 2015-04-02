@@ -271,4 +271,14 @@ class EquipmentRepository extends EntityRepository
 
         return count($qb->getQuery()->getSingleScalarResult()) > 0;
     }
+
+    public function searchByName($pattern, $max_results = 200)
+    {
+        return $this->createQueryBuilder('e')
+                ->where('LOWER(e.designation) LIKE :pattern')
+                ->setParameter('pattern', '%'.strtolower($pattern).'%')
+                ->setMaxResults($max_results)
+                ->getQuery()
+                ->getResult();
+    }
 }

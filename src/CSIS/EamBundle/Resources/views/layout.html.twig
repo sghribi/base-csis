@@ -8,6 +8,11 @@
 <link rel="stylesheet" type="text/css" href="{{ asset("css/smoothness/jquery-ui-1.10.3.min.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("css/main.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("css/chosen.min.css") }}">
+{% stylesheets output="css/csis.css"
+    '@CSISEamBundle/Resources/public/less/csis.less'
+%}
+    <link href="{{ asset_url }}" rel="stylesheet" media="screen">
+{% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
@@ -23,6 +28,7 @@
     '../vendor/twitter/typeahead.js/dist/bloodhound.js'
     '../vendor/twitter/typeahead.js/dist/typeahead.bundle.js'
     '../vendor/twitter/typeahead.js/dist/typeahead.jquery.js'
+    '../vendor/components/handlebars.js/handlebars.js'
     'bundles/fosjsrouting/js/router.js'
     '@CSISEamBundle/Resources/public/js/csis-search.js'
     '@CSISEamBundle/Resources/public/js/csis.js'
@@ -110,7 +116,35 @@
       </div>
     </div>
   </div>
-      
+
 </div>
+
+
+{# Template for search results #}
+{% verbatim %}
+<script id="equipment-by-name-suggestion" type="text/x-handlebars-template">
+    <a href="{{ url }}" class="search-suggestion-wrapper">
+        <div class="search-suggestion-photo">
+            <img class="media-object" src="{{ data.photo_path }}" alt="{{ data.first_name }} {{ data.last_name }}">
+        </div>
+        <div class="search-suggestion">
+            <div class="main">{{data.first_name}} {{ data.last_name }}</div>
+            <div class="second">{{ data.room }}</div>
+        </div>
+    </a>
+</script>
+
+<script id="equipment-by-tags-suggestion" type="text/x-handlebars-template">
+    <a href="{{ url }}" class="search-suggestion-wrapper">
+        <div class="search-suggestion-photo">
+            <img class="media-object" src="{{ data.photo_path }}" alt="{{ data.name }}">
+        </div>
+        <div class="search-suggestion">
+            <div class="main">{{data.name}}</div>
+            <div class="second"></div>
+        </div>
+    </a>
+</script>
+{% endverbatim %}
 
 {% endblock %}
