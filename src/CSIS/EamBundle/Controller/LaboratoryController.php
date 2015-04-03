@@ -46,13 +46,12 @@ class LaboratoryController extends Controller
 
     /**
      * Finds and displays a Laboratory entity.
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
      * @Template("CSISEamBundle:Laboratory:show.html.twig")
      * @Route("/{id}/show", name="laboratory_show", requirements={"id" = "\d+"})
      */
     public function showAction(Laboratory $laboratory)
     {
-        $em = $this->getDoctrine()->getManager();
         $deleteForm = $this->createDeleteForm($laboratory->getId());
 
         return array(

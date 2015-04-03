@@ -47,7 +47,7 @@ class InstitutionController extends Controller {
 
     /**
      * Finds and displays a Institution entity.
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
      * @Template("CSISEamBundle:Institution:show.html.twig")
      * @Route("/{id}/show", name="institution_show", requirements={"id" = "\d+"})
      */

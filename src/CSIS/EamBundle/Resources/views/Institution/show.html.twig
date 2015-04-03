@@ -22,18 +22,28 @@
       <div class="pull-left">
         <h4>Fiche de l'Etablissement : {{ institution.acronym }}</h4>
       </div>
-      <div class="pull-right">
-        <a href="{{ path('institution') }}" class="btn btn-default" data-toggle="tooltip" title="Retour à la liste des Etablissements">
-          <i class="icon-list-alt"></i> Liste des établissements
-        </a>
-      </div>
+      {% if is_granted('ROLE_GEST_EQUIP') %}
+        <div class="pull-right">
+          <a href="{{ path('institution') }}" class="btn btn-default" data-toggle="tooltip" title="Retour à la liste des Etablissements">
+            <i class="icon-list-alt"></i> Liste des établissements
+          </a>
+        </div>
+      {% endif %}
       <br/>
       <p class="clearfix"></p>
       
       <div class="tabbable"> 
         <ul class="nav nav-tabs">
           <li class="active"><a href="#infos" data-toggle="tab">Informations</a></li>
-          <li><a href="#laboratories" data-toggle="tab">Laboratoires associés</a></li>
+          {% if is_granted('ROLE_USER') %}
+            <li>
+                <a href="#laboratories" data-toggle="tab">Laboratoires associés</a>
+            </li>
+          {% else %}
+            <li class="disabled" data-toggle="tooltip" title="Vous devez être authentifié">
+                <a href="#">Laboratoires associés</a>
+            </li>
+          {% endif %}
         </ul>
 
         <div class="tab-content">

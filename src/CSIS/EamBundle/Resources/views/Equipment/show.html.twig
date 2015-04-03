@@ -19,29 +19,31 @@
   <div class="span12">
     <div class="well">
       <h4>Fiche de l'équipement : {{ equipment.designation }}
-        <div class="pull-right">
-            <a href="{{ path('equipment') }}" class="btn btn-default" data-toggle="tooltip" title="Retour à la liste des équipments">
-              <i class="icon-list-alt"></i> Liste des équipements
-            </a>
-        </div>
+        {% if is_granted("ROLE_GEST_EQUIP") %}
+            <div class="pull-right">
+                <a href="{{ path('equipment') }}" class="btn btn-default" data-toggle="tooltip" title="Retour à la liste des équipments">
+                  <i class="icon-list-alt"></i> Liste des équipements
+                </a>
+            </div>
+        {% endif %}
       </h4>
    
       {% include 'CSISEamBundle:Vitrine:card_equipment.html.twig' %}
 
       {% if is_granted("ROLE_GEST_EQUIP") %}
-      <hr/>
-      <div class="pull-right">
-          <a class="btn btn-success" href="{{ path('equipment_edit', { 'id': equipment.id }) }}">
-            <i class="icon-edit icon-white"></i> Éditer l'équipement
-          </a>
-          <a class="btn btn-info"  href="{{ path('equipment_edit_tags', { 'id': equipment.id }) }}">
-            <i class="icon-tag icon-white"></i> Gérer les tags
-          </a>
-          <a class="btn btn-danger" href="{{ path('equipment_ask_delete', { 'id': equipment.id }) }}">
-              <i class="icon-trash icon-white"></i> Supprimer l'équipement
-          </a>
-      </div>
-      <br />
+          <hr/>
+          <div class="pull-right">
+              <a class="btn btn-success" href="{{ path('equipment_edit', { 'id': equipment.id }) }}">
+                <i class="icon-edit icon-white"></i> Éditer l'équipement
+              </a>
+              <a class="btn btn-info"  href="{{ path('equipment_edit_tags', { 'id': equipment.id }) }}">
+                <i class="icon-tag icon-white"></i> Gérer les tags
+              </a>
+              <a class="btn btn-danger" href="{{ path('equipment_ask_delete', { 'id': equipment.id }) }}">
+                  <i class="icon-trash icon-white"></i> Supprimer l'équipement
+              </a>
+          </div>
+          <br />
       {% endif %}
       
     </div>
