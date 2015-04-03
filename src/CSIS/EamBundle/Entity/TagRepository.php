@@ -43,10 +43,10 @@ SELECT `tag2`.`id`, `tag2`.`tag`, `tag2`.`status`, COUNT(`t2`.`tag_id`) AS `nomb
 FROM `equipment_tag` AS `t1`
 JOIN `equipment_tag` AS `t2` ON `t1`.`equipment_id` = `t2`.`equipment_id`
 LEFT JOIN `tag` AS `tag2` ON `t2`.`tag_id` = `tag2`.`id`
-WHERE `t1`.`tag_id` != `t2`.`tag_id` AND `tag2`.`status` = 1 AND `t1`.`tag_id` IN (%s)
+WHERE `t1`.`tag_id` != `t2`.`tag_id` AND `tag2`.`status` = 1 AND `t1`.`tag_id` IN (%s) AND `tag2`.`id` NOT IN (%s)
 GROUP BY `t1`.`tag_id`, `t2`.`tag_id`
 ORDER BY `nombre` DESC
-LIMIT 0, 10
+LIMIT 0, 15
 SQL;
 
         $tagsId = array( );
@@ -54,8 +54,8 @@ SQL;
             $tagsId[] = $tag->getId();
         }
 
-        $query = $this->_em->createNativeQuery(sprintf($sql, implode(',', $tagsId)), $rsm);
-        
+        $query = $this->_em->createNativeQuery(sprintf($sql, implode(',', $tagsId), implode(',', $tagsId)), $rsm);
+
         return $query->getResult();
     }
 

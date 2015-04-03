@@ -474,7 +474,9 @@ class Equipment
      */
     public function addTag(Tag $tag)
     {
-        $this->tags[] = $tag;
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
 
         return $this;
     }

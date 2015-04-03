@@ -1,8 +1,5 @@
 {% extends 'CSISEamBundle::layout.html.twig' %}
 
-{# @TODO: séparer html/js #}
-
-
 {% block csis_body %}
     <div class="row">
         <div class="offset1 row10">
@@ -17,7 +14,7 @@
                 <li class="active">Tags</li>
             </ul>
 
-            <form action="{{ path('equipment_edit_tags', {id: equipment.id}) }}" method="POST" {{ form_enctype(form) }}>
+            <form action="{{ path('equipment_edit_tags', {id: equipment.id}) }}" method="POST" class="text-center" {{ form_enctype(form) }}>
 
                 <h3 class="pull-center">Gestion des tags de cet équipement</h3>
 
@@ -25,7 +22,9 @@
                 <div class="row-fluid">
 
                     <div class="span6 text-center">
-                        <div class="tags offset1" data-prototype="{{ form_widget(form.tags.vars.prototype)|e }}">
+                        <h4>Tags associés</h4>
+
+                        <div class="tags" data-prototype="{{ form_widget(form.tags.vars.prototype)|e }}">
                             {% for tag in form.tags %}
                                 {{ form_row(tag) }}
                             {% endfor %}
@@ -37,47 +36,20 @@
                         </a>
                     </div>
 
-
                     <div class="span6 text-center">
-                        {#<h4>Tags suggérés</h4>#}
-                        {#<p class="muted">Ces tags sont suggérés à partir des tags acceptés/rejetés, et à partir de la description donnée à l'équipement (À venir...).</p>#}
-                        {#<table class="table" data-prototype="{{ form_widget(form.equipmentTags.vars.prototype)|e }}" id="refused">#}
-                            {#<tbody>#}
-                            {#{% for tag in suggestedTags %}#}
-                                {#<tr class="tag info">#}
-                                    {#<td>#}
-                                        {#{{ tag.tag }}#}
-                                    {#</td>#}
-                                    {#<td>#}
-                                        {#<a href="#"><i class="icon icon-ok"></i></a>#}
-                                    {#</td>#}
-                                    {#<td>#}
-                                        {#<a href="#"><i class="icon icon-remove"></i></a>#}
-                                    {#</td>#}
-                                {#</tr>#}
-                            {#{% endfor %}#}
-                            {#</tbody>#}
-                        {#</table>#}
+                        <h4>Tags suggérés</h4>
 
-                        {#<h4>Proposer un tag non existant</h4>#}
-                        {#<div>#}
-                            {#<p class="muted">#}
-                                {#Le tag proposé sera lié à cet équipement, mais sera sujet à modération. Une fois le tag accepté par un modérateur, il sera visible sur la fiche d'équipement sans action de votre part.#}
-                            {#</p>#}
-
-                            {#&#123;&#35;<form class="well">&#35;&#125;#}
-                                {#&#123;&#35;<input type="text" />&#35;&#125;#}
-                                {#&#123;&#35;<br/>&#35;&#125;#}
-                                {#&#123;&#35;<a href="#" class="btn btn-default">Proposer un nouveau tag</a>&#35;&#125;#}
-                            {#&#123;&#35;</form>&#35;&#125;#}
-                        {#</div>#}
+                        <div class="suggestions">
+                            {% for tag in suggestedTags %}
+                                <a class="btn btn-block btn-link suggestion" href="#" data-value="{{ tag.tag }}"><i class="icon icon-plus"></i> {{ tag.tag }}</a>
+                            {% endfor %}
+                        </div>
                     </div>
-
                 </div>
                 {{ form_row(form._token) }}
                 <hr/>
 
-                <button class="btn btn-success" type="submit"><i class="icon icon-refresh icon-white"></i> Mettre à jour</button>
+                <button class="btn btn-success pull-center" type="submit"><i class="icon icon-refresh icon-white"></i> Mettre à jour</button>
             </form>
 
         </div>
@@ -86,26 +58,35 @@
     <script>
         jQuery(document).ready(function() {
             // Récupère le div qui contient la collection des contacts
-            var collectionHolderOwner = $('div.tags');
-            var add_buttonOwner = $('#add_new_tag');
+            var collectionHolderTag = $('div.tags');
+            var add_buttonTag = $('#add_new_tag');
+            var suggestionsTag = $('.suggestion');
 
 
             // ajoute un lien de suppression à tous les éléments li de
-            // formulaires de owners existants
-            collectionHolderOwner.children('div').each(function() {
+            // formulaires de tags existants
+            collectionHolderTag.children('div').each(function() {
                 attachAjax($(this).children('input'), '{{ url('tag_autocomplete') }}');
-                addOwnerFormDeleteLink($(this));
+                addTagFormDeleteLink($(this));
             });
 
-            add_buttonOwner.on('click', function(e) {
+            add_buttonTag.on('click', function(e) {
                 // ajoute un nouveau formulaire contact (voir le prochain bloc de code)
                 e.preventDefault();
-                $newForm = addOwnerForm(collectionHolderOwner);
+                $newForm = addTagForm(collectionHolderTag);
+            });
+
+            suggestionsTag.on('click', function(e) {
+                e.preventDefault();
+                tag = $(this).data('value');
+                $newForm = addTagForm(collectionHolderTag);
+                $newForm.find('input').val(tag);
+                $(this).hide();
             });
 
         });
 
-        function addOwnerForm(collectionHolder) {
+        function addTagForm(collectionHolder) {
             // Récupère l'élément ayant l'attribut data-prototype
             var prototype = collectionHolder.attr('data-prototype');
             var length = collectionHolder.children().length;
@@ -113,16 +94,16 @@
             // la longueur de la collection courante
             var $newForm = $('<div><label>Nom du tag :</label>' + prototype.replace(/__name__/g, length) + '</div>');
 
-            // Affiche le formulaire dans la page dans un div, avant le lien "ajouter un owner"
+            // Affiche le formulaire dans la page dans un div, avant le lien "ajouter un tag"
             collectionHolder.append($newForm);
             attachAjax($newForm.children('input'), '{{ url('tag_autocomplete') }}');
             // ajoute un lien de suppression au nouveau formulaire
-            addOwnerFormDeleteLink($newForm);
+            addTagFormDeleteLink($newForm);
 
             return $newForm;
         }
 
-        function addOwnerFormDeleteLink($tagForm) {
+        function addTagFormDeleteLink($tagForm) {
             var $removeFormButton = $('<a class="btn btn-warning"><i class="icon-trash icon-white"></i></a>');
             var $input = $tagForm.children('input');
 
@@ -130,7 +111,7 @@
             $input.parent().append($removeFormButton);
 
             $removeFormButton.on('click', function(e) {
-                // supprime l'élément div pour le formulaire d'owner
+                // supprime l'élément div pour le formulaire de tag
                 e.preventDefault();
                 $tagForm.remove();
             });
@@ -154,117 +135,4 @@
             });
         }
     </script>
-
-
-
-    {#<script type="text/javascript">#}
-        {#/** Equipment Tag labels **/#}
-        {#equipmentTagLabel();#}
-        {#equipmentTagHideStatus();#}
-
-        {#function equipmentTagLabel() {#}
-            {#$('.equipment-tag-label-new').each(function() {#}
-                {#$(this).removeClass('equipment-tag-label-new');#}
-                {#$('<label class="equipment-tag-label">' + $(this).find(":selected").text() + '</label>').insertAfter($(this));#}
-                {#$(this).hide();#}
-            {#});#}
-        {#}#}
-
-        {#function equipmentTagHideStatus() {#}
-            {#$('.equipment-tag-status').each(function() {#}
-                {#$(this).hide();#}
-            {#});#}
-        {#}#}
-
-        {#$('.tags').find('.tag').each(function() {#}
-            {#addDeleteBtn($(this));#}
-        {#});#}
-
-        {#$('#refused').find('.tag').each(function() {#}
-            {#addUpButton($(this));#}
-        {#});#}
-
-        {#$('#accepted').find('.tag').each(function() {#}
-            {#addDownButton($(this));#}
-        {#});#}
-
-        {#function addDeleteBtn(element) {#}
-            {#var $deleteBtn = $('<td><a href="#" class="delete-btn"><i class="icon icon-trash"></i></a></td>');#}
-            {#$deleteBtn.appendTo(element);#}
-
-            {#$deleteBtn.children('.delete-btn').on('click', function(e) {#}
-                {#e.preventDefault();#}
-                {#element.remove();#}
-            {#});#}
-        {#}#}
-
-        {#function addUpButton(element) {#}
-            {#var $upBtn = $('<a href="#" class="accept-btn" title="Accept this tag"><i class="icon icon-arrow-up"></i></a>');#}
-            {#var $actionTd = element.find('td').last();#}
-
-            {#$upBtn.appendTo($actionTd);#}
-
-            {#$upBtn.on('click', function(e) {#}
-                {#e.preventDefault();#}
-                {#var $tr = $upBtn.closest('tr');#}
-                {#$tr.appendTo($('#accepted').find('tbody'))#}
-                {#$tr.find('.accept-btn').each(function() { $(this).remove();});#}
-                {#$tr.removeClass('error').addClass('success');#}
-                {#addDownButton($tr);#}
-                {#updateTagStatus($tr);#}
-            {#});#}
-        {#}#}
-
-        {#function updateTagStatus($tag) {#}
-            {#$input = $tag.find('input.equipment-tag-status');#}
-            {#status = $tag.closest('tags').attr('data-status');#}
-            {#$input.val(status);#}
-        {#}#}
-
-        {#function addDownButton(element) {#}
-            {#var $downBtn = $('<a href="#" title="Refuse this tag" class="refuse-btn"><i class="icon icon-arrow-down"></i></a>');#}
-            {#var $actionTd = element.find('td').last();#}
-
-            {#$downBtn.appendTo($actionTd);#}
-
-            {#$downBtn.on('click', function(e) {#}
-                {#e.preventDefault();#}
-                {#var $tr = $downBtn.closest('tr');#}
-                {#$tr.appendTo($('#refused').find('tbody'))#}
-                {#$tr.find('.refuse-btn').each(function() { $(this).remove();});#}
-                {#$tr.removeClass('success').addClass('error');#}
-                {#addUpButton($tr);#}
-                {#updateTagStatus($tr);#}
-            {#});#}
-        {#}#}
-
-        {#$('.tags').each(function() {#}
-            {#var $addBtn = $('<a href="#" class="btn btn-info"><i class="icon icon-plus icon-white"></i> Ajouter un tag</a>');#}
-            {#$addBtn.insertAfter($(this));#}
-            {#var $dataPrototype = $(this).attr('data-prototype');#}
-            {#var $tagTable = $(this);#}
-
-            {#$addBtn.on('click', function(e) {#}
-                {#e.preventDefault();#}
-                {#var $newForm =  $('<tr class="tag warning"><td>' + $dataPrototype.replace(/__name__/g, $('.tag').children().length) + '</td></tr>');#}
-                {#var $status =  $newForm.find('input.equipment-tag-status');#}
-                {#$status.val($tagTable.attr('data-status'));#}
-                {#$status.hide();#}
-                {#addDeleteBtn($newForm);#}
-                {#$tagTable.append($newForm);#}
-                {#addChosenSupport($newForm.find('select'));#}
-            {#});#}
-        {#});#}
-
-        {#function addChosenSupport(element) {#}
-            {#element.chosen({#}
-                {#disable_search_threshold: 10,#}
-                {#no_results_text: "Aucun tag",#}
-                {#placeholder_text_single: 'Selectionner un tag',#}
-                {#allow_single_deselect: true#}
-            {#});#}
-        {#}#}
-
-    {#</script>#}
-
 {% endblock %}
