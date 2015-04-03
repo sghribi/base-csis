@@ -28,10 +28,17 @@ class Equipment
      */
     private $id;
 
-     /**
-      * @ORM\OneToMany(targetEntity="CSIS\EamBundle\Entity\EquipmentTag", cascade={"persist", "remove"}, mappedBy="equipment")
-      */
-    private $equipmentTags;
+    /**
+     * @var ArrayCollection $users
+     *
+     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Tag", inversedBy="equipments")
+     * @ORM\JoinTable(
+     *     name="equipment_tag",
+     *     joinColumns={@ORM\JoinColumn(name="equipment_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     * )
+     */
+    private $tags;
 
     /**
      * @var string
@@ -153,7 +160,7 @@ class Equipment
      */
     function __construct()
     {
-        $this->equipmentTags = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->owners = new ArrayCollection();
         $this->lastEditDate = new \DateTime();
     }
@@ -399,41 +406,6 @@ class Equipment
     }
 
     /**
-     * Add equipmentTag
-     *
-     * @param EquipmentTag $equipmentTag
-     *
-     * @return Equipment
-     */
-    public function addEquipmentTag(EquipmentTag $equipmentTag)
-    {
-        $this->equipmentTags[] = $equipmentTag;
-        $equipmentTag->setEquipment($this);
-
-        return $this;
-    }
-
-    /**
-     * Remove equipmentTag
-     *
-     * @param EquipmentTag $equipmentTag
-     */
-    public function removeEquipmentTag(EquipmentTag $equipmentTag)
-    {
-        $this->equipmentTags->removeElement($equipmentTag);
-    }
-
-    /**
-     * Get equipmentTags
-     *
-     * @return ArrayCollection
-     */
-    public function getEquipmentTags()
-    {
-        return $this->equipmentTags;
-    }
-
-    /**
      * Set laboratory
      *
      * @param Laboratory $laboratory
@@ -461,9 +433,10 @@ class Equipment
      * Add owner
      *
      * @param User $owner
+     *
      * @return Equipment
      */
-    public function addOwner(\CSIS\UserBundle\Entity\User $owner = null)
+    public function addOwner(User $owner = null)
     {
         $this->owners[] = $owner;
 
@@ -471,13 +444,13 @@ class Equipment
     }
 
     /**
-     * Remove owners
+     * Remove owner
      *
-     * @param \CSIS\UserBundle\Entity\User $owners
+     * @param User $owner
      */
-    public function removeOwner(\CSIS\UserBundle\Entity\User $owners)
+    public function removeOwner(User $owner)
     {
-        $this->owners->removeElement($owners);
+        $this->owners->removeElement($owner);
     }
 
     /**
@@ -488,5 +461,39 @@ class Equipment
     public function getOwners()
     {
         return $this->owners;
+    }
+
+    /**
+     * Add tag
+     *
+     * @param Tag $tag
+     *
+     * @return Equipment
+     */
+    public function addTag(Tag $tag)
+    {
+        $this->tags[] = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Remove tag
+     *
+     * @param Tag $tag
+     */
+    public function removeTag(Tag $tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Tag
@@ -57,21 +58,31 @@ class Tag
      */
     private $lastEditDate;
 
-        /**
+    /**
+     * @var ArrayCollection $equipments
+     *
+     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Equipment", mappedBy="tags")
+     */
+    private $equipments;
+
+    /**
      * Tag's constructor
      * Initialize the status to false (unpublished)
      */
-    function __construct() {
-
-        $this->status       = 0;
+    public function __construct()
+    {
+        $this->status       = self::PENDING;
         $this->lastEditDate = new \DateTime();
+        $this->equipments   = new ArrayCollection();
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->tag;
     }
-
 
     /**
      * Get id
@@ -173,5 +184,39 @@ class Tag
                             $tag
                 );
         return $tag;
+    }
+
+    /**
+     * Add equipment
+     *
+     * @param Equipment $equipment
+     *
+     * @return Tag
+     */
+    public function addEquipment(Equipment $equipment)
+    {
+        $this->equipments[] = $equipment;
+
+        return $this;
+    }
+
+    /**
+     * Remove equipments
+     *
+     * @param Equipment $equipment
+     */
+    public function removeEquipment(Equipment $equipment)
+    {
+        $this->equipments->removeElement($equipment);
+    }
+
+    /**
+     * Get equipments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEquipments()
+    {
+        return $this->equipments;
     }
 }
