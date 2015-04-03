@@ -28,6 +28,10 @@ class TagRepository extends EntityRepository
 
     public function findRelativeTags( $tags )
     {
+        if (count($tags) == 0) {
+            return array();
+        }
+
         $rsm = new ResultSetMapping();
         $rsm->addEntityResult('CSISEamBundle:Tag', 'tag2', 'tag');
         $rsm->addFieldResult('tag2', 'id', 'id');

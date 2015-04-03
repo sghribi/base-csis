@@ -4,6 +4,8 @@ namespace CSIS\EamBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use CSIS\EamBundle\Entity\LaboratoryRepository;
 
@@ -85,13 +87,17 @@ class EquipmentType extends AbstractType
 
       if ($options['tags']) {
           $builder
-              ->add('equipmentTags', 'entity', array(
-                  'data_class' => 'CSISEamBundle:Tag',
-                  'by_reference' => false,
+              ->add('tags', 'collection', array(
+                  'type' => 'csis_tags_selector',
+                  'allow_add' => true,
+                  'allow_delete' => true,
                   'prototype' => true,
-              ))
-          ;
-      }
+                  'by_reference' => false,
+                  'options' => array(
+                      'equipment' => $options['equipment'],
+                  )
+          ));
+      };
   }
 
   public function setDefaultOptions ( OptionsResolverInterface $resolver )
@@ -101,6 +107,7 @@ class EquipmentType extends AbstractType
         'cascade_validation' => true,
         'summary' => false,
         'tags' => false,
+        'equipment' => null,
     ));
   }
 

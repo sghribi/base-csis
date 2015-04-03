@@ -74,7 +74,7 @@ class EquipmentController extends Controller
         $equipment = new Equipment();
 
         $equipment->getOwners()->add($this->getUser());
-        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true));
+        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true, 'equipment' => $equipment));
 
         return array(
             'equipment' => $equipment,
@@ -94,7 +94,7 @@ class EquipmentController extends Controller
     {
         $equipment = new Equipment();
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true));
+        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true, 'equipment' => $equipment));
 
         $form->handleRequest($request);
 
@@ -138,7 +138,7 @@ class EquipmentController extends Controller
             $equipment->getOwners()->add(new User());
         }
 
-        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true));
+        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true, 'equipment' => $equipment));
 
         return array(
             'equipment' => $equipment,
@@ -156,7 +156,7 @@ class EquipmentController extends Controller
      */
     public function editTagsAction(Equipment $equipment, Request $request)
     {
-        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('tags' => true));
+        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('tags' => true, 'equipment' => $equipment));
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -165,7 +165,7 @@ class EquipmentController extends Controller
             $em->flush();
 
             $this->addFlash('valid', 'Les tags ont correctement été mis à jour.');
-            $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('tags' => true));
+            $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('tags' => true, 'equipment' => $equipment));
         }
 
         $suggestedTags = $this->getDoctrine()->getRepository('CSISEamBundle:Tag')->findRelativeTags($equipment->getTags());
@@ -187,7 +187,7 @@ class EquipmentController extends Controller
      */
     public function updateAction(Request $request, Equipment $equipment)
     {
-        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true));
+        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true, 'equipment' => $equipment));
 
         $editForm->handleRequest($request);
 

@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use CSIS\UserBundle\Entity\User;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Equipment
@@ -31,7 +32,7 @@ class Equipment
     /**
      * @var ArrayCollection $users
      *
-     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Tag", inversedBy="equipments")
+     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Tag", inversedBy="equipments", cascade={"all"})
      * @ORM\JoinTable(
      *     name="equipment_tag",
      *     joinColumns={@ORM\JoinColumn(name="equipment_id", referencedColumnName="id")},
@@ -495,5 +496,17 @@ class Equipment
     public function getTags()
     {
         return $this->tags;
+    }
+
+    /**
+     * @Assert\Callback
+     */
+    public function assertTagsAreUnique(ExecutionContextInterface $context)
+    {
+        $tags = $this->tags->toArray();
+
+        if (count($tags) != count(array_unique($tags))) {
+            $context->buildViolation('Des tags sont en doublons.')->addViolation();
+        }
     }
 }

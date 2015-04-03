@@ -46,8 +46,8 @@
     <dt>Tags</dt>
     <dd>
         <ul class="inline">
-            {% for equipmentTag in equipment.equipmentTags if equipmentTag.status is constant('CSIS\\EamBundle\\Entity\\EquipmentTag::ACCEPTED') and equipmentTag.tag.status is constant('CSIS\\EamBundle\\Entity\\Tag::ACCEPTED')  %}
-                <li>{{ equipmentTag.tag.tag }}</li>
+			{% for tag in equipment.tags if tag.status is constant('CSIS\\EamBundle\\Entity\\Tag::ACCEPTED')  %}
+                <li>{{ tag.tag }}</li>
             {% else %}
                 <li class="muted">Aucun tag associé</li>
             {% endfor %}

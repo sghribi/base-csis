@@ -2,49 +2,46 @@
 
 namespace CSIS\EamBundle\Form\Type;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use CSIS\EamBundle\Form\DataTransformer\TagToTagTransformer;
 
 class TagSelectorType extends AbstractType
 {
-
     /**
-     * @var ObjectManager
+     * @var EntityManager
      */
-    private $om;
+    private $em;
     
     /**
-     * @var Symfony\Component\HttpFoundation\Session\Session
+     * @var SessionInterface
      */
     private $session;
 
     /**
-     * @param ObjectManager $om
+     * @param EntityManager     $em
+     * @param SessionInterface  $session
      */
-    public function __construct( ObjectManager $om, SessionInterface $session )
+    public function __construct(EntityManager $em, SessionInterface $session)
     {
-        $this->om = $om;
+        $this->em = $em;
         $this->session = $session;
     }
 
     public function buildForm( FormBuilderInterface $builder, array $options )
     {
-        $transformer = new TagToTagTransformer($this->om, $this->session);
+        $transformer = new TagToTagTransformer($this->em, $this->session, $options['equipment']);
         $builder->addModelTransformer($transformer);
     }
 
     public function setDefaultOptions( OptionsResolverInterface $resolver )
     {
         $resolver->setDefaults(array(
-            'invalid_message' => 'Le tag sélectionné n\'existe pas.',
             'label' => 'Nom du tag :',
-            'attr' => array(
-                'class' => 'span2',
-            )
+            'equipment' => null,
         ));
     }
 
@@ -55,6 +52,6 @@ class TagSelectorType extends AbstractType
 
     public function getName()
     {
-        return 'csis_tag_selector';
+        return 'csis_tags_selector';
     }
 }
