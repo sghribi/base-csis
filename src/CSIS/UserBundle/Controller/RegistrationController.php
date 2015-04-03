@@ -17,13 +17,9 @@ class RegistrationController extends BaseController
         $formHandler = $this->container->get('fos_user.registration.form.handler');
         $confirmationEnabled = $this->container->getParameter('fos_user.registration.confirmation.enabled');
 
-        $em = $this->container->get('doctrine')->getManager();
-                
         $process = $formHandler->process($confirmationEnabled);
         if ($process) {
             $user = $form->getData();
-            $curUser = $this->container->get('security.context')->getToken()->getUser();
-
             if ($confirmationEnabled && !$user->isEnabled()) {
                 $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
                 $route = 'fos_user_registration_check_email';

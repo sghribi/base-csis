@@ -58,6 +58,7 @@ class InstitutionRepository extends EntityRepository
     public function findByOwnerOrderByAcronymPaginated(User $user,$start, $limit) {
         $qb = $this->createQueryBuilder('i');
         $qb = $this->qbByOwners($qb, $user);
+        $qb = $this->qbReachByUser($qb, $user);
         $qb = $this->qbOrderByAcronym($qb);
         $qb = $this->qbPaginate($qb, $start, $limit);
         
@@ -79,7 +80,7 @@ class InstitutionRepository extends EntityRepository
     }
     
     private function qbReachByUser(QueryBuilder $qb, User $user) {
-        if ( !$user->hasRole('ROLE_ADMIN') ) {
+        if ( !$user->hasRole('ROLE_GEST_ESTAB') ) {
             return $qb->orWhere($qb->expr()->eq('i', ':institution'))
                       ->setParameter('institution', $user->getInstitution());
         } else {
@@ -88,7 +89,7 @@ class InstitutionRepository extends EntityRepository
     }
 
     private function qbByOwners(QueryBuilder $qb, User $user) {
-        if ( !$user->hasRole('ROLE_ADMIN') ) {
+        if ( !$user->hasRole('ROLE_GEST_ESTAB') ) {
             return $qb->orWhere(':user MEMBER OF i.owners')
                       ->setParameter('user', $user);
         } else {

@@ -23,6 +23,7 @@ class LaboratoryRepository extends EntityRepository {
     public function findByOwnerOrderByAcronymPaginated(User $user,$start, $limit) {
         $qb = $this->createQueryBuilder('l');
         $qb = $this->qbByOwners($qb, $user);
+        $qb = $this->qbReachByUser($qb, $user);
         $qb = $this->qbOrderByAcronym($qb);
         $qb = $this->qbPaginate($qb, $start, $limit);
         
@@ -68,7 +69,7 @@ class LaboratoryRepository extends EntityRepository {
     }
     
     private function qbReachByUser(QueryBuilder $qb, User $user) {
-        if ( !$user->hasRole('ROLE_ADMIN')) {
+        if ( !$user->hasRole('ROLE_GEST_ESTAB')) {
             return $qb->orWhere($qb->expr()->eq('l', ':laboratory'))
                       ->orWhere($qb->expr()->eq('l.institution', ':institution'))
                       ->setParameter('institution', $user->getInstitution())
@@ -79,7 +80,7 @@ class LaboratoryRepository extends EntityRepository {
     }
 
     private function qbByOwners(QueryBuilder $qb, User $user) {
-        if ( !$user->hasRole('ROLE_ADMIN') ) {
+        if ( !$user->hasRole('ROLE_GEST_ESTAB') ) {
             return $qb->leftJoin('l.institution', 'i')
                       ->orWhere(':user MEMBER OF l.owners')
                       ->orWhere(':user MEMBER OF i.owners')

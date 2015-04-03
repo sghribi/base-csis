@@ -10,6 +10,43 @@
       </ul>
   </div>
 
+  <div class="pull-center">
+    <h4>{{ app.user.firstName }} {{ app.user.lastName }}</h4>
+    {% if is_granted('ROLE_ADMIN') %}
+      <p>
+        Administrateur de la plateforme
+      </p>
+    {% endif %}
+    {% if is_granted('ROLE_GEST_TAGS') %}
+      <p>
+        Gestionnaire des tags
+      </p>
+    {% endif %}
+    {% if is_granted('ROLE_GEST_ESTAB') %}
+      <p>
+        Gestionnaire des établissements.
+      </p>
+    {% endif %}
+    <p>
+      {% if app.user.lab %}
+        {% if is_granted('ROLE_GEST_EQUIP') %}
+          Gestionnaire
+        {% else %}
+          Membre
+        {% endif %}
+        du laboratoire {{ app.user.lab }}
+      {% endif %}
+      {% if app.user.institution %}
+        {% if is_granted('ROLE_GEST_LAB') %}
+          Gestionnaire
+        {% else %}
+          Membre
+        {% endif%}
+        de l'établissement {{ app.user.institution }}
+      {% endif %}
+    </p>
+  </div>
+
   <div class="span5 offset1">
     <h4>Mon Compte</h4>
      <ul>
