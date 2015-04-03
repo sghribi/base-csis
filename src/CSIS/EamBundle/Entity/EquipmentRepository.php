@@ -281,4 +281,19 @@ class EquipmentRepository extends EntityRepository
                 ->getQuery()
                 ->getResult();
     }
+
+    public function searchByTags($pattern, $max_results = 200)
+    {
+        $terms = explode(" ", $pattern);
+        $search = "LOWER(t.tag) LIKE '" . implode("%' OR LOWER(t.tag) LIKE '", $terms) . "%'";
+
+        return $this->createQueryBuilder('e')
+                ->join('e.tags', 't')
+                ->where($search)
+                ->andWhere('t.status = :accepted')
+                ->setParameter('accepted', Tag::ACCEPTED)
+                ->setMaxResults($max_results)
+                ->getQuery()
+                ->getResult();
+    }
 }

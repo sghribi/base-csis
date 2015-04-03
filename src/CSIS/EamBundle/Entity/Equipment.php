@@ -502,6 +502,15 @@ class Equipment
     }
 
     /**
+     * @return ArrayCollection
+     * @Serializer\VirtualProperty
+     */
+    public function getAcceptedTags()
+    {
+        return $this->tags->filter(function(Tag $tag) { return $tag->getStatus() == Tag::ACCEPTED;});
+    }
+
+    /**
      * @Assert\Callback
      */
     public function assertTagsAreUnique(ExecutionContextInterface $context)

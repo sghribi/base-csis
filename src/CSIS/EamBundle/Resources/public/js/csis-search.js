@@ -94,10 +94,11 @@
                 },
                 source: equipmentsByName.ttAdapter(),
                 templates: {
+                    header: '<div class="search-header">Recherche par nom</div>',
                     suggestion: function (data) {
                         deferSearchResults();
                         url = Routing.generate('equipment_show', { id: data.id });
-                        template =  Handlebars.compile($('#equipment-by-name-suggestion').html());
+                        template =  Handlebars.compile($('#equipment-suggestion').html());
                         return template({data: data, url: url});
                     }
                 }
@@ -109,10 +110,11 @@
                 },
                 source: equipmentsByTags.ttAdapter(),
                 templates: {
+                    header: '<div class="search-header">Recherche par tags</div>',
                     suggestion: function (data) {
                         deferSearchResults();
                         url = Routing.generate('equipment_show', { id: data.id });
-                        template =  Handlebars.compile($('#equipment-by-tags-suggestion').html());
+                        template =  Handlebars.compile($('#equipment-suggestion').html());
                         return template({data: data, url: url});
                     }
                 }

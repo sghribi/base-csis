@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Tag
@@ -14,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @UniqueEntity(fields={"tag"})
  * @ORM\Table(name="tag")
  * @ORM\Entity(repositoryClass="CSIS\EamBundle\Entity\TagRepository")
+ * @Serializer\ExclusionPolicy("all")
  */
 class Tag
 {
@@ -23,9 +25,10 @@ class Tag
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Serializer\Expose
      */
     private $id;
-	
+
     /**
      * @var string
      *
@@ -35,7 +38,8 @@ class Tag
      * @Assert\Length( 
      *      min=1, 
      *      max=255
-     * ) 
+     * )
+     * @Serializer\Expose
      */
     private $tag;
 

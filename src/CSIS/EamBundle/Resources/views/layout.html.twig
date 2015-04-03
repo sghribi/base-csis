@@ -69,7 +69,7 @@
                         <input
                             type="text"
                             class="form-control typeahead span5"
-                            placeholder="Recherche"
+                            placeholder="Rechercher des équipements par nom ou tag"
                             id="search-bar-input"
                             name="query"
                             aria-describedby="search-bar-addon"
@@ -110,7 +110,7 @@
           </span> 
           en informatique de Polytech Paris-Sud
           <br/>
-          Refonte agile du portail en 2014 par <a style="color: inherit; text-decoration: underline;" href="https://linkedin.com/in/ghribi" target="_blank">Samy GHRIBI</a>, étudiant à Centrale Paris.
+          Refonte agile du portail en 2014, puis 2015 par <a style="color: inherit; text-decoration: underline;" href="https://linkedin.com/in/ghribi" target="_blank">Samy GHRIBI</a>, étudiant à Centrale Paris.
         </small>
       </div>
     </div>
@@ -120,20 +120,11 @@
 
 {# Template for search results #}
 {% verbatim %}
-<script id="equipment-by-name-suggestion" type="text/x-handlebars-template">
+<script id="equipment-suggestion" type="text/x-handlebars-template">
     <a href="{{ url }}" class="search-suggestion-wrapper">
         <div class="search-suggestion">
-            <div class="main">{{ data.designation }}</div>
-            <div class="second">test</div>
-        </div>
-    </a>
-</script>
-
-<script id="equipment-by-tags-suggestion" type="text/x-handlebars-template">
-    <a href="{{ url }}" class="search-suggestion-wrapper">
-        <div class="search-suggestion">
-            <div class="main">{{data.name}}</div>
-            <div class="second"></div>
+            <div class="main">{{data.designation}}</div>
+            <div class="second">{{#list data.accepted_tags }}{{tag}}{{/list}}</div>
         </div>
     </a>
 </script>
