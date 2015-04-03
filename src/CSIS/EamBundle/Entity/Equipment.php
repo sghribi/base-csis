@@ -38,6 +38,7 @@ class Equipment
      *     joinColumns={@ORM\JoinColumn(name="equipment_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      * )
+     * @ORM\OrderBy({"tag": "ASC"})
      */
     private $tags;
 
