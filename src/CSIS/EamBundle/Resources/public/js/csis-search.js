@@ -97,7 +97,7 @@
                     suggestion: function (data) {
                         deferSearchResults();
                         url = Routing.generate('equipment_show', { id: data.id });
-                        template =  Handlebars.compile($('#equipment-by-tags-suggestion').html());
+                        template =  Handlebars.compile($('#equipment-by-name-suggestion').html());
                         return template({data: data, url: url});
                     }
                 }

@@ -65,22 +65,22 @@
           </ul>
           <div class="pull-right">
             <ul class="nav">
-
+                <li>
                     <div class="input-group search-bar-group">
                         <input
-                                type="text"
-                                class="form-control typeahead"
-                                placeholder="Recherche"
-                                id="search-bar-input"
-                                name="query"
-                                aria-describedby="search-bar-addon"
-                                autocomplete="off"
-                                autocorrect="off"
-                                autocapitalize="off"
-                                spellcheck="false"
-                                data-search-equipement-name-limit="{{ constant('CSIS\\EamBundle\\Controller\\SearchController::SEARCH_EQUIPMENTS_NAME_RESULTS') }}"
-                                data-search-equipement-tags-limit="{{ constant('CSIS\\EamBundle\\Controller\\SearchController::SEARCH_EQUIPMENTS_TAGS_RESULTS') }}"
-                                />
+                            type="text"
+                            class="form-control typeahead span5"
+                            placeholder="Recherche"
+                            id="search-bar-input"
+                            name="query"
+                            aria-describedby="search-bar-addon"
+                            autocomplete="off"
+                            autocorrect="off"
+                            autocapitalize="off"
+                            spellcheck="false"
+                            data-search-equipement-name-limit="{{ constant('CSIS\\EamBundle\\Controller\\SearchController::SEARCH_EQUIPMENTS_NAME_RESULTS') }}"
+                            data-search-equipement-tags-limit="{{ constant('CSIS\\EamBundle\\Controller\\SearchController::SEARCH_EQUIPMENTS_TAGS_RESULTS') }}"
+                        />
                     </div>
                 </li>
             </ul>
@@ -119,26 +119,19 @@
 
 </div>
 
-
 {# Template for search results #}
 {% verbatim %}
 <script id="equipment-by-name-suggestion" type="text/x-handlebars-template">
     <a href="{{ url }}" class="search-suggestion-wrapper">
-        <div class="search-suggestion-photo">
-            <img class="media-object" src="{{ data.photo_path }}" alt="{{ data.first_name }} {{ data.last_name }}">
-        </div>
         <div class="search-suggestion">
-            <div class="main">{{data.first_name}} {{ data.last_name }}</div>
-            <div class="second">{{ data.room }}</div>
+            <div class="main">{{ data.designation }}</div>
+            <div class="second">test</div>
         </div>
     </a>
 </script>
 
 <script id="equipment-by-tags-suggestion" type="text/x-handlebars-template">
     <a href="{{ url }}" class="search-suggestion-wrapper">
-        <div class="search-suggestion-photo">
-            <img class="media-object" src="{{ data.photo_path }}" alt="{{ data.name }}">
-        </div>
         <div class="search-suggestion">
             <div class="main">{{data.name}}</div>
             <div class="second"></div>
