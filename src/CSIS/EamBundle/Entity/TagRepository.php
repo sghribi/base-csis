@@ -4,9 +4,7 @@ namespace CSIS\EamBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Query;
-use CSIS\EamBundle\Entity\Tag;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -47,7 +45,6 @@ ORDER BY `nombre` DESC
 LIMIT 0, 10
 SQL;
 
-
         $tagsId = array( );
         foreach ( $tags as $tag ) {
             $tagsId[] = $tag->getId();
@@ -60,14 +57,12 @@ SQL;
 
     public function waitingTags()
     {
-        $rsm = new ResultSetMapping();
-        $rsm->addScalarResult('nb', 'nb');
-
-        $query = $this->_em->createNativeQuery('SELECT count(*) as nb FROM `tag` WHERE status = 0', $rsm);
-
-        $tag = $query->getScalarResult();
-
-        return $tag[0]['nb'];
+        return $this->createQueryBuilder('t')
+            ->select('count(t)')
+            ->where('t.status = :pending')
+            ->setParameter('pending', Tag::PENDING)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     public function findSearch( $search )
@@ -103,10 +98,10 @@ SQL;
     public function findTagsStandByWithNumberOfUse($start, $limit)
     {
         $qb = $this->createQueryBuilder('t')
-            ->select('t as tag, count(et) as nb')
-            ->leftJoin('CSISEamBundle:EquipmentTag', 'et', Join::WITH, 'et.tag = t.id')
-            ->groupBy('t.id')
+            ->select('t as tag, count(e) as nb')
+            ->leftJoin('t.equipments', 'e')
             ->orderBy('t.tag')
+            ->groupBy('t.id')
             ->where('t.status = :status')
             ->setParameter('status', Tag::PENDING)
             ->setFirstResult(($start-1)*$limit)
@@ -119,13 +114,29 @@ SQL;
     public function findTagsWithNumberOfUse($start, $limit)
     {
         $qb = $this->createQueryBuilder('t')
-            ->select('t as tag, count(et) as nb')
-            ->leftJoin('CSISEamBundle:EquipmentTag', 'et', Join::WITH, 'et.tag = t.id')
-            ->groupBy('t.id')
+            ->select('t as tag, count(e) as nb')
+            ->leftJoin('t.equipments', 'e')
             ->orderBy('t.tag')
+            ->groupBy('t.id')
             ->setFirstResult(($start-1)*$limit)
             ->setMaxResults($limit);
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param Tag $tag
+     *
+     * @return boolean
+     */
+    public function isTagUsed(Tag $tag)
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->join('t.equipments', 'e')
+            ->where('t.id = :tagId')
+            ->setParameter('tagId', $tag->getId())
+            ->select('count(e)');
+
+        return $qb->getQuery()->getSingleScalarResult() > 0;
     }
 }

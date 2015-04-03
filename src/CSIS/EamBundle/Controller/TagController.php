@@ -2,8 +2,8 @@
 
 namespace CSIS\EamBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use JMS\SecurityExtraBundle\Annotation\Secure;
@@ -12,11 +12,9 @@ use CSIS\EamBundle\Form\TagType;
 
 /**
  * Tag controller.
- *
  */
 class TagController extends Controller
 {
-
     /**
      * @Secure(roles="ROLE_GEST_TAGS")
      */
@@ -32,15 +30,14 @@ class TagController extends Controller
         $maxPerPage = $this->container->getParameter('csis_admin_views_max_in_lists'); // Nombre de entités par page
 
         // Handle tabs
-        if ( $onglet == "edit" ) {
+        if ($onglet == "edit") {
             $page_att = $page;
         } else {
             $page_all = $page;
         }
 
         /** Listes des tags **/
-        $em = $this->getDoctrine()->getManager(); // Récupère la base
-        $tagRepository = $em->getRepository('CSISEamBundle:Tag');
+        $tagRepository = $this->getDoctrine()->getRepository('CSISEamBundle:Tag');
 
         // Liste de tous les tags
         $tags_all = $tagRepository->findTagsWithNumberOfUse($page_all, $maxPerPage);
@@ -52,14 +49,14 @@ class TagController extends Controller
 
         // Affiche la page
         return $this->render('CSISEamBundle:Tag:index.html.twig', array(
-                    'form' => $form->createView(),
-                    'tags_all' => $tags_all,
-                    'tags_att' => $tags_att,
-                    'page_all' => $page_all,
-                    'page_att' => $page_att,
-                    'nbPages_all' => $nbPages_all,
-                    'nbPages_att' => $nbPages_att,
-                    'onglet' => $onglet,
+            'form' => $form->createView(),
+            'tags_all' => $tags_all,
+            'tags_att' => $tags_att,
+            'page_all' => $page_all,
+            'page_att' => $page_att,
+            'nbPages_all' => $nbPages_all,
+            'nbPages_att' => $nbPages_att,
+            'onglet' => $onglet,
         ));
     }
 
@@ -122,15 +119,15 @@ class TagController extends Controller
         $nbPages_s = ceil(count($tagRepository->findBy(array( 'status' => Tag::PENDING ))) / $maxPerPage);
 
         return $this->render('CSISEamBundle:Tag:edit.html.twig', array(
-                    'edit_form' => $editForm->createView(),
-                    'tags_all' => $entities,
-                    'tags_att' => $entities_s,
-                    'tag' => $entity,
-                    'page_all' => 1,
-                    'page_att' => 1,
-                    'nbPages_all' => $nbPages,
-                    'nbPages_att' => $nbPages_s,
-                    'onglet' => 'list',
+            'edit_form' => $editForm->createView(),
+            'tags_all' => $entities,
+            'tags_att' => $entities_s,
+            'tag' => $entity,
+            'page_all' => 1,
+            'page_att' => 1,
+            'nbPages_all' => $nbPages,
+            'nbPages_att' => $nbPages_s,
+            'onglet' => 'list',
         ));
     }
 
@@ -150,7 +147,7 @@ class TagController extends Controller
         $editForm = $this->createForm(new TagType(), $entity);
 
         // On récupère les données modifiées copié sur le formulaire + copié sur l'entité
-        $editForm->bind($request);
+        $editForm->handleRequest($request);
 
         // On vérifie si les valeurs saisies sont valides
         if ( $editForm->isValid() ) {
@@ -195,47 +192,43 @@ class TagController extends Controller
      */
     public function askDeleteAction(Tag $tag)
     {
-        $em = $this->getDoctrine()->getManager();
-        $equipmentTagRepository = $em->getRepository('CSISEamBundle:EquipmentTag');
-
+        $tagRepository = $this->getDoctrine()->getRepository('CSISEamBundle:Tag');
 
         // On vérifie si le tag existe
-        $exist = $equipmentTagRepository->isTagUsed($tag);
+        $exist = $tagRepository->isTagUsed($tag);
         if ($exist) {
-            $this->get('session')->getFlashBag()->add('main_error', 'Suppression impossible : le tag <strong>' . $tag->getTag() . '</strong>, est utilisé dans les équipements.');
+            $this->addFlash('main_error', 'Suppression impossible : le tag <strong>' . $tag->getTag() . '</strong>, est utilisé dans les équipements.');
         } else {
             // Message de confirmation
             $message = 'Etes-vous sûr de bien vouloir supprimer le tag <strong>' . $tag->getTag() . '</strong> ?';
             $message .= '&nbsp;&nbsp<a href="' . $this->generateUrl('tag_delete', array( 'id' => $tag->getId() )) . '">Oui</a>';
             $message .= '&nbsp;&nbsp<a href="' . $this->generateUrl('tag') . '">Non</a>';
-            $this->get('session')->getFlashBag()->add('main_valid', $message);
+            $this->addFlash('main_valid', $message);
         }
 
         // Redirection vers la page principale
-        return $this->redirect($this->generateUrl('tag'));
+        return $this->redirectToRoute('tag');
     }
 
     public function autocompleteAction( Request $request )
     {
-        $em = $this->getDoctrine()->getManager();
-        $tagRepo = $em->getRepository('CSISEamBundle:Tag');
-        $input = $request->request->get('input');
-
-        if ($request->isXmlHttpRequest()) {
-            $tags = $tagRepo->findAutocomplete($input);
-
-            $data = array( );
-            if ( count($tags) > 0 ) {
-                foreach ( $tags as $tag )
-                    $data[] = $tag->getTag();
-            } else {
-                $data[] = 'Aucun résulat trouvé.';
-            }
-
-            return new Response(json_encode($data));
+        if (!$request->isXmlHttpRequest()) {
+            throw new AccessDeniedHttpException('La page à laquelle vous tentez d\'accéder ne fonctionne que par ajax');
         }
 
-        throw new AccessDeniedHttpException('La page à laquelle vous tentez d\'accéder ne fonctionne que par ajax');
+        $tagRepo = $this->getDoctrine()->getRepository('CSISEamBundle:Tag');
+        $input = $request->request->get('input');
+        $tags = $tagRepo->findAutocomplete($input);
+        $data = array();
+        if (count($tags) > 0) {
+            foreach ($tags as $tag) {
+                $data[] = $tag->getTag();
+            }
+        } else {
+            $data[] = 'Aucun résulat trouvé.';
+        }
+
+        return new JsonResponse($data);
     }
 
     /**
@@ -248,8 +241,8 @@ class TagController extends Controller
         $em->remove($tag);
         $em->flush();
 
-        $this->get('session')->getFlashBag()->add('main_valid', 'Tag <strong>' . $tag->getTag() . '</strong>, supprimé !');
+        $this->addFlash('main_valid', 'Tag <strong>' . $tag->getTag() . '</strong>, supprimé !');
 
-        return $this->redirect($this->generateUrl('tag'));
+        return $this->redirectToRoute('tag');
     }
 }

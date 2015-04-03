@@ -85,10 +85,8 @@ class EquipmentType extends AbstractType
 
       if ($options['tags']) {
           $builder
-              ->add('equipmentTags', 'custom_equipment_tag_collection', array(
-                  'type' => new EquipmentTagType(),
-                  'allow_add' => true,
-                  'allow_delete' => true,
+              ->add('equipmentTags', 'entity', array(
+                  'data_class' => 'CSISEamBundle:Tag',
                   'by_reference' => false,
                   'prototype' => true,
               ))

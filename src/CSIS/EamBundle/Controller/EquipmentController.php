@@ -16,7 +16,6 @@ use CSIS\EamBundle\Entity\Tag;
 use CSIS\EamBundle\Form\EquipmentType;
 use CSIS\EamBundle\Form\EquipmentAddOwnerType;
 use CSIS\UserBundle\Entity\User;
-use CSIS\EamBundle\Entity\EquipmentTag;
 
 /**
  * This Controller allows to manage all actions of the Equipement entity
@@ -169,15 +168,7 @@ class EquipmentController extends Controller
             $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('tags' => true));
         }
 
-        /** @var EquipmentTag $equipmentTag */
-        $tags = new ArrayCollection();
-        foreach ($equipment->getEquipmentTags() as $equipmentTag) {
-            if ($equipmentTag->getStatus() == EquipmentTag::ACCEPTED && $equipmentTag->getId()) {
-                $tags->add($equipmentTag->getTag());
-            }
-        }
-        $suggestedTags = $this->getDoctrine()->getManager()->getRepository('CSISEamBundle:Tag')->findRelativeTags($tags);
-
+        $suggestedTags = $this->getDoctrine()->getRepository('CSISEamBundle:Tag')->findRelativeTags($equipment->getTags());
 
         return array(
             'equipment' => $equipment,
@@ -271,23 +262,7 @@ class EquipmentController extends Controller
             throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
         }
 
-        $equipmentTags = $equipment->getEquipmentTags();
-
-        $json = array('accepted' => array(), 'rejected' => array());
-
-        foreach ($equipmentTags as $equipmentTag)
-        {
-            if ($equipmentTag->getStatus() == EquipmentTag::ACCEPTED)
-            {
-                $json['accepted'][] = array('name' => $equipmentTag->getTag()->getTag(), 'status' => $equipmentTag->getTag()->getStatus());
-            }
-            elseif ($equipmentTag->getStatus() == EquipmentTag::REFUSED)
-            {
-                $json['rejected'][] = array('name' => $equipmentTag->getTag()->getTag(), 'status' => $equipmentTag->getTag()->getStatus());
-            }
-        }
-
-        return new JsonResponse($json);
+        return $equipment->getTags();
     }
 
     /**
@@ -299,8 +274,9 @@ class EquipmentController extends Controller
      */
     public function fetchRelativeTagsAction(Equipment $equipment, Request $request)
     {
-        if (!$request->isXmlHttpRequest())
+        if (!$request->isXmlHttpRequest()) {
             throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
+        }
 
         $tags = $equipment->getTags();
 
@@ -312,14 +288,11 @@ class EquipmentController extends Controller
 
         $relativesTag = array();
         foreach ( $newTags as $tag ) {
-            if ( !$tags->contains($tag['tag']) ) {
-                $relativesTag[] = array('name' => $tag['tag']->getTag(), 'status' => $tag['tag']->getStatus());
+            if (!$tags->contains($tag['tag'])) {
+                $relativesTag[] = $tag['tag'];
             }
         }
-
-        $json = array('suggested' => $relativesTag);
-
-        return new JsonResponse($json);
+        return $relativesTag;
     }
 
     /**
@@ -331,8 +304,9 @@ class EquipmentController extends Controller
      */
     public function updateTagsAction(Equipment $equipment, Request $request)
     {
-        if (!$request->isXmlHttpRequest())
+        if (!$request->isXmlHttpRequest()) {
             throw new AccessDeniedHttpException('The page you are requested is only avalaible by ajax requests');
+        }
 
         $em = $this->getDoctrine()->getManager();
         $tagRepo = $em->getRepository('CSISEamBundle:Tag');
@@ -340,48 +314,31 @@ class EquipmentController extends Controller
         $tags = $request->request->get('tags');
 
         // 1. On supprime tous les tags de l'équipement
-        $oldEquipmentTags = $equipment->getEquipmentTags();
-        foreach ($oldEquipmentTags as $equipmentTag)
+        $oldTags = $equipment->getTags();
+        /** @var Tag $tag */
+        foreach ($oldTags as $tag)
         {
-            $equipment->removeEquipmentTag($equipmentTag);
-            $equipmentTag->setTag(null);
-            $equipmentTag->setEquipment(null);
+            $equipment->removeTag($tag);
+            $tag->removeEquipment($equipment);
         }
 
         // 2. On traite les tags reçus en POST
         foreach ($tags as $tag => $status)
         {
-            $existingTag = $tagRepo->findOneByTag($tag);
+            $existingTag = $tagRepo->findOneBy(array('tag' => $tag));
 
             // Si le tag n'existe pas
-            if(!$existingTag)
-            {
+            if(!$existingTag) {
                 $existingTag = new Tag();
                 $existingTag->setTag($tag);
                 $existingTag->setStatus(false);
                 $existingTag->setLastEditDate(new \DateTime());
-
             }
 
-            $equipmentTag = new EquipmentTag();
-            $equipmentTag->setEquipment($equipment);
-            $equipmentTag->setTag($existingTag);
-
-            if ($status == 'accepted')
-            {
-                $equipmentTag->setStatus(EquipmentTag::ACCEPTED);
-            }
-            elseif ($status == 'rejected')
-            {
-                $equipmentTag->setStatus(EquipmentTag::REFUSED);
-            }
-            else
-            {
-                var_dump($status); die;
-            }
+            $existingTag->addEquipment($equipment);
+            $equipment->addTag($existingTag);
 
             $em->persist($existingTag);
-            $em->persist($equipmentTag);
             $em->persist($equipment);
         }
 
@@ -393,9 +350,9 @@ class EquipmentController extends Controller
     /**
      * Scan the Equipment and attach tags to it
      *
-     * @param \CSIS\EamBundle\Entity\Equipment $equipment
+     * @param Equipment $equipment
      */
-    protected function attachTags( Equipment $equipment, $andFlush = true )
+    protected function attachTags(Equipment $equipment, $andFlush = true )
     {
         $lab = $equipment->getLaboratory();
         $inst = $lab->getInstitution();
