@@ -101,14 +101,11 @@
          </ul>
   {% endif %}
 
-  {% if is_granted("ROLE_GEST_EQUIP") %}
-    {% if is_granted("ROLE_GEST_ESTAB") or is_granted("ROLE_GEST_LAB") %}<hr />{% endif %}
     <h4>Mes équipements</h4>
     <ul>
       <li><a href="{{ path('equipment') }}">Accéder à la liste de mes équipements</a></li>
       <li><a href="{{ path('equipment_new') }}">Créer un nouvel équipement</a></li>
     </ul>
-  {% endif %}
   </div>
     
 </div>

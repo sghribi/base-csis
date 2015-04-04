@@ -54,3 +54,8 @@ services:
             - %tag%
         tags:
             - { name: kernel.event_subscriber }
+
+    csis.voter.equipment:
+        class: CSIS\EamBundle\Security\Authorization\Voter\EquipmentVoter
+        tags:
+            - { name: security.voter }

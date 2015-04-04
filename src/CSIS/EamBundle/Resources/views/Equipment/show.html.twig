@@ -30,7 +30,7 @@
    
       {% include 'CSISEamBundle:Vitrine:card_equipment.html.twig' %}
 
-      {% if is_granted("ROLE_GEST_EQUIP") %}
+      {% if is_granted('edit', equipment) %}
           <hr/>
           <div class="pull-right">
               <a class="btn btn-success" href="{{ path('equipment_edit', { 'id': equipment.id }) }}">

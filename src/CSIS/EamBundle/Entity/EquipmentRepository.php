@@ -14,6 +14,19 @@ use CSIS\UserBundle\Entity\User;
  */
 class EquipmentRepository extends EntityRepository
 {
+    public function findAllHydrated()
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->select('e, l, i, u, t')
+            ->join('e.laboratory', 'l')
+            ->join('l.institution', 'i')
+            ->join('e.owners', 'u')
+            ->join('e.tags', 't')
+            ->orderBy('e.designation');
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findByOwners($user) {
         $qb = $this->createQueryBuilder('e');
         $qb = $this->qbByOwners($qb, $user);

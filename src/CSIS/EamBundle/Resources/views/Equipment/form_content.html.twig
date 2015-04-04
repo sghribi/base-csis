@@ -13,7 +13,12 @@
         <legend>
             Informations générales
         </legend>
-        {% set fields = [form.designation, form.brand, form.type, form.url, form.description, form.shared, form.laboratory] %}
+
+        {% if form.laboratory is defined %}
+            {% set fields = [form.designation, form.brand, form.type, form.url, form.description, form.shared, form.laboratory] %}
+        {% else %}
+            {% set fields = [form.designation, form.brand, form.type, form.url, form.description, form.shared] %}
+        {% endif %}
 
         {% for field in fields %}
             <div class="control-group">
@@ -47,23 +52,24 @@
         {% endfor %}
     </fieldset>
 
-    <fieldset>
-        <legend>
-            Propriétaires
-        </legend>
+    {% if is_granted('edit_owners', equipment) %}
+        <fieldset>
+            <legend>
+                Propriétaires
+            </legend>
 
-        <div class="owners offset1" data-prototype="{{ form_widget(form.owners.vars.prototype)|e }}">
-            {% for o in form.owners %}
-                {{ form_row(o) }}
-            {% endfor %}
-        </div>
-        <br/>
-        <a id="add_new_owner" class="btn btn-primary offset1">
-            <i class="icon-plus icon-white"></i>
-            &nbsp;Ajouter un propriétaire
-        </a>
-
-    </fieldset>
+            <div class="owners offset1" data-prototype="{{ form_widget(form.owners.vars.prototype)|e }}">
+                {% for o in form.owners %}
+                    {{ form_row(o) }}
+                {% endfor %}
+            </div>
+            <br/>
+            <a id="add_new_owner" class="btn btn-primary offset1">
+                <i class="icon-plus icon-white"></i>
+                &nbsp;Ajouter un propriétaire
+            </a>
+        </fieldset>
+    {% endif %}
 
     {{ form_rest(form) }}
 

@@ -57,14 +57,6 @@ class EquipmentType extends AbstractType
                 'attr' => array(),
                 'multiple' => false,
             ))
-            ->add('laboratory', 'entity', array(
-                'label' => 'Laboratoire :',
-                'class' => 'CSISEamBundle:Laboratory',
-                'query_builder' => function(LaboratoryRepository $er) use ($user) {
-                        return $er->getQbReachableLaboratoriesOrderedByAcronym($user);
-                    },
-                'attr' => array(),
-            ))
             ->add('building', null, array(
                 'label' => 'Bâtiment :',
                 'attr' => array(),
@@ -77,13 +69,31 @@ class EquipmentType extends AbstractType
                 'label' => 'Salle :',
                 'attr' => array(),
             ))
-            ->add('owners', 'collection', array(
-                'type' => 'csis_user_selector',
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-            ));
-    }
+        ;
+      }
+
+      if($options['owners']) {
+          $builder
+              ->add('owners', 'collection', array(
+              'type' => 'csis_user_selector',
+              'allow_add' => true,
+              'allow_delete' => true,
+              'by_reference' => false,
+          ));
+      }
+
+      if($options['laboratory']) {
+          $builder
+              ->add('laboratory', 'entity', array(
+                  'label' => 'Laboratoire :',
+                  'class' => 'CSISEamBundle:Laboratory',
+                  'query_builder' => function(LaboratoryRepository $er) use ($user) {
+                      return $er->getQbReachableLaboratoriesOrderedByAcronym($user);
+                  },
+                  'attr' => array(),
+              ))
+          ;
+      }
 
       if ($options['tags']) {
           $builder
@@ -104,10 +114,11 @@ class EquipmentType extends AbstractType
   {
     $resolver->setDefaults(array(
         'data_class' => 'CSIS\EamBundle\Entity\Equipment',
-        'cascade_validation' => true,
         'summary' => false,
         'tags' => false,
+        'owners' => false,
         'equipment' => null,
+        'laboratory' => null,
     ));
   }
 

@@ -2,9 +2,10 @@
 
 namespace CSIS\EamBundle\Controller;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use CSIS\EamBundle\Security\Authorization\Voter\EquipmentVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,7 @@ class EquipmentController extends Controller
     /**
      * Displays all reachable Equipments to the user
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Secure(roles="ROLE_USER")
      * @Template("CSISEamBundle:Equipment:index.html.twig")
      * @Route("/", name="equipment")
      * @Method({"GET"})
@@ -35,9 +36,7 @@ class EquipmentController extends Controller
     public function indexAction()
     {
         $repo = $this->getDoctrine()->getManager()->getRepository('CSISEamBundle:Equipment');
-        $user = $this->getUser();
-
-        $entities = $repo->findByOwnersOrderByDesignation($user);
+        $entities = $repo->findAllHydrated();
 
         return array(
             'entities' => $entities,
@@ -47,10 +46,11 @@ class EquipmentController extends Controller
     /**
      * Displays the requested Equipment
      *
-     * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
+     * @Security("is_granted('view', equipment)")
      * @Route("/{id}", name="equipment_show", requirements={"id" = "\d+"}, options={"expose": true})
      * @Method({"GET"})
      * @Template("CSISEamBundle:Equipment:show.html.twig")
+     *
      */
     public function showAction(Equipment $equipment)
     {
@@ -90,7 +90,12 @@ class EquipmentController extends Controller
     {
         $equipment = new Equipment();
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true, 'equipment' => $equipment));
+        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array(
+            'summary' => true,
+            'equipment' => $equipment,
+            'owners' => true,
+            'laboratory' => true,
+        ));
 
         $form->handleRequest($request);
 
@@ -123,7 +128,7 @@ class EquipmentController extends Controller
     /**
      * Displays a form for Equipment edition
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Security("is_granted('edit', equipment)")
      * @Template("CSISEamBundle:Equipment:edit.html.twig")
      * @Route("/{id}/edit", name="equipment_edit", requirements={"id" = "\d+"})
      * @Method({"GET"})
@@ -134,7 +139,12 @@ class EquipmentController extends Controller
             $equipment->getOwners()->add(new User());
         }
 
-        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true, 'equipment' => $equipment));
+        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment, array(
+            'summary' => true,
+            'equipment' => $equipment,
+            'owners' => $this->isGranted(EquipmentVoter::EDIT_OWNERS, $equipment),
+            'laboratory' => $this->isGranted('ROLE_GEST_EQUIP'),
+        ));
 
         return array(
             'equipment' => $equipment,
@@ -145,7 +155,7 @@ class EquipmentController extends Controller
     /**
      * Displays a widget for tags edition for an Equipment
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Security("is_granted('edit', equipment)")
      * @Template("CSISEamBundle:Equipment:editTags.html.twig")
      * @Route("/{id}/edit/tags", name="equipment_edit_tags", requirements={"id" = "\d+"})
      * @Method({"GET", "POST"})
@@ -176,14 +186,19 @@ class EquipmentController extends Controller
     /**
      * Receives the POST data in order to edit an Equipment
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Security("is_granted('edit', equipment)")
      * @Template("CSISEamBundle:Equipment:edit.html.twig")
      * @Route("/{id}/edit", name="equipment_update", requirements={"id" = "\d+"})
      * @Method({"POST"})
      */
     public function updateAction(Request $request, Equipment $equipment)
     {
-        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true, 'equipment' => $equipment));
+        $editForm = $this->createForm(new EquipmentType($this->getUser()), $equipment, array(
+            'summary' => true,
+            'equipment' => $equipment,
+            'owners' => $this->isGranted(EquipmentVoter::EDIT_OWNERS, $equipment),
+            'laboratory' => $this->isGranted('ROLE_GEST_EQUIP'),
+        ));
 
         $editForm->handleRequest($request);
 
@@ -209,25 +224,24 @@ class EquipmentController extends Controller
     /**
      * Displays to the user a message in order to confirm the removal of the Equipment entity
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Security("is_granted('edit', equipment)")
      * @Route("/{id}/ask_delete", name="equipment_ask_delete", requirements={"id" = "\d+"})
      */
-    public function askDeleteAction( Equipment $entity )
+    public function askDeleteAction( Equipment $equipment )
     {
-        // Message de confirmation
         $this->addFlash(
                 'valid', sprintf('Etes-vous sûr de bien vouloir supprimer l\'équipement <strong>%1$s</strong> ?'
-                        . '&nbsp;&nbsp<a href="%2$s">Oui</a>&nbsp;/&nbsp;<a href="%3$s">Non</a>', $entity->getDesignation(), $this->generateUrl('equipment_delete', array( 'id' => $entity->getId() )), $this->generateUrl('equipment')
+                        . '&nbsp;&nbsp<a href="%2$s">Oui</a>&nbsp;/&nbsp;<a href="%3$s">Non</a>', $equipment->getDesignation(), $this->generateUrl('equipment_delete', array( 'id' => $equipment->getId() )), $this->generateUrl('equipment')
                 )
         );
-        // Redirection vers la page principale
-        return $this->redirect($this->generateUrl('equipment'));
+
+        return $this->redirectToRoute('equipment');
     }
 
     /**
      * Remove the requested Equipment
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Security("is_granted('edit', equipment)")
      * @Route("/{id}/delete", name="equipment_delete", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
@@ -247,7 +261,7 @@ class EquipmentController extends Controller
     /**
      * Fetch tags for an Equipment
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Security("is_granted('edit', equipment)")
      * @Route("/{id}/edit/tags/fetch", name="equipment_fetch_tags", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
@@ -263,7 +277,7 @@ class EquipmentController extends Controller
     /**
      * Fetch relative tags for an Equipment
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Security("is_granted('edit', equipment)")
      * @Route("/{id}/edit/tags/relatives", name="equipment_fetch_relative_tags", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
@@ -293,7 +307,7 @@ class EquipmentController extends Controller
     /**
      * Update tags for an Equipment
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Security("is_granted('edit', equipment)")
      * @Route("/{id}/edit/tags/update", name="equipment_update_tags", requirements={"id" = "\d+"})
      * @Method({"POST"})
      */
