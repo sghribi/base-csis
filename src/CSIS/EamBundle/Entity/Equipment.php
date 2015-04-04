@@ -158,9 +158,17 @@ class Equipment
     private $url;
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf('%s [#%s]', $this->designation, $this->id);
+    }
+
+    /**
      * Constructor of the class
      */
-    function __construct()
+    public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->owners = new ArrayCollection();
