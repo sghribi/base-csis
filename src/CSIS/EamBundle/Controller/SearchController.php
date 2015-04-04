@@ -80,7 +80,7 @@ class SearchController extends Controller
 
         $equipmentsName = $em->getRepository('CSISEamBundle:Equipment')->searchByName($term);
         $equipmentsTags = $em->getRepository('CSISEamBundle:Equipment')->searchByTags($term);
-        $equipments = array_merge($equipmentsName, $equipmentsTags);
+        $equipments = array_unique(array_merge($equipmentsName, $equipmentsTags));
         $nbResults = count($equipments);
         $equipments = $this->splitEqpmtsByLetter($equipments);
         ksort($equipments);
