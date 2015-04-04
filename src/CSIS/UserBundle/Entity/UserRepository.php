@@ -15,13 +15,12 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class UserRepository extends EntityRepository
 {
-    public function findAllOrderByNameByEnabledPaginated($start, $limit)
+    public function findAllOrderByName()
     {
         $qb = $this->createQueryBuilder('u');
         $qb = $this->qbOrderByName($qb);
-        $qb = $this->qbPaginate($qb, $start, $limit);
-        
-        return new Paginator($qb);
+
+        return $qb->getQuery()->getResult();
     }
     
     public function getQbfindAllWithEstabRole() {

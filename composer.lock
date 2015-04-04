@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "63fc280aa73675ad081b7f944a0e8f5a",
+    "hash": "b3f771290704a5002163b866a73bf0f4",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -56,6 +56,29 @@
                 "shasum": null
             },
             "type": "library"
+        },
+        {
+            "name": "datatables/datatables",
+            "version": "1.10.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DataTables/DataTables.git",
+                "reference": "34abc58d70949446e556c212e7e625e6cc6fd3b5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DataTables/DataTables/zipball/34abc58d70949446e556c212e7e625e6cc6fd3b5",
+                "reference": "34abc58d70949446e556c212e7e625e6cc6fd3b5",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "DataTables is a plug-in for the jQuery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table.",
+            "homepage": "http://www.datatables.net/",
+            "time": "2015-04-03 13:47:53"
         },
         {
             "name": "doctrine/annotations",

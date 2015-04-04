@@ -39,30 +39,17 @@ class InstitutionRepository extends EntityRepository
       
       return $qb->getQuery()->getResult();
     }
-    
-    /*
-     * used by admin index
-     */
-    public function findByOwnersOrderByEditDatePaginated(User $user, $start, $limit) {
-        $qb = $this->createQueryBuilder('i');
-        $qb = $this->qbByOwners($qb, $user);
-        $qb = $this->qbOderByEditDate($qb);
-        $qb = $this->qbPaginate($qb, $start, $limit);
-        
-        return new Paginator($qb);
-    }
-    
+
     /*
      * used by institution index
      */
-    public function findByOwnerOrderByAcronymPaginated(User $user,$start, $limit) {
+    public function findByOwnerOrderByAcronym(User $user) {
         $qb = $this->createQueryBuilder('i');
         $qb = $this->qbByOwners($qb, $user);
         $qb = $this->qbReachByUser($qb, $user);
         $qb = $this->qbOrderByAcronym($qb);
-        $qb = $this->qbPaginate($qb, $start, $limit);
-        
-        return new Paginator($qb);
+
+        return $qb->getQuery()->getResult();
     }
     
     public function getQbReachableInstitutions($user) {
@@ -103,14 +90,5 @@ class InstitutionRepository extends EntityRepository
     
     private function qbOrderByAcronym(QueryBuilder $qb) {
         return $qb->orderBy('i.acronym', 'ASC');
-    }
-
-    private function qbPaginate(QueryBuilder $qb, $start, $limit) {
-        if ($start < 1) {
-            throw new \InvalidArgumentException('L\'argument $start ne peut être inférieur à 1 (valeur : "' . $start . '").');
-        }
-
-        return $qb->setFirstResult(($start - 1) * $limit)
-                  ->setMaxResults($limit);
     }
 }

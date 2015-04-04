@@ -50,8 +50,6 @@ stof_doctrine_extensions:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-    globals:
-        csis_max_in_pagination : %csis_max_in_pagination%
     form:
         resources: 
             - 'CSISEamBundle:Form:fields_errors.html.twig'

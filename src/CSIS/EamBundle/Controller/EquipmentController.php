@@ -32,19 +32,15 @@ class EquipmentController extends Controller
      * @Route("/", name="equipment")
      * @Method({"GET"})
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $repo = $this->getDoctrine()->getManager()->getRepository('CSISEamBundle:Equipment');
         $user = $this->getUser();
-        $maxPerPage = $this->container->getParameter('csis_admin_views_max_in_lists');
-        $page = $request->query->get('page', 1);
 
-        $entities = $repo->findByOwnersOrderByDesignationPaginated($user, $page, $maxPerPage);
+        $entities = $repo->findByOwnersOrderByDesignation($user);
 
         return array(
             'entities' => $entities,
-            'page' => $page,
-            'nbPages' => ceil(count($entities) / $maxPerPage),
         );
     }
 

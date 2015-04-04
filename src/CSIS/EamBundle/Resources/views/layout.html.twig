@@ -9,10 +9,41 @@
 <link rel="stylesheet" type="text/css" href="{{ asset("css/main.css") }}">
 <link rel="stylesheet" type="text/css" href="{{ asset("css/chosen.min.css") }}">
 {% stylesheets output="css/csis.css"
+    '../vendor/datatables/datatables/media/css/jquery.dataTables.min.css'
     '@CSISEamBundle/Resources/public/less/csis.less'
 %}
     <link href="{{ asset_url }}" rel="stylesheet" media="screen">
 {% endstylesheets %}
+{% image
+'../vendor/datatables/datatables/media/images/sort_asc.png'
+output='images/sort_asc.png'
+%}
+{% endimage %}
+{% image
+'../vendor/datatables/datatables/media/images/sort_asc.png'
+output='images/sort_asc.png'
+%}
+{% endimage %}
+{% image
+'../vendor/datatables/datatables/media/images/sort_desc.png'
+output='images/sort_desc.png'
+%}
+{% endimage %}
+{% image
+'../vendor/datatables/datatables/media/images/sort_asc_disabled.png'
+output='images/sort_asc_disabled.png'
+%}
+{% endimage %}
+{% image
+'../vendor/datatables/datatables/media/images/sort_both.png'
+output='images/sort_both.png'
+%}
+{% endimage %}
+{% image
+'../vendor/datatables/datatables/media/images/sort_asc.png'
+output='images/sort_asc.png'
+%}
+{% endimage %}
 {% endblock %}
 
 {% block javascripts %}
@@ -28,6 +59,7 @@
     '../vendor/twitter/typeahead.js/dist/typeahead.bundle.js'
     '../vendor/twitter/typeahead.js/dist/typeahead.jquery.js'
     '../vendor/components/handlebars.js/handlebars.js'
+    '../vendor/datatables/datatables/media/js/jquery.dataTables.min.js'
     'bundles/fosjsrouting/js/router.js'
     '@CSISEamBundle/Resources/public/js/csis-search.js'
     '@CSISEamBundle/Resources/public/js/csis.js'
@@ -37,6 +69,7 @@
 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 {% block page_js %}{% endblock %}
 {% endblock %}
+
 
 {% block body %}
 

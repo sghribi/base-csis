@@ -31,7 +31,8 @@
     "hammerjs/jquery.hammer.js": "2.0.0",
     "friendsofsymfony/jsrouting-bundle": "2.0.*@dev",
     "oyejorge/less.php": "~1.5",
-    "components/handlebars.js": "3.0.0"
+    "components/handlebars.js": "3.0.0",
+    "datatables/datatables": "1.10.6"
   },
   "scripts": {
     "post-install-cmd": [

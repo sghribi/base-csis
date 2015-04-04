@@ -3,7 +3,6 @@
 namespace CSIS\EamBundle\Controller;
 
 use CSIS\EamBundle\Form\InstitutionEditOwnersType;
-use CSIS\EamBundle\Form\LaboratoryEditOwnersType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -28,20 +27,16 @@ class InstitutionController extends Controller {
      * Lists all Institution entities.
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Institution:index.html.twig")
-     * @Route("/{page}", name="institution", requirements={"page" = "\d+"}, defaults={"page" = 1})
+     * @Route("/", name="institution")
      */
-    public function indexAction($page)
+    public function indexAction()
     {
         $em = $this->getDoctrine();
-
-        $maxPerPage = $this->container->getParameter('csis_admin_views_max_in_lists');
         $user = $this->getUser();
-        $institutions = $em->getRepository('CSISEamBundle:Institution')->findByOwnerOrderByAcronymPaginated($user, $page, $maxPerPage);
+        $institutions = $em->getRepository('CSISEamBundle:Institution')->findByOwnerOrderByAcronym($user);
 
         return array(
             'institutions' => $institutions,
-            'page' => $page,
-            'nbPages' => ceil(count($institutions) / $maxPerPage)
         );
     }
 

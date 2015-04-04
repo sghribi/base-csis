@@ -16,7 +16,7 @@
               
         {# Liste des tags #}
         <div class="tab-pane{% if onglet != 'edit' %} active{% endif %}" id="list">
-          <table class="table table-striped table-hover">
+          <table class="table table-striped table-hover csis-datatable">
             <thead>
               <tr>
                 <th>Tag</th>
@@ -50,7 +50,7 @@
               {% else %}
               <tr>
                 <td>
-                  <strong>Il n'y a aucun tag à afficher pour la page {{ page_all }} !</strong><br />
+                  <strong>Il n'y a aucun tag à afficher.</strong><br />
                   <a href="{{ path('tag') }}">Retour</a>
                 </td>
                 <td>&nbsp;</td><td>&nbsp;</td>
@@ -59,14 +59,13 @@
               {% endfor %}
             </tbody>
           </table>  
-          {{ pagination.pagination_onglet('tag', page_all, nbPages_all, 'list') }} 
         </div>
         {# Fin liste des tags #}
 
         {# Liste des tags en attente #}
         {% if is_granted("ROLE_GEST_TAGS") %}
         <div class="tab-pane{% if onglet == 'edit' %} active{% endif %}" id="edit">
-          <table class="table table-striped table-hover">
+          <table class="table table-striped table-hover csis-datatable">
             <thead>
               <tr>
                 <th>Tag</th>
@@ -97,7 +96,6 @@
               {% endfor %}
             </tbody>
           </table>
-          {{ pagination.pagination_onglet('tag', page_att, nbPages_att, 'edit') }} 
         </div>
         {% endif %}
         {# Fin liste des tags en attente #}

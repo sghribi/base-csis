@@ -4,7 +4,6 @@ namespace CSIS\EamBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use CSIS\UserBundle\Entity\User;
 
 /**
@@ -37,30 +36,19 @@ class EquipmentRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findByOwnersOrderByDesignationPaginated(User $user, $start, $limit) {
+    public function findByOwnersOrderByDesignation(User $user) {
         $qb = $this->createQueryBuilder('e');
         $qb = $this->qbByOwners($qb, $user);
         $qb = $this->qbOrderByDesignation($qb);
-        $qb = $this->qbPaginate($qb, $start, $limit);
 
-        return new Paginator($qb);
+        return $qb->getQuery()->getResult();
     }
 
-    public function findByOwnerPaginated(User $user, $start, $limit) {
+    public function findByOwner(User $user) {
         $qb = $this->createQueryBuilder('e');
         $qb = $this->qbByOwners($qb, $user);
-        $qb = $this->qbPaginate($qb, $start, $limit);
 
-        return new Paginator($qb);
-    }
-
-    public function findByOwnersOrderByEditDatePaginated(User $user, $start, $limit) {
-        $qb = $this->createQueryBuilder('e');
-        $qb = $this->qbByOwners($qb, $user);
-        $qb = $this->qbOrderByEditDate($qb);
-        $qb = $this->qbPaginate($qb, $start, $limit);
-
-        return new Paginator($qb);
+        return $qb->getQuery()->getResult();
     }
 
     private function qbByOwners(QueryBuilder $qb, User $user) {
@@ -108,14 +96,6 @@ class EquipmentRepository extends EntityRepository
         return $qb->orderBy('e.lastEditDate', 'DESC');
     }
 
-    private function qbPaginate(QueryBuilder $qb, $start, $limit) {
-        if ($start < 1) {
-            throw new \InvalidArgumentException('L\'argument $start ne peut être inférieur à 1 (valeur : "' . $start . '").');
-        }
-
-        return $qb->setFirstResult(($start - 1) * $limit)
-                        ->setMaxResults($limit);
-    }
 
     public function findSearchedEquipments($superSearch) {
         $stringResult = "SELECT e FROM CSISEamBundle:Equipment e ";

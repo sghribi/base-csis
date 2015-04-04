@@ -13,5 +13,3 @@ parameters:
 
     locale:            fr
     secret:            ThisTokenIsNotSoSecretChangeIt 
-
-    csis_max_in_pagination: 4

@@ -26,21 +26,16 @@ class LaboratoryController extends Controller
      * Lists all Laboratory entities.
      * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Laboratory:index.html.twig")
-     * @Route("/{page}", name="laboratory", requirements={"page" = "\d+"}, defaults={"page" = 1})
+     * @Route("/", name="laboratory")
      */
-    public function indexAction($page)
+    public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $maxPerPage = $this->container->getParameter('csis_admin_views_max_in_lists');
         $user = $this->getUser();
-
-        $laboratories = $em->getRepository('CSISEamBundle:Laboratory')->findByOwnerOrderByAcronymPaginated($user, $page, $maxPerPage);
+        $laboratories = $em->getRepository('CSISEamBundle:Laboratory')->findByOwnerOrderByAcronym($user);
 
         return array(
             'laboratories' => $laboratories,
-            'page' => $page,
-            'nbPages' => ceil(count($laboratories) / $maxPerPage),
         );
     }
 

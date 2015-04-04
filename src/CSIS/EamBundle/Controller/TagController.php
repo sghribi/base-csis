@@ -18,44 +18,26 @@ class TagController extends Controller
     /**
      * @Secure(roles="ROLE_GEST_TAGS")
      */
-    public function indexAction($onglet, $page)
+    public function indexAction($onglet)
     {
         // Tag form creation
         $tag = new Tag();
         $form = $this->createForm(new TagType(), $tag);
 
-        // Useful vars
-        $page_all = 1; // Numéro de page pour tous les tags
-        $page_att = 1; // Numéro de page pour les en attentes
-        $maxPerPage = $this->container->getParameter('csis_admin_views_max_in_lists'); // Nombre de entités par page
-
         // Handle tabs
-        if ($onglet == "edit") {
-            $page_att = $page;
-        } else {
-            $page_all = $page;
-        }
-
         /** Listes des tags **/
         $tagRepository = $this->getDoctrine()->getRepository('CSISEamBundle:Tag');
 
         // Liste de tous les tags
-        $tags_all = $tagRepository->findTagsWithNumberOfUse($page_all, $maxPerPage);
+        $tags_all = $tagRepository->findTagsWithNumberOfUse();
         // Liste des tags ayant comme status en attente
-        $tags_att = $tagRepository->findTagsStandByWithNumberOfUse($page_att, $maxPerPage);
-
-        $nbPages_all = ceil(count($tagRepository->findAll()) / $maxPerPage);
-        $nbPages_att = ceil(count($tagRepository->findBy(array( 'status' => 0 ))) / $maxPerPage);
+        $tags_att = $tagRepository->findTagsStandByWithNumberOfUse();
 
         // Affiche la page
         return $this->render('CSISEamBundle:Tag:index.html.twig', array(
             'form' => $form->createView(),
             'tags_all' => $tags_all,
             'tags_att' => $tags_att,
-            'page_all' => $page_all,
-            'page_att' => $page_att,
-            'nbPages_all' => $nbPages_all,
-            'nbPages_att' => $nbPages_att,
             'onglet' => $onglet,
         ));
     }

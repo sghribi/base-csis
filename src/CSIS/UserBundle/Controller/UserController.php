@@ -24,20 +24,16 @@ class UserController extends Controller
      * @Secure(roles="ROLE_GEST_USER")
      * @Template("CSISUserBundle:Admin:index.html.twig")
      */
-    public function indexAction($page)
+    public function indexAction()
     {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $userRepo = $em->getRepository('CSISUserBundle:User');
-        $maxPerPage = $this->container->getParameter('csis_user_max_per_page');
-        
-        $users = $userRepo->findAllOrderByNameByEnabledPaginated($page, $maxPerPage);
+
+        $users = $userRepo->findAllOrderByName();
 
         return array(
             'users' => $users,
-            'maxPerPage' => $maxPerPage,
-            'page' => $page,
-            'nbPages'  => ceil( count($users) / $maxPerPage ),
         );
     }
 

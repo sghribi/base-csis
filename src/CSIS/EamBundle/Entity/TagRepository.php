@@ -99,7 +99,7 @@ SQL;
         return $qb->getQuery()->getResult();
     }
 
-    public function findTagsStandByWithNumberOfUse($start, $limit)
+    public function findTagsStandByWithNumberOfUse()
     {
         $qb = $this->createQueryBuilder('t')
             ->select('t as tag, count(e) as nb')
@@ -107,23 +107,19 @@ SQL;
             ->orderBy('t.tag')
             ->groupBy('t.id')
             ->where('t.status = :status')
-            ->setParameter('status', Tag::PENDING)
-            ->setFirstResult(($start-1)*$limit)
-            ->setMaxResults($limit);
+            ->setParameter('status', Tag::PENDING);
 
         return $qb->getQuery()->getResult();
     }
 
 
-    public function findTagsWithNumberOfUse($start, $limit)
+    public function findTagsWithNumberOfUse()
     {
         $qb = $this->createQueryBuilder('t')
             ->select('t as tag, count(e) as nb')
             ->leftJoin('t.equipments', 'e')
             ->orderBy('t.tag')
-            ->groupBy('t.id')
-            ->setFirstResult(($start-1)*$limit)
-            ->setMaxResults($limit);
+            ->groupBy('t.id');
 
         return $qb->getQuery()->getResult();
     }
