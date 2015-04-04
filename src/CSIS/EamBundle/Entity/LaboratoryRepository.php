@@ -69,25 +69,27 @@ class LaboratoryRepository extends EntityRepository {
     }
     
     private function qbReachByUser(QueryBuilder $qb, User $user) {
-        if ( !$user->hasRole('ROLE_GEST_ESTAB')) {
-            return $qb->orWhere($qb->expr()->eq('l', ':laboratory'))
-                      ->orWhere($qb->expr()->eq('l.institution', ':institution'))
-                      ->setParameter('institution', $user->getInstitution())
-                      ->setParameter('laboratory', $user->getLab());
-        } else {
+        if ($user->hasRole('ROLE_GEST_ESTAB') || $user->hasRole('ROLE_ADMIN')) {
             return $qb;
         }
+
+        return $qb
+            ->orWhere($qb->expr()->eq('l', ':laboratory'))
+            ->orWhere($qb->expr()->eq('l.institution', ':institution'))
+            ->setParameter('institution', $user->getInstitution())
+            ->setParameter('laboratory', $user->getLab());
     }
 
     private function qbByOwners(QueryBuilder $qb, User $user) {
-        if ( !$user->hasRole('ROLE_GEST_ESTAB') ) {
-            return $qb->leftJoin('l.institution', 'i')
-                      ->orWhere(':user MEMBER OF l.owners')
-                      ->orWhere(':user MEMBER OF i.owners')
-                      ->setParameter('user', $user);
-        } else {
+        if ($user->hasRole('ROLE_GEST_ESTAB') || $user->hasRole('ROLE_ADMIN')) {
             return $qb;
         }
+
+        return $qb
+            ->leftJoin('l.institution', 'i')
+            ->orWhere(':user MEMBER OF l.owners')
+            ->orWhere(':user MEMBER OF i.owners')
+            ->setParameter('user', $user);
     }
 
     private function qbOderByEditDate(QueryBuilder $qb) {

@@ -65,7 +65,7 @@ class Tag
     /**
      * @var ArrayCollection $equipments
      *
-     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Equipment", mappedBy="tags", cascade={"all"})
+     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Equipment", mappedBy="tags", cascade={"persist"})
      */
     private $equipments;
 

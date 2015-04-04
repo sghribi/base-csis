@@ -80,21 +80,21 @@ class InstitutionRepository extends EntityRepository
     }
     
     private function qbReachByUser(QueryBuilder $qb, User $user) {
-        if ( !$user->hasRole('ROLE_GEST_ESTAB') ) {
-            return $qb->orWhere($qb->expr()->eq('i', ':institution'))
-                      ->setParameter('institution', $user->getInstitution());
-        } else {
+        if ($user->hasRole('ROLE_GEST_ESTAB') || $user->hasRole('ROLE_ADMIN')) {
             return $qb;
         }
+
+        return $qb->orWhere($qb->expr()->eq('i', ':institution'))
+                  ->setParameter('institution', $user->getInstitution());
     }
 
     private function qbByOwners(QueryBuilder $qb, User $user) {
-        if ( !$user->hasRole('ROLE_GEST_ESTAB') ) {
-            return $qb->orWhere(':user MEMBER OF i.owners')
-                      ->setParameter('user', $user);
-        } else {
+        if ($user->hasRole('ROLE_GEST_ESTAB') || $user->hasRole('ROLE_ADMIN')) {
             return $qb;
         }
+
+        return $qb->orWhere(':user MEMBER OF i.owners')
+                      ->setParameter('user', $user);
     }
 
     private function qbOderByEditDate(QueryBuilder $qb) {

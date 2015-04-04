@@ -19,7 +19,6 @@ class UserRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('u');
         $qb = $this->qbOrderByName($qb);
-        $qb = $this->qbOrderByEnabled($qb);
         $qb = $this->qbPaginate($qb, $start, $limit);
         
         return new Paginator($qb);
@@ -108,11 +107,6 @@ class UserRepository extends EntityRepository
     {
         return $qb->orderBy('u.lastName', 'ASC')
                 ->addOrderBy('u.firstName', 'ASC');
-    }
-
-    private function qbOrderByEnabled(QueryBuilder $qb)
-    {
-        return $qb->orderBy('u.enabled', 'ASC');
     }
 
     private function qbPaginate(QueryBuilder $qb, $start, $limit)

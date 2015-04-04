@@ -235,15 +235,14 @@ class EquipmentController extends Controller
      * @Route("/{id}/delete", name="equipment_delete", requirements={"id" = "\d+"})
      * @Method({"GET"})
      */
-    public function deleteAction(Equipment $entity)
+    public function deleteAction(Equipment $equipment)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $em->remove($entity);
+        $em->remove($equipment);
         $em->flush();
 
         $this->addFlash(
-                'valid', sprintf('Equipement <strong>%s</strong> supprimé !', $entity->getDesignation())
+                'valid', sprintf('Equipement <strong>%s</strong> supprimé !', $equipment->getDesignation())
         );
 
         return $this->redirect($this->generateUrl('equipment'));

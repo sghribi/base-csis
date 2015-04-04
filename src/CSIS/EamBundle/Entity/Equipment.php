@@ -32,7 +32,7 @@ class Equipment
     /**
      * @var ArrayCollection $users
      *
-     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Tag", inversedBy="equipments", cascade={"all"})
+     * @ORM\ManyToMany(targetEntity="CSIS\EamBundle\Entity\Tag", inversedBy="equipments", cascade={"persist"})
      * @ORM\JoinTable(
      *     name="equipment_tag",
      *     joinColumns={@ORM\JoinColumn(name="equipment_id", referencedColumnName="id")},
