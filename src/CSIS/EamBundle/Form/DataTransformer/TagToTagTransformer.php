@@ -3,13 +3,17 @@
 namespace CSIS\EamBundle\Form\DataTransformer;
 
 use CSIS\EamBundle\Entity\Equipment;
+use CSIS\EamBundle\Event\TagEvent;
+use CSIS\EamBundle\Events;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use CSIS\EamBundle\Entity\Tag;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class TagToTagTransformer
@@ -32,15 +36,36 @@ class TagToTagTransformer implements DataTransformerInterface
     private $equipment;
 
     /**
-     * @param EntityManager     $em
-     * @param SessionInterface  $session
-     * @param Equipment         $equipment
+     * @var EventDispatcherInterface
      */
-    public function __construct(EntityManager $em, SessionInterface $session, Equipment $equipment)
+    private $dispatcher;
+
+    /**
+     * @var UserInterface
+     */
+    private $user;
+
+
+    /**
+     * @param EntityManager             $em
+     * @param SessionInterface          $session
+     * @param Equipment                 $equipment
+     * @param EventDispatcherInterface  $dispatcher
+     * @param UserInterface             $user
+     */
+    public function __construct(
+        EntityManager $em,
+        SessionInterface $session,
+        Equipment $equipment,
+        EventDispatcherInterface $dispatcher,
+        UserInterface $user
+    )
     {
         $this->em = $em;
         $this->session = $session;
         $this->equipment = $equipment;
+        $this->dispatcher = $dispatcher;
+        $this->user = $user;
     }
 
     /**
@@ -92,6 +117,8 @@ class TagToTagTransformer implements DataTransformerInterface
             $equipment->addTag($tag);
             $this->em->persist($tag);
             $this->em->flush();
+
+            $this->dispatcher->dispatch(Events::TAG_CREATED, new TagEvent($tag, $equipment, $this->user));
 
             $this->session->getFlashBag()->add(
                     'main_valid',

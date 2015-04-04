@@ -105,3 +105,12 @@ fos_rest:
     format_listener: true
     view:
         view_response_listener: 'force'
+
+# CSIS Parameters
+parameters:
+    tag:
+        email:
+            template: CSISEamBundle:Tag:email.txt.twig
+            from_email:
+                address: noreply@csis-saclay.net
+                sender_name: Base de donnée équipement

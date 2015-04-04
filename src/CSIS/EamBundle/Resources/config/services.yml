@@ -13,6 +13,8 @@ services:
         arguments:
             - @doctrine.orm.default_entity_manager
             - @session
+            - @event_dispatcher
+            - @security.context
         tags:
             - { name: form.type, alias: csis_tags_selector }
     
@@ -41,3 +43,14 @@ services:
       class: CSIS\EamBundle\Form\CustomEquipmentTagCollectionType
       tags:
         - { name: form.type, alias: custom_equipment_tag_collection }
+
+    csis.listener.tag:
+        class:      CSIS\EamBundle\Listener\TagListener
+        arguments:
+            - @swiftmailer.mailer
+            - @router
+            - @twig
+            - @doctrine.orm.default_entity_manager
+            - %tag%
+        tags:
+            - { name: kernel.event_subscriber }

@@ -1,0 +1,18 @@
+{% block subject %}
+    {% autoescape false %}
+    Nouveau tag sur la base de données CSIS
+    {% endautoescape %}
+{% endblock %}
+{% block body_text %}
+    {% autoescape false %}
+    Bonjour
+
+    L'utilisateur {{ tagCreator.username }} ({{ tagCreator.firstName }} {{ tagCreator.lastName }}) a créé le tag {{ tag.tag }} sur l'équipement {{ equipment.designation }}.
+
+    Vous pouvez accepter ou refuser ce tag à cette adresse : {{ url }}
+
+    Bien cordialement,
+    Base de données CSIS
+    {% endautoescape %}
+{% endblock %}
+{% block body_html %}{% endblock %}
