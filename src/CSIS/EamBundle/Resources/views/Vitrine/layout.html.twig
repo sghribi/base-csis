@@ -7,30 +7,36 @@
     <li class="active">Tous les équipements</li>
 </ul>
 
-<h2>Vitrine des équipements</h2>
+{% if search is not defined %}
+    <h2>Vitrine des équipements</h2>
+{% else %}
+    <h2>Résultats de la recherche <strong>"{{ search }}"</strong> <small>{{ nbResults }} résultat(s)</small></h2>
+{% endif %}
 
 <div class="row">
     <div class="span4">
         <div class="well" style="max-width: 340px; padding: 8px 0;">
-            <ul class="nav nav-list">
-                <li class="nav-header">Arborescence :</li>
-                <div class="btn-group">
-                    <a class="btn dropdown-toggle span3" style="margin-left: 10px" data-toggle="dropdown" href="#">
-                        {% if vitrine == "alphabetique" %}
-                            Tous les équipements
-                        {% elseif vitrine == "laboratories" %}
-                            Par établissement/laboratoire
-                        {% endif %}
-                        <span class="caret pull-right"></span>
-                    </a>
-                    <ul class="dropdown-menu span3" style="margin-left: 10px">
-                        <li><a href="{{ path('vitrine', { 'vitrine' : 'alphabetique' }) }}">Tous les équipements</a></li>
-                        <li><a href="{{ path('vitrine', { 'vitrine' : 'laboratories' }) }}">Par établissement/laboratoire</a></li>
-                    </ul>
-                </div>
-                <li class="divider"></li>
-            </ul>
-                 
+            {% if search is not defined %}
+                <ul class="nav nav-list">
+                    <li class="nav-header">Arborescence :</li>
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle span3" style="margin-left: 10px" data-toggle="dropdown" href="#">
+                            {% if vitrine == "alphabetique" %}
+                                Tous les équipements
+                            {% elseif vitrine == "laboratories" %}
+                                Par établissement/laboratoire
+                            {% endif %}
+                            <span class="caret pull-right"></span>
+                        </a>
+                        <ul class="dropdown-menu span3" style="margin-left: 10px">
+                            <li><a href="{{ path('vitrine', { 'vitrine' : 'alphabetique' }) }}">Tous les équipements</a></li>
+                            <li><a href="{{ path('vitrine', { 'vitrine' : 'laboratories' }) }}">Par établissement/laboratoire</a></li>
+                        </ul>
+                    </div>
+                    <li class="divider"></li>
+                </ul>
+            {% endif %}
+
             <div style="height:400px;overflow:auto">
 
             {% if vitrine ==  "alphabetique" %}    

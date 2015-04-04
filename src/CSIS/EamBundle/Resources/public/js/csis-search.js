@@ -83,7 +83,7 @@
                 templates: {
                     empty: function (query) {
                         var url = Routing.generate('search_results', { query: query.query });
-                        return  '<a class="tt-suggestion no-result" href="' + url + '">Rechercher "' + query.query + '" dans la base<i class="search-spinner fa fa-fw fa-spinner fa-pulse"></i></a>';
+                        return  '<a class="tt-suggestion no-result" href="' + url + '">Rechercher "' + query.query + '" dans la base<div class="search-spinner"><div></div></div></a>';
                     }
                 }
             };
@@ -132,7 +132,7 @@
                     $(this).keyup();
                 }
             ).on('typeahead:selected', function(e) {
-                    selected = $('.tt-suggestion.tt-cursor').children();
+                    selected = $('.tt-suggestion.tt-cursor').children('a');
                     if (selected.size() > 0) {
                         window.location = selected.attr('href');
                     } else {

@@ -68,12 +68,74 @@ class SearchController extends Controller
     }
 
     /**
-     * @Route("/search", name="search_results", options={"expose"=true})
+     * @Route("/results", name="search_results", options={"expose"=true})
      *                ?query=...
-     * @Template("CSISEamBundle:Search:results.html.twig")
+     * @Template("CSISEamBundle:Vitrine:layout.html.twig")
      */
     public function resultsAction (Request $request)
     {
-        return array();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $term = $request->query->get('query');
+
+        $equipmentsName = $em->getRepository('CSISEamBundle:Equipment')->searchByName($term);
+        $equipmentsTags = $em->getRepository('CSISEamBundle:Equipment')->searchByTags($term);
+        $equipments = array_merge($equipmentsName, $equipmentsTags);
+        $nbResults = count($equipments);
+        $equipments = $this->splitEqpmtsByLetter($equipments);
+        ksort($equipments);
+
+        return array(
+            'equipements' => $equipments,
+            'vitrine' => 'alphabetique',
+            'id' => 0,
+            'card' => null,
+            'search' => $term,
+            'nbResults' => $nbResults,
+        );
+    }
+
+    /**
+     * @param array $equipements
+     *
+     * @return array
+     */
+    private function splitEqpmtsByLetter($equipements)
+    {
+        $eqpmtsByLetter = array();
+
+        foreach ($equipements as $eqpmt) {
+            $eqpmtsByLetter[strtoupper(substr($this->deleteAccent($eqpmt->getDesignation()),0,1))][] = $eqpmt;
+        }
+
+        return $eqpmtsByLetter;
+    }
+
+    /**
+     * @param string $word
+     *
+     * @return string
+     */
+    private function deleteAccent($word)
+    {
+        $word = mb_strtolower($word, 'UTF-8');
+        $word = str_replace(array(  'à', 'â', 'ä', 'á', 'ã', 'å',
+            'î', 'ï', 'ì', 'í',
+            'ô', 'ö', 'ò', 'ó', 'õ', 'ø',
+            'ù', 'û', 'ü', 'ú',
+            'é', 'è', 'ê', 'ë',
+            'ç', 'ÿ', 'ñ',
+        ),
+            array(  'a', 'a', 'a', 'a', 'a', 'a',
+                'i', 'i', 'i', 'i',
+                'o', 'o', 'o', 'o', 'o', 'o',
+                'u', 'u', 'u', 'u',
+                'e', 'e', 'e', 'e',
+                'c', 'y', 'n',
+            ),
+            $word
+        );
+
+        return $word;
     }
 }

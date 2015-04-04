@@ -204,6 +204,6 @@ class VitrineController extends Controller
                             $word
                 );
 
-    return $word;
-}
+        return $word;
+    }
 }
