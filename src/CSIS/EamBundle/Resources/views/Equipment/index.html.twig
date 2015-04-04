@@ -34,9 +34,8 @@
           <tr>
             <th>Designation</th>
             <th style="text-align:center;">Laboratoire</th>
-            <th style="text-align:center;">Bâtiment</th>
-            <th style="text-align:center;">Etage</th>
-            <th style="text-align:center;">Salle</th>
+            <th style="text-align:center;">Localisation</th>
+            <th style="text-align:center;">Nombre de tags</th>
             <th style="text-align:center;">Disponible</th>
             {% if is_granted("ROLE_GEST_EQUIP") %}
               <th>Actions</th>
@@ -48,9 +47,8 @@
           <tr>
             <td>{{ entity.designation }}</td>
             <td style="text-align:center;">{{ entity.laboratory.acronym }}</td>
-            <td style="text-align:center;">{{ entity.building }}</td>
-            <td style="text-align:center;">{{ entity.floor }}</td>
-            <td style="text-align:center;">{{ entity.room }}</td>
+            <td style="text-align:center;">{{ entity.building }} {{ entity.floor }} {{ entity.room }}</td>
+            <td style="text-align:center;">{{ entity.tags|length }}</td>
             <td style="text-align:center;">
                 {% if entity.shared == constant('CSIS\\EamBundle\\Entity\\Equipment::SHARED') %}
                     Oui
