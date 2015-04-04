@@ -269,7 +269,7 @@ class EquipmentRepository extends EntityRepository
             ->where('e.laboratory = :laboratory')
             ->setParameter('laboratory', $laboratory);
 
-        return count($qb->getQuery()->getSingleScalarResult()) > 0;
+        return $qb->getQuery()->getSingleScalarResult() > 0;
     }
 
     public function searchByName($pattern, $max_results = 200)

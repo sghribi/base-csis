@@ -166,7 +166,7 @@ class LaboratoryController extends Controller
 
         // On vérifie si le laboratoire existe
         if ($repo->isLaboratoryUsed($laboratory)) {
-            $this->get('session')->getFlashBag()->add(
+            $this->addFlash(
                 'error',
                 sprintf("Suppression impossible : le laboratoire <strong> %s </strong>, est utilisé dans les équipements.", $laboratory->getAcronym())
             );
@@ -175,11 +175,11 @@ class LaboratoryController extends Controller
             $message = 'Etes-vous sûr de bien vouloir supprimer le laboratoire <strong>'.$laboratory->getAcronym().'</strong> ?';
             $message .= '&nbsp;&nbsp<a href="'.$this->generateUrl('laboratory_delete', array('id'=>$laboratory->getId())).'">Oui</a>';
             $message .= '&nbsp;&nbsp<a href="'.$this->generateUrl('laboratory').'">Non</a>';
-            $this->get('session')->getFlashBag()->add('main_valid',  $message);
+            $this->addFlash('main_valid',  $message);
         }
 
         // Redirection vers la page principale
-        return $this->redirect($this->generateUrl('laboratory'));
+        return $this->redirectToRoute('laboratory');
     }
 
     /**
