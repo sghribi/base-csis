@@ -74,6 +74,7 @@ class Laboratory {
      * @var \CSIS\EamBundle\Entity\Equipment
      * 
      * @ORM\OneToMany(targetEntity="\CSIS\EamBundle\Entity\Equipment", mappedBy="laboratory")
+     * @ORM\OrderBy({"designation": "ASC"})
      */
     private $equipments;
 

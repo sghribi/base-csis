@@ -74,6 +74,7 @@ class Institution {
      * Liste des utilisateurs qui ont un droit sur cet institution
      * 
      * @ORM\OneToMany(targetEntity="Laboratory", mappedBy="institution")
+     * @ORM\OrderBy({"acronym": "ASC"})
      */
     private $laboratories;
 

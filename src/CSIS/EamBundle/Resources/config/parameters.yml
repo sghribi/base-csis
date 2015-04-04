@@ -1,6 +1,6 @@
 parameters:
     csis_vitrine: alphabetique|laboratories
-    csis_vitrine_default: alphabetique
+    csis_vitrine_default: laboratories
     csis_card: equipment|laboratory|institution
     csis_card_default: vide
     csis_id_default: 0
