@@ -43,7 +43,7 @@ class TagController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_GEST_EQUIP")
+     * @Secure(roles="ROLE_GEST_TAGS")
      */
     public function createAction( Request $request )
     {
