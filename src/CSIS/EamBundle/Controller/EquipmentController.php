@@ -61,6 +61,7 @@ class EquipmentController extends Controller
      * Displays a form for Equipment creation
      *
      * @Template("CSISEamBundle:Equipment:new.html.twig")
+     * @Secure(roles="ROLE_USER")
      * @Route("/new", name="equipment_new")
      * @Method({"GET"})
      */
@@ -85,6 +86,7 @@ class EquipmentController extends Controller
      * Receives the POST data in order to create an Equipment
      *
      * @Template("CSISEamBundle:Equipment:new.html.twig")
+     * @Secure(roles="ROLE_USER")
      * @Route("/new", name="equipment_create")
      * @Method({"POST"})
      */
