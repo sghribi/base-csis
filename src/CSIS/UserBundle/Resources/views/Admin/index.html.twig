@@ -20,8 +20,8 @@
         <tr>
           <th>#</th>
           <th>Nom Prénom</th>
-          <th>Login</th>
           <th>Email</th>
+          <th>Laboratoire ou Établissement</th>
           <th>Téléphone</th>
           <th>Voir</th>
           <th>État</th>
@@ -32,8 +32,14 @@
         <tr>
           <td>{{ loop.index }}</td>
           <td>{{ user.lastName }} {{ user.firstName }}</td>
-          <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
+          <td>
+            {% if user.lab %}
+              <a href="{{ path('laboratory_show', {id: user.lab.id}) }}">{{ user.lab }}</a>
+            {% elseif user.institution %}
+              <a href="{{ path('institution_show', {id: user.institution.id}) }}">{{ user.institution }}</a>
+            {% endif %}
+          </td>
           <td>{{ user.phoneNumber }}</td>
           <td>
             <a href="{{ path('csis_user_show', {'id' : user.id}) }}" data-toggle="tooltip" title="Voir">
