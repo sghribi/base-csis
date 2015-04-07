@@ -74,6 +74,7 @@ class EquipmentController extends Controller
             'summary' => true,
             'equipment' => $equipment,
             'laboratory' => true,
+            'owners' => true,
         ));
 
         return array(
