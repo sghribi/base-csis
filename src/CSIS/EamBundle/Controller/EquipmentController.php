@@ -60,7 +60,6 @@ class EquipmentController extends Controller
     /**
      * Displays a form for Equipment creation
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:new.html.twig")
      * @Route("/new", name="equipment_new")
      * @Method({"GET"})
@@ -70,7 +69,11 @@ class EquipmentController extends Controller
         $equipment = new Equipment();
 
         $equipment->getOwners()->add($this->getUser());
-        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array('summary' => true, 'equipment' => $equipment));
+        $form = $this->createForm(new EquipmentType($this->getUser()), $equipment, array(
+            'summary' => true,
+            'equipment' => $equipment,
+            'laboratory' => true,
+        ));
 
         return array(
             'equipment' => $equipment,
@@ -81,7 +84,6 @@ class EquipmentController extends Controller
     /**
      * Receives the POST data in order to create an Equipment
      *
-     * @Secure(roles="ROLE_GEST_EQUIP")
      * @Template("CSISEamBundle:Equipment:new.html.twig")
      * @Route("/new", name="equipment_create")
      * @Method({"POST"})

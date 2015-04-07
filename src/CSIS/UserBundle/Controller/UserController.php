@@ -60,7 +60,7 @@ class UserController extends Controller
      */
     public function editAction(Request $request, User $user)
     {
-        $form = $this->createForm($this->container->get('csis.user.form'), $user, array('password' => $user->isEnabled()));
+        $form = $this->createForm($this->get('csis.user.form'), $user, array('password' => $user->isEnabled()));
         
         if ( $request->isMethod('POST') ) {
             $form->handleRequest($request);
