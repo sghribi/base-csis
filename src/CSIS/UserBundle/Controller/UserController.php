@@ -66,11 +66,8 @@ class UserController extends Controller
             $form->handleRequest($request);
             
             if ($form->isValid()) {
-
-                //
                 if (!$user->isEnabled()) {
                     $user->setEnabled(true);
-
                 }
 
                 $this->get('fos_user.user_manager')->updateUser($user);
@@ -91,8 +88,8 @@ class UserController extends Controller
             }
         }
         return $this->render('CSISUserBundle:Admin:edit.html.twig', array(
-                    'user' => $user,
-                    'form' => $form->createView(),
+            'user' => $user,
+            'form' => $form->createView(),
         ));
         
     }

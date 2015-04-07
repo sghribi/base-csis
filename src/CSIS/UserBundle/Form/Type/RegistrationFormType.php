@@ -6,12 +6,9 @@ use CSIS\EamBundle\Form\ChoiceList\RoleChoiceList;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseProfileFormType;
 use FOS\UserBundle\Util\UserManipulator;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
-use Symfony\Component\Security\Core\Role\Role;
 
 class RegistrationFormType extends BaseProfileFormType {
 
