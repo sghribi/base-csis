@@ -27,8 +27,7 @@ $(document).ready(function() {
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.6/i18n/French.json"
             },
-            "iDisplayLength": 25,
-            "bStateSave": true
+            "iDisplayLength": 25
         }
     );
 });
