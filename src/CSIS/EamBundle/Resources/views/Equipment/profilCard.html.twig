@@ -1,5 +1,12 @@
 {# Propritétés de l'equipement sélectionné #}
-<h3>{{ equipment.designation }}</h3>
+<h3>
+	<div class="pull-right">
+		{% if is_granted('view', equipment) %}
+			<a class="btn btn-primary" href="{{ path('equipment_show', {id: equipment.id}) }}"><i class="icon icon-white icon-eye-open"></i> Fiche équipement</a>
+		{% endif %}
+	</div>
+	{{ equipment.designation }}
+</h3>
 
 <hr/>
 
