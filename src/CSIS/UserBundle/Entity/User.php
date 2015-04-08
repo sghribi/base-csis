@@ -59,7 +59,7 @@ class User extends BaseUser
      * ATTENTION : cela ne donne aucun droit à l'utilisateur
      * Les droits sont gérés via Laboratory::$owners
      *
-     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Laboratory")
+     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Laboratory", cascade={"persist"})
      * @ORM\JoinColumn(name="lab_id", onDelete="SET NULL", nullable=true)
      */
     protected $lab;
@@ -69,7 +69,7 @@ class User extends BaseUser
      * ATTENTION : cela ne donne aucun droit à l'utilisateur
      * Les droits sont gérés via Institution::$owners
      *
-     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Institution")
+     * @ORM\ManyToOne(targetEntity="CSIS\EamBundle\Entity\Institution", cascade={"persist"})
      * @ORM\JoinColumn(name="institution_id", onDelete="SET NULL", nullable=true)
      */
     protected $institution;
