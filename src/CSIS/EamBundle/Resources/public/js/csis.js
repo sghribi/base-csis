@@ -30,4 +30,14 @@ $(document).ready(function() {
             "iDisplayLength": 25
         }
     );
+
+    $('.csis-datatable-small').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.6/i18n/French.json"
+            },
+            "iDisplayLength": 10,
+            "bFilter" : false,
+            "bLengthChange": false
+        }
+    );
 });

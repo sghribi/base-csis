@@ -39,7 +39,7 @@ class UserController extends Controller
 
     /**
      * Finds and displays a User.
-     * @Secure(roles="ROLE_GEST_USER")
+     * @Secure(roles="ROLE_USER")
      * @Template("CSISUserBundle:Admin:show.html.twig")
      * @ParamConverter("user", class="CSISUserBundle:User")
      */

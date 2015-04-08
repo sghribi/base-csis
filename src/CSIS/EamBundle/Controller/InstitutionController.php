@@ -48,7 +48,29 @@ class InstitutionController extends Controller {
      */
     public function showAction(Institution $institution)
     {
-        return array('institution' => $institution);
+        $members = $this->getDoctrine()->getRepository('CSISUserBundle:User')
+            ->createQueryBuilder('u')
+            ->where('u.institution = :institution')
+            ->setParameter('institution', $institution)
+            ->orderBy('u.lastName')
+            ->getQuery()
+            ->getResult();
+
+        $responsables = $this->getDoctrine()->getRepository('CSISUserBundle:User')
+            ->createQueryBuilder('u')
+            ->where('u.institution = :institution')
+            ->setParameter('institution', $institution)
+            ->andWhere('u.roles LIKE :roles')
+            ->setParameter('roles', '%ROLE_GEST_ESTAB%')
+            ->orderBy('u.lastName')
+            ->getQuery()
+            ->getResult();
+
+        return array(
+            'institution' => $institution,
+            'members' => $members,
+            'responsables' => $responsables,
+        );
     }
 
     /**

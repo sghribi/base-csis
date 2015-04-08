@@ -10,6 +10,20 @@
       </ul>
   </div>
 
+  <div class="span12 text-center">
+    {% if app.user.lab %}
+      <a class="btn btn-primary" href="{{ path('laboratory_show', {id: app.user.lab.id}) }}">
+        Mon laboratoire
+      </a>
+    {% endif %}
+    {% if app.user.institution %}
+      <a class="btn btn-primary" href="{{ path('institution_show', {id: app.user.institution.id}) }}">
+        Mon établissement
+      </a>
+    {% endif %}
+    <hr/>
+  </div>
+
   <div class="pull-center">
     <h4>{{ app.user.firstName }} {{ app.user.lastName }}</h4>
     {% if is_granted('ROLE_ADMIN') %}
@@ -34,7 +48,7 @@
         {% else %}
           Membre
         {% endif %}
-        du laboratoire {{ app.user.lab }}
+        du laboratoire <a href="{{ path('laboratory_show', {id: app.user.lab.id}) }}">{{ app.user.lab }}</a>
       {% endif %}
       {% if app.user.institution %}
         {% if is_granted('ROLE_GEST_LAB') %}

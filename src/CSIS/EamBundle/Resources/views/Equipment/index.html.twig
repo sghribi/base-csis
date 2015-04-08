@@ -18,19 +18,17 @@
 <div class="row">        
   <div class="span12">
     <div class="well">
-      
-      <h4 class="span11">Liste des équipements
-        {# Definition des bouttons #}
-          {% if is_granted('ROLE_GEST_EQUIP') %}
-            <div class="pull-right">
-                <a class="btn btn-success" href="{{ path('equipment_new') }}" data-toggle="tooltip" title="Créer un nouvel Equipement">
-                    <i class="icon-plus icon-white"></i>
-                    Ajouter
-                </a>
-            </div>
-          {% endif %}
-      </h4>
-      
+        <h4>Liste des équipements dont je suis responsable
+            {% if is_granted('ROLE_USER') %}
+                <span class="pull-right">
+                    <a class="btn btn-success" href="{{ path('equipment_new') }}" data-toggle="tooltip" title="Créer un nouvel Equipement">
+                        <i class="icon-plus icon-white"></i>
+                        Créer un nouvel équipement
+                    </a>
+                </span>
+            {% endif %}
+        </h4>
+      <hr/>
       <table class="table table-striped table-hover csis-datatable">
         <thead>
           <tr>
@@ -43,7 +41,7 @@
           </tr>
         </thead>
         <tbody>
-        {% for entity in entities if is_granted('edit', entity) or entity.laboratory == app.user.lab or entity.laboratory.institution == app.user.institution %}
+        {% for entity in entities if is_granted('edit', entity) %}
           <tr>
             <td>{{ entity.designation }}</td>
             <td style="text-align:center;"><a href="{{ path('laboratory_show', {id: entity.laboratory.id}) }}">{{ entity.laboratory.acronym }}</a></td>
@@ -60,10 +58,8 @@
             </td>
             <td>
                 <a href="{{ path('equipment_show', { 'id': entity.id }) }}" class="icon-eye-open" data-toggle="tooltip" title="Afficher" ></a>
-                {% if is_granted('edit', entity) %}
-                    <a href="{{ path('equipment_edit', { 'id': entity.id }) }}" class="icon-edit" data-toggle="tooltip" title="Modifier" ></a>
-                    <a href="{{ path('equipment_ask_delete', { 'id': entity.id }) }}" class="icon-trash" data-toggle="tooltip" title="Supprimer" ></a>
-                {% endif %}
+                <a href="{{ path('equipment_edit', { 'id': entity.id }) }}" class="icon-edit" data-toggle="tooltip" title="Modifier" ></a>
+                <a href="{{ path('equipment_ask_delete', { 'id': entity.id }) }}" class="icon-trash" data-toggle="tooltip" title="Supprimer" ></a>
             </td>
           </tr>
         {% endfor %}

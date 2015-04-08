@@ -16,95 +16,69 @@
 </div>
 
 <div class="row">
+  {% if is_granted("ROLE_GEST_ESTAB") %}
+    <div class="span12">
+      <div class="text-center">
+        <a class="btn btn-success" href="{{ path('institution_edit', { 'id': institution.id }) }}">
+          <i class="icon-edit icon-white"></i> Éditer l'établissement
+        </a>
+        <a class="btn btn-info" href="{{ path('institution_credentials', { 'id': institution.id }) }}">
+          <i class="icon-user icon-white"></i> Gérer les propriétaires
+        </a>
+        <a class="btn btn-danger" href="{{ path('institution_ask_delete', { 'id': institution.id }) }}">
+          <i class="icon-trash icon-white"></i> Supprimer l'établissement
+        </a>
+      </div>
+      <hr/>
+    </div>
+  {% endif %}
+
+  <div class="page-header text-center">
+    <h3>
+      Établissement <strong>{{ institution.name }}</strong>
+    </h3>
+  </div>
+
+
+  <div class="text-center">
+    <dl class="span12">
+      <dt>Responsables</dt>
+      {% if responsables|length > 0 %}
+        <dd>
+          {% for responsable in responsables %}
+            <a href="{{ path('csis_user_show', {id: responsable.id}) }}">{{ responsable.firstName }} {{ responsable.lastName }}</a>
+          {% endfor %}
+        </dd>
+      {% else %}
+        <dd><p class="muted">Aucun responsable.</p></dd>
+      {% endif %}
+    </dl>
+  </div>
+
   <div class="span12">
-    <div class="well">
-      
-      <div class="pull-left">
-        <h4>Fiche de l'Etablissement : {{ institution.acronym }}</h4>
-      </div>
-      {% if is_granted('ROLE_GEST_EQUIP') %}
-        <div class="pull-right">
-          <a href="{{ path('institution') }}" class="btn btn-default" data-toggle="tooltip" title="Retour à la liste des Etablissements">
-            <i class="icon-list-alt"></i> Liste des établissements
-          </a>
-        </div>
-      {% endif %}
-      <br/>
-      <p class="clearfix"></p>
-      
-      <div class="tabbable"> 
-        <ul class="nav nav-tabs">
-          <li class="active"><a href="#infos" data-toggle="tab">Informations</a></li>
-          {% if is_granted('ROLE_USER') %}
-            <li>
-                <a href="#laboratories" data-toggle="tab">Laboratoires associés</a>
-            </li>
-          {% else %}
-            <li class="disabled" data-toggle="tooltip" title="Vous devez être authentifié">
-                <a href="#">Laboratoires associés</a>
-            </li>
-          {% endif %}
-        </ul>
-
-        <div class="tab-content">
-          <div class="tab-pane active" id="infos">
-            {% include 'CSISEamBundle:Institution:profilCard.html.twig' %}
-          </div>
-          <div class="tab-pane" id="laboratories">
-            <table class="table table-striped table-hover">               
-              <thead>
-                <tr>
-                  <th>Acronym</th>
-                  <th>Etablissement</th>
-                  <th>Nom (FR)</th>
-                  <th>Name (EN)</th>
-                  <th>CSIS</th>
-                  <th>Recherche</th>
-                  <th>&nbsp;</th>
-                </tr>
-              </thead>
-
-              <tbody id="tablebody">
-              {# Affiche tous les laboratoires par ordre alphabétique #}
-              {% for laboratory in institution.laboratories %}
-                <tr>
-                  <td>{{ laboratory.acronym }}</td> {# Acronym du labo #}
-                  <td>{{ laboratory.institution.name }}</td> {# Nom francais du labo #}
-                  <td>{{ laboratory.nameFr }}</td> {# Nom francais du labo #}
-                  <td>{{ laboratory.nameEn }}</td> {# Nom francais du labo #}
-                  <td>{% if laboratory.researchLaboratory=='0' %} Non {% else %} Oui {% endif %}</td>{# Nom francais du labo #}
-                  <td><a href="{{ path('laboratory_show', { 'id': laboratory.id }) }}" class="icon-eye-open" data-toggle="tooltip" title="Afficher" ></a></td>
-                </tr>
-              {% else %}
-                <tr>
-                  <td colspan="7">
-                    <strong>Il n'y a aucun laboratoire à afficher pour cet établissement !</strong><br />
-                  </td>
-                </tr>
-              {% endfor %}                    
-              </tbody>               
-            </table>
-          </div>
-        </div>
-      </div>
-      
-      {# Definition des bouttons #}
-      {% if is_granted("ROLE_GEST_ESTAB") %}
-        <div class="pull-right">
-          <a class="btn btn-success" href="{{ path('institution_edit', { 'id': institution.id }) }}">
-            <i class="icon-edit icon-white"></i> Éditer l'établissement
-          </a>
-          <a class="btn btn-info" href="{{ path('institution_credentials', { 'id': institution.id }) }}">
-              <i class="icon-user icon-white"></i> Gérer les propriétaires
-          </a>
-          <a class="btn btn-danger" href="{{ path('institution_ask_delete', { 'id': institution.id }) }}">
-            <i class="icon-trash icon-white"></i> Supprimer l'établissement
-          </a>
-        </div>
-        <br />
-      {% endif %}
+    <div class="well text-center">
+      <h4>Laboratoires</h4>
+      <table class="table table-striped table-hover csis-datatable">
+        <thead>
+          <tr>
+            <th>Acronyme</th>
+            <th>Nom (FR)</th>
+            <th>Name (EN)</th>
+            <th>Recherche&nbsp;?</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for laboratory in institution.laboratories %}
+          <tr>
+            <td><a href="{{ path('laboratory_show', {id: laboratory.id}) }}">{{ laboratory.acronym }}</a></td>
+            <td>{{ laboratory.nameFr }}</td>
+            <td>{{ laboratory.nameEn }}</td>
+            <td>{% if laboratory.researchLaboratory %}Oui{% else %}Non{% endif %}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
-
 {% endblock %}

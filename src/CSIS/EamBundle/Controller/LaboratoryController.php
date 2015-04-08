@@ -49,9 +49,29 @@ class LaboratoryController extends Controller
     {
         $deleteForm = $this->createDeleteForm($laboratory->getId());
 
+        $members = $this->getDoctrine()->getRepository('CSISUserBundle:User')
+            ->createQueryBuilder('u')
+            ->where('u.lab = :lab')
+            ->setParameter('lab', $laboratory)
+            ->orderBy('u.lastName')
+            ->getQuery()
+            ->getResult();
+
+        $responsables = $this->getDoctrine()->getRepository('CSISUserBundle:User')
+            ->createQueryBuilder('u')
+            ->where('u.lab = :lab')
+            ->setParameter('lab', $laboratory)
+            ->andWhere('u.roles LIKE :roles')
+            ->setParameter('roles', '%ROLE_GEST_EQUIP%')
+            ->orderBy('u.lastName')
+            ->getQuery()
+            ->getResult();
+
         return array(
             'laboratory' => $laboratory,
-            'delete_form' => $deleteForm->createView()
+            'delete_form' => $deleteForm->createView(),
+            'members' => $members,
+            'responsables' => $responsables,
         );
     }
 

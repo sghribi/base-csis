@@ -15,102 +15,110 @@
     </div>
 </div>
 
-<div class="row">
-  <div class="span12">
-    
-    <div class="well">
-      <div class="pull-left">
-        <h4>Fiche du laboratoire : {{ laboratory.acronym }}</h4>
-      </div>
-        {% if is_granted("ROLE_GEST_EQUIP") %}
-          <div class="pull-right">
-            <a href="{{ path('laboratory') }}" class="btn btn-default" data-toggle="tooltip" title="Retour à la liste des laboratoires">
-              <i class="icon-list-alt"></i> Liste des laboratoires
-            </a>
-          </div>
-        {% endif %}
-      <br/>
-      <p class="clearfix"></p>
-      
-      <div class="tabbable"> 
-        <ul class="nav nav-tabs">
-          <li class="active"><a href="#infos" data-toggle="tab">Informations</a></li>
-          {% if is_granted('ROLE_USER') %}
-            <li><a href="#equipments" data-toggle="tab">Equipements associés</a></li>
-          {% else %}
-              <li class="disabled" data-toggle="tooltip" title="Vous devez être authentifié">
-                  <a href="#">Equipements associés</a>
-              </li>
-          {% endif %}
-        </ul>
 
-        <div class="tab-content">
-          <div class="tab-pane active" id="infos">
-            {# Insertion de la carte de profil #}
-            {% include 'CSISEamBundle:Laboratory:profilCard.html.twig' %}
-          </div>
-          <div class="tab-pane" id="equipments">
-            {% if is_granted('ROLE_USER') %}
-                <table class="table table-striped table-hover">
-                  <thead>
-                    <tr>
-                      <th>Designation</th>
-                      <th style="text-align:center;">Bâtiment</th>
-                      <th style="text-align:center;">Etage</th>
-                      <th style="text-align:center;">Salle</th>
-                      <th style="text-align:center;">Disponible</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {% for entity in laboratory.equipments %}
-                    <tr>
-                      <td>{{ entity.designation }}</td>
-                      <td style="text-align:center;">{{ entity.building }}</td>
-                      <td style="text-align:center;">{{ entity.floor }}</td>
-                      <td style="text-align:center;">{{ entity.room }}</td>
-                      <td style="text-align:center;">
-                          {% if entity.shared == constant('CSIS\\EamBundle\\Entity\\Equipment::SHARED') %}
-                              Oui
-                          {% elseif entity.shared == constant('CSIS\\EamBundle\\Entity\\Equipment::DISCUTABLE') %}
-                              À discuter
-                          {% elseif entity.shared == constant('CSIS\\EamBundle\\Entity\\Equipment::NOT_SHARED') %}
-                              Non
-                          {%  endif  %}
-                      </td>
-                      <td><a href="{{ path('equipment_show', { 'id': entity.id }) }}" class="icon-eye-open" title="Afficher" ></a></td>
-                    </tr>
-                   {% else %}
-                      <tr>
-                        <td colspan="6">
-                          <strong>Il n'y a aucun équipement à afficher pour ce laboratoire !</strong><br />
-                        </td>
-                      </tr>
-                  {% endfor %}
-                  </tbody>
-                </table>
-              {% endif %}
-          </div>
-        </div>
-      </div>
-      
-      {% if is_granted("ROLE_GEST_LAB") %}
-      <div class="pull-right">
+<div class="row">
+  {% if is_granted("ROLE_GEST_LAB") %}
+    <div class="span12">
+        <div class="text-center">
           <a class="btn-success btn" href="{{ path('laboratory_edit', { 'id': laboratory.id }) }}">
             <i class="icon-edit icon-white"></i> Éditer le laboratoire
           </a>
           <a class="btn-info btn" href="{{ path('laboratory_credentials', { 'id': laboratory.id }) }}">
-              <i class="icon-user icon-white"></i> Gérer les propriétaires
+            <i class="icon-user icon-white"></i> Gérer les propriétaires
           </a>
           <a class="btn-danger btn" href="{{ path('laboratory_ask_delete', { 'id': laboratory.id }) }}">
             <i class="icon-trash icon-white"></i> Supprimer le laboratoire
           </a>
       </div>
-      <br />
-      {% endif %}
-      
+      <hr/>
     </div>
-    
+  {% endif %}
+
+  <div class="page-header text-center">
+    <h3>
+      Laboratoire <strong>{{ laboratory.acronym }}</strong>
+    </h3>
+    <h4>Membre de l'établissement <a href="{{ path('institution_show', {id: laboratory.institution.id}) }}">{{ laboratory.institution.name }}</a> </h4>
+  </div>
+
+
+  <div class="text-center">
+    <dl class="span4">
+      <dt>Nom (FR)</dt>
+      <dd>{{ laboratory.nameFr }}</dd>
+    </dl>
+    <dl class="span4">
+      <dt>Name (EN)</dt>
+      <dd>{{ laboratory.nameEn }}</dd>
+    </dl>
+    <dl class="span4">
+      <dt>Laboratoire de recherche ?</dt>
+      <dd>{% if laboratory.researchLaboratory %} Oui {% else %} Non {% endif %}</dd>
+    </dl>
+    <dl class="span12">
+      <dt>Responsables</dt>
+      {% if responsables|length > 0 %}
+        <dd>
+          {% for responsable in responsables %}
+            <a href="{{ path('csis_user_show', {id: responsable.id}) }}">{{ responsable.firstName }} {{ responsable.lastName }}</a>
+          {% endfor %}
+        </dd>
+      {% else %}
+        <dd><p class="muted">Aucun responsable.</p></dd>
+      {% endif %}
+    </dl>
+  </div>
+
+  <div class="span6">
+    <div class="well text-center">
+      <h4>Equipements</h4>
+      <table class="table table-striped table-hover csis-datatable-small">
+        <thead>
+          <tr>
+            <th>Désignation</th>
+            <th>Disponible</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for equipment in laboratory.equipments %}
+            <tr>
+              <td><a href="{{ path('equipment_show', {id: equipment.id}) }}">{{ equipment.designation }}</a></td>
+              <td>
+                {% if equipment.shared == constant('CSIS\\EamBundle\\Entity\\Equipment::SHARED') %}
+                  Oui
+                {% elseif equipment.shared == constant('CSIS\\EamBundle\\Entity\\Equipment::DISCUTABLE') %}
+                  À discuter
+                {% elseif equipment.shared == constant('CSIS\\EamBundle\\Entity\\Equipment::NOT_SHARED') %}
+                  Non
+                {%  endif  %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="span6">
+    <div class="well text-center">
+      <h4>Membres du laboratoire</h4>
+
+      <table class="table table-striped table-hover csis-datatable-small">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for member in members %}
+            <tr>
+              <td><a href="{{ path('csis_user_show', {id: member.id}) }}">{{ member.firstName }} {{ member.lastName }}</a></td>
+              <td><a href="mailto:{{ member.emailCanonical }}">{{ member.emailCanonical }}</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
   </div>
 </div>
 

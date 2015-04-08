@@ -15,7 +15,7 @@
   <h2>Utilisateur</h2>
 
   <div class="well">
-    {% if not user.enabled %}
+    {% if is_granted('ROLE_GEST_USER') and not user.enabled %}
       <p class="text-error">Ce compte n'a pas encore été activé, car il manque des informations sur l'utilisateur. Vous pouvez activer ce compte en cliquant sur "Actier l'utilisateur", vous pourrez alors soit définir un mot de passe, soit envoyer un mail à l'utilisateur.</p>
     {%  endif %}
 
@@ -33,18 +33,22 @@
     </dl>
     <dl class="dl-horizontal">
       <dt>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}</dt>
-      <dd>{{ user.email }}</dd>
+      <dd>{{ user.emailCanonical }}</dd>
     </dl>
-    <dl class="dl-horizontal">
-      <dt>Rôles</dt>
-        <dd>
-          <ul>
-            {% for role in user.formatedRoles %}
-              <li>{{ role }}</li>
-            {% endfor %}
-          </ul>
-        </dd>
-    </dl>
+
+    {% if is_granted('ROLE_GEST_USER') %}
+      <dl class="dl-horizontal">
+        <dt>Rôles</dt>
+          <dd>
+            <ul>
+              {% for role in user.formatedRoles %}
+                <li>{{ role }}</li>
+              {% endfor %}
+            </ul>
+          </dd>
+      </dl>
+    {% endif %}
+
     <dl class="dl-horizontal">
       <dt>Laboratoire</dt>
       <dd>{{ user.lab }}</dd>
@@ -55,23 +59,25 @@
     </dl>
   </div>
 
-  <form action="{{ path('csis_user_delete', {'id': user.id}) }}" {{ form_enctype(delete_form) }} method="POST">
-    <a href="{{ path('csis_user_index') }}" class="btn">
-      <i class="icon-chevron-left"></i>&nbsp;Retour liste utilisateurs
-    </a>
-    {% if user.enabled %}
-        <a href="{{ path('csis_user_edit', {'id': user.id}) }}" class="btn btn-success">
-          <i class="icon-edit icon-white"></i>&nbsp;Modifier l'utilisateur
-        </a>
-    {% else %}
-        <a href="{{ path('csis_user_edit', {'id': user.id}) }}" class="btn btn-success">
-          <i class="icon-arrow-up icon-white"></i>&nbsp;Activer l'utilisateur
-        </a>
-    {% endif %}
-    <button type="submit" class="btn btn-warning">
-      <i class="icon-trash icon-white"></i>&nbsp;Supprimer l'utilisateur
-    </button>
-    {{ form_rest(delete_form) }}
-  </form>
+  {% if is_granted('ROLE_GEST_USER') %}
+    <form action="{{ path('csis_user_delete', {'id': user.id}) }}" {{ form_enctype(delete_form) }} method="POST">
+      <a href="{{ path('csis_user_index') }}" class="btn">
+        <i class="icon-chevron-left"></i>&nbsp;Retour liste utilisateurs
+      </a>
+      {% if user.enabled %}
+          <a href="{{ path('csis_user_edit', {'id': user.id}) }}" class="btn btn-success">
+            <i class="icon-edit icon-white"></i>&nbsp;Modifier l'utilisateur
+          </a>
+      {% else %}
+          <a href="{{ path('csis_user_edit', {'id': user.id}) }}" class="btn btn-success">
+            <i class="icon-arrow-up icon-white"></i>&nbsp;Activer l'utilisateur
+          </a>
+      {% endif %}
+      <button type="submit" class="btn btn-warning">
+        <i class="icon-trash icon-white"></i>&nbsp;Supprimer l'utilisateur
+      </button>
+      {{ form_rest(delete_form) }}
+    </form>
+  {% endif %}
 </div>
 {% endblock %}
