@@ -8,7 +8,7 @@
           <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
           <li><a href="{{ path('institution_show', {id: laboratory.institution.id}) }}">{{ laboratory.institution.name }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
           <li><a href="{{ path('laboratory_show', {id: laboratory.id}) }}">{{ laboratory.nameFr }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
-          <li class="active">Propriétaires</li>
+          <li class="active">Contacts</li>
       </ul>
   </div>
 
@@ -16,7 +16,7 @@
     <div class="well">
       <form action="{{ path('laboratory_credentials_edit', {'id': laboratory.id}) }}" method="post" {{ form_enctype(form) }}>
         <fieldset>
-          <legend>Éditer les propriétaires du laboratoire {{ laboratory }}</legend>
+          <legend>Éditer les contacts du laboratoire {{ laboratory }}</legend>
           {{ form_widget(form) }}
           <br />
           <button type="submit" class="btn btn-success">Enregister</button>
@@ -34,7 +34,7 @@
 {% block page_js %}
     <script type="text/javascript">
         jQuery(document).ready(function() {
-            $("#csis_eambundle_laboratoryEditOwnerstype_owners").chosen({disable_search_threshold: 10, no_results_text: "Aucun résultat",placeholder_text_multiple: 'Sélectionner les propriétaires', });
+            $("#csis_eambundle_laboratoryEditOwnerstype_owners").chosen({disable_search_threshold: 10, no_results_text: "Aucun résultat",placeholder_text_multiple: 'Sélectionner les contacts' });
         });
     </script>
 {% endblock %}

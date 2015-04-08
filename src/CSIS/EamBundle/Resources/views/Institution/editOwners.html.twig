@@ -8,14 +8,14 @@
       <ul class="breadcrumb">
           <li><a href="{{ path('vitrine') }}">Vitrine</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
           <li><a href="{{ path('institution_show', {id: institution.id}) }}">{{ institution.name|slice }}</a> <span class="divider"><i class="icon icon-chevron-right"></i></span></li>
-          <li class="active">Propriétaires</li>
+          <li class="active">Contacts</li>
       </ul>
   </div>
   <div class="span10 offset1">
     <div class="well">
       <form action="{{ path('institution_credentials_edit', {'id': institution.id}) }}" method="post" {{ form_enctype(form) }}>
         <fieldset>
-          <legend>Éditer les propriétaires</legend>
+          <legend>Éditer les contacts</legend>
           {{ form_widget(form) }}
           <br />
           <button type="submit" class="btn btn-success">Éditer</button>
@@ -33,7 +33,7 @@
 {% block page_js %}
     <script type="text/javascript">
         jQuery(document).ready(function() {
-            $("#csis_eambundle_institutionEditOwnerstype_owners").chosen({disable_search_threshold: 10, no_results_text: "Aucun résultat",placeholder_text_multiple: 'Sélectionner les propriétaires', });
+            $("#csis_eambundle_institutionEditOwnerstype_owners").chosen({disable_search_threshold: 10, no_results_text: "Aucun résultat",placeholder_text_multiple: 'Sélectionner les contacts' });
         });
     </script>
 {% endblock %}

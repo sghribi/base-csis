@@ -20,8 +20,8 @@ class LaboratoryEditOwnersType extends AbstractType {
         $user = $this->user;
 
         $builder->add('owners', 'entity', array(
-            'label' => 'Propriétaires',
-            'attr' => array('placeholder' => 'Propriétaires', 'class' => 'span9'),
+            'label' => 'Contacts',
+            'attr' => array('placeholder' => 'Contacts', 'class' => 'span9'),
             'required' => false,
             'expanded' => false,
             'multiple' => true,

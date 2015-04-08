@@ -27,7 +27,7 @@
     var length = collectionHolder.children().length;
     // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
     // la longueur de la collection courante
-    var $newForm = $('<div><label>Adresse email du propriétaire :</label>' + prototype.replace(/__name__/g, length) + '</div>');
+    var $newForm = $('<div><label>Adresse email du contact :</label>' + prototype.replace(/__name__/g, length) + '</div>');
 
     // Affiche le formulaire dans la page dans un div, avant le lien "ajouter un owner"
     collectionHolder.append($newForm);

@@ -229,17 +229,17 @@ class InstitutionController extends Controller {
         $em = $this->getDoctrine()->getManager();
         if( $institution->getOwners()->contains($owner) ) {
             $institution->getOwners()->removeElement($owner);
-            $this->container->get('session')->getFlashBag()->set('main_valid',
-                'Propriétaire '. $owner->getLastName() . ' ' . $owner->getFirstName() .' supprimé.'
+            $this->addFlash('main_valid',
+                'Contact '. $owner->getLastName() . ' ' . $owner->getFirstName() .' supprimé.'
             );
         } else {
-            $this->container->get('session')->getFlashBag()->set('main_error',
-                'Erreur lors de la supression du propriétaire '. $owner->getLastName() . ' ' . $owner->getFirstName() .'.'
+            $this->addFlash('main_error',
+                'Erreur lors de la suppression du Contact '. $owner->getLastName() . ' ' . $owner->getFirstName() .'.'
             );
         }
         $em->flush();
 
-        return $this->redirect($this->generateUrl('institution_credentials', array('id' => $institution->getId())));
+        return $this->redirectToRoute('institution_credentials', array('id' => $institution->getId()));
     }
 
     /**

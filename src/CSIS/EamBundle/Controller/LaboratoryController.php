@@ -237,18 +237,18 @@ class LaboratoryController extends Controller
 
         if($laboratory->getOwners()->contains($owner)) {
             $laboratory->getOwners()->removeElement($owner);
-            $this->container->get('session')->getFlashBag()->set('main_valid',
-                    'Propriétaire '. $owner->getLastName() . ' ' . $owner->getFirstName() .' supprimé.'
+            $this->addFlash('main_valid',
+                    'Contact '. $owner->getLastName() . ' ' . $owner->getFirstName() .' supprimé.'
             );
         } else {
-            $this->container->get('session')->getFlashBag()->set('main_error',
-                    'Erreur lors de la supression du propriétaire '. $owner->getLastName() . ' ' . $owner->getFirstName() .'.'
+            $this->addFlash('main_error',
+                    'Erreur lors de la supression du contact '. $owner->getLastName() . ' ' . $owner->getFirstName() .'.'
             );
         }
 
         $em->flush();
 
-        return $this->redirect($this->generateUrl('laboratory_credentials', array('id' => $laboratory->getId())));
+        return $this->redirectToRoute('laboratory_credentials', array('id' => $laboratory->getId()));
     }
 
     /**

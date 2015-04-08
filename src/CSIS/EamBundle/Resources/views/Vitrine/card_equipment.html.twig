@@ -4,15 +4,7 @@
 <ul class="nav nav-tabs">
     <li class="active"><a href="#informations" data-toggle="tab">Informations</a></li>
     <li><a href="#proprietaire" data-toggle="tab">Hébergeur</a></li>
-    {% if is_granted('ROLE_USER') %}
-        <li>
-          <a href="#owners" data-toggle="tab">Propriétaires</a>
-        </li>
-    {% else %}
-        <li class="disabled" data-toggle="tooltip" title="Vous devez être authentifié">
-          <a href="#">Propriétaires</a>
-        </li>
-    {% endif %}
+    <li><a href="#owners" data-toggle="tab">Contacts</a></li>
 
 </ul>
 <div class="tab-content">
@@ -27,9 +19,8 @@
     </div>
 
     <div class="tab-pane" id="owners">
-      {% if is_granted('ROLE_USER') %}
         <dl>
-          <dt>Propriétaires</dt>
+          <dt>Contacts</dt>
           <dd>
             {% if equipment.owners is not empty %}
             <ul>
@@ -38,10 +29,9 @@
                 {% endfor %}
             </ul>
             {% else %}
-                <span class="muted">Aucun propriétaire</span>
+                <span class="muted">Aucun contact</span>
             {% endif %}
           </dd>
         </dl>
-      {% endif %}
     </div>
 </div>
