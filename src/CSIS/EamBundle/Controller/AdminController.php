@@ -25,11 +25,9 @@ class AdminController extends Controller {
     {
         /** @var EntityManager $em **/
         $em = $this->getDoctrine()->getManager();
-        $waitingTags  = $em->getRepository('CSISEamBundle:Tag')->waitingTags();
         $waitingUsers  = $em->getRepository('CSISUserBundle:User')->waitingUsers();
 
         return array(
-            'waiting_tags'     => $waitingTags,
             'waiting_users'     => $waitingUsers,
         );
     }

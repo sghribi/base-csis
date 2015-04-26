@@ -48,9 +48,15 @@ class Tag
      *
      * @ORM\Column(name="status", type="smallint")
      */
-    private $status;
+    private $status = self::ACCEPTED;
 
+    /**
+     * Don't remove, used in migration 20150426133900
+     *
+     * @deprecated
+     */
     const PENDING = 0;
+
     const ACCEPTED = 1;
     const REFUSED = 2;
 
@@ -75,7 +81,6 @@ class Tag
      */
     public function __construct()
     {
-        $this->status       = self::PENDING;
         $this->lastEditDate = new \DateTime();
         $this->equipments   = new ArrayCollection();
     }

@@ -27,13 +27,13 @@ class RoleChoiceList extends LazyChoiceList
         );
         $labels = array(
             'Utilisateur',
-            'Utilisateur + modérateur des tags',
+            'Utilisateur + gestionnaire des tags',
             'Gestionnaire d\'un laboratoire',
-            'Gestionnaire d\'un laboratoire + modérateur des tags',
+            'Gestionnaire d\'un laboratoire + gestionnaire des tags',
             'Gestionnaire d\'un établissement',
-            'Gestionnaire d\'un établissement + modérateur des tags',
+            'Gestionnaire d\'un établissement + gestionnaire des tags',
             'Gestionnaire de tous les établissements',
-            'Gestionnaire de tous les établissements + modérateur des tags',
+            'Gestionnaire de tous les établissements + gestionnaire des tags',
             'Super administrateur',
         );
 

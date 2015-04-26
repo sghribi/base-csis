@@ -101,10 +101,7 @@ class TagToTagTransformer implements DataTransformerInterface
             return null;
         }
 
-        $tag = $this->em
-                ->getRepository('CSISEamBundle:Tag')
-                ->findOneBy(array('tag' => $tag_name))
-        ;
+        $tag = $this->em->getRepository('CSISEamBundle:Tag')->findOneBy(array('tag' => $tag_name));
 
         if (!$tag) {
             /** @var Equipment $equipment */
@@ -112,7 +109,7 @@ class TagToTagTransformer implements DataTransformerInterface
 
             $tag = new Tag();
             $tag->setTag($tag_name);
-            $tag->setStatus(Tag::PENDING);
+            $tag->setStatus(Tag::ACCEPTED);
             $tag->setLastEditDate(new \DateTime());
             $equipment->addTag($tag);
             $this->em->persist($tag);
@@ -122,7 +119,7 @@ class TagToTagTransformer implements DataTransformerInterface
 
             $this->session->getFlashBag()->add(
                     'main_valid',
-                    sprintf('Une demande de validation a été éffectuées au près des administrateurs pour valider le tag "%s".', $tag_name)
+                    sprintf('Le nouveau tag "%s" a bien été créé.', $tag->getTag())
             );
         }
 

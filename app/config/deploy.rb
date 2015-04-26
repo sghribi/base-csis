@@ -12,7 +12,7 @@ set :repository,  "git@gitlab.my.ecp.fr:2012ghribis/base-csis.git"
 set :scm,         :git
 
 # project config
-set :use_composer,          true
+set :use_composer,          false
 set :vendors_mode,          "install"
 set :dump_assetic_assets,   true
 set :controllers_to_clear,  ["app_*.php"]

@@ -85,14 +85,8 @@
     {% if is_granted("ROLE_GEST_TAGS") %}
     <hr />
     <h4>Tags</h4>
-    {% if waiting_tags %}
-        <p class="text-warning">
-            {{ waiting_tags }} tag(s) en attente de modération.
-        </p>
-    {% endif %}
     <ul>
       <li><a href="{{ path("tag") }}">Gestion des tags</a></li>
-      <li><a href="{{ path("tag", {'onglet' : 'edit'}) }}">Demandes de tags en attentes</a></li>
     </ul>
     {% endif %}
   </div>

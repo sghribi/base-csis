@@ -59,16 +59,6 @@ SQL;
         return $query->getResult();
     }
 
-    public function waitingTags()
-    {
-        return $this->createQueryBuilder('t')
-            ->select('count(t)')
-            ->where('t.status = :pending')
-            ->setParameter('pending', Tag::PENDING)
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
     public function findSearch( $search )
     {
         // Recherche tous les tags par ordre alphabétique
@@ -87,31 +77,17 @@ SQL;
     {
         $qb = $this->createQueryBuilder('t');
 
-        // On ne recherche que les tags validés ou en attente
         $qb->where($qb->expr()->like('t.tag', ':tag'))
-            ->andWhere('t.status = 0 OR t.status = 1')
-                ->orderBy('t.tag')
-                ->setParameter('tag', '%' . $tag . '%')
-                ->setFirstResult(0)
-                ->setMaxResults(10)
+            ->andWhere('t.status != :refused')
+            ->setParameter('refused', Tag::REFUSED)
+            ->setParameter('tag', '%' . $tag . '%')
+            ->orderBy('t.tag')
+            ->setFirstResult(0)
+            ->setMaxResults(10)
         ;
 
         return $qb->getQuery()->getResult();
     }
-
-    public function findTagsStandByWithNumberOfUse()
-    {
-        $qb = $this->createQueryBuilder('t')
-            ->select('t as tag, count(e) as nb')
-            ->leftJoin('t.equipments', 'e')
-            ->orderBy('t.tag')
-            ->groupBy('t.id')
-            ->where('t.status = :status')
-            ->setParameter('status', Tag::PENDING);
-
-        return $qb->getQuery()->getResult();
-    }
-
 
     public function findTagsWithNumberOfUse()
     {

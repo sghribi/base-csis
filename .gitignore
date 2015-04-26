@@ -8,7 +8,6 @@
 /*.sublime-*
 /web/files/
 /bin/
-/composer.phar
 *.swp
 *.swo
 .idea/*
