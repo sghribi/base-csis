@@ -28,7 +28,7 @@ class UserSelectorType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
-        $transformer = new UserToEmailTransformer($this->om, $this->session, $this->router);
+        $transformer = new UserToEmailTransformer($this->om, $this->session, $this->router, $options['equipment']);
         $builder->addModelTransformer($transformer);
     }
 
@@ -38,7 +38,8 @@ class UserSelectorType extends AbstractType
             'label' => 'Adresse email de l\'utilisateur :',
             'attr' => array(
                 'class' => 'span5',
-            )
+            ),
+            'equipment' => null,
         ));
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace CSIS\EamBundle\Form\DataTransformer;
 
+use CSIS\EamBundle\Entity\Equipment;
 use Doctrine\DBAL\DBALException;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -28,13 +29,19 @@ class UserToEmailTransformer implements DataTransformerInterface
     private $router;
 
     /**
+     * @var Equipment
+     */
+    private $equipment;
+
+    /**
      * @param ObjectManager $om
      */
-    public function __construct(ObjectManager $om, Session $session, Router $router)
+    public function __construct(ObjectManager $om, Session $session, Router $router, Equipment $equipment)
     {
         $this->om = $om;
         $this->session = $session;
         $this->router  = $router;
+        $this->equipment = $equipment;
     }
 
     /**
@@ -77,6 +84,7 @@ class UserToEmailTransformer implements DataTransformerInterface
                 $user = new User();
                 $user->setEmail($email);
                 $user->setEnabled(false);
+                $user->setLab($this->equipment->getLaboratory());
 
                 // Hack to have unique username
                 $suffix = '';
