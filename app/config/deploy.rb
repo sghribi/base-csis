@@ -8,7 +8,7 @@ server "ghribi.net", :app, :web, :primary => true
 set :deploy_to,   "/var/www/csis.ghribi.net/"
 set :branch, "master"
 
-set :repository,  "git@gitlab.my.ecp.fr:2012ghribis/base-csis.git"
+set :repository,  "git@github.com:sghribi/base-csis.git"
 set :scm,         :git
 
 # project config
