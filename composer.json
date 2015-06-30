@@ -32,7 +32,8 @@
     "friendsofsymfony/jsrouting-bundle": "2.0.*@dev",
     "oyejorge/less.php": "~1.5",
     "components/handlebars.js": "3.0.0",
-    "datatables/datatables": "1.10.6"
+    "datatables/datatables": "1.10.6",
+    "coresphere/console-bundle": "^0.1.0"
   },
   "scripts": {
     "post-install-cmd": [

@@ -110,6 +110,6 @@ class LaboratoryRepository extends EntityRepository {
             ->where('l.institution = :institution')
             ->setParameter('institution', $institution);
 
-        return count($qb->getQuery()->getSingleScalarResult()) > 0;
+        return $qb->getQuery()->getSingleScalarResult() > 0;
     }
 }
