@@ -22,6 +22,52 @@ $(document).ready(function() {
     var $searchBar = $('#search-bar-input');
     $searchBar.CSISSearch();
 
+    // Enable internationalization support in the sorting
+    customStringPre = function(data) {
+    data = data[0];
+    normalized = ! data ?
+        '' :
+        typeof data === 'string' ?
+            data
+                .replace( /έ/g, 'ε')
+                .replace( /ύ/g, 'υ')
+                .replace( /ό/g, 'ο')
+                .replace( /ώ/g, 'ω')
+                .replace( /ά/g, 'α')
+                .replace( /ί/g, 'ι')
+                .replace( /ή/g, 'η')
+                .replace( /\n/g, ' ' )
+                .replace( /á/g, 'a' )
+                .replace( /é/g, 'e' )
+                .replace( /í/g, 'i' )
+                .replace( /ó/g, 'o' )
+                .replace( /ú/g, 'u' )
+                .replace( /ê/g, 'e' )
+                .replace( /î/g, 'i' )
+                .replace( /ô/g, 'o' )
+                .replace( /è/g, 'e' )
+                .replace( /ï/g, 'i' )
+                .replace( /ü/g, 'u' )
+                .replace( /ã/g, 'a' )
+                .replace( /õ/g, 'o' )
+                .replace( /ç/g, 'c' )
+                .replace( /ì/g, 'i' ) :
+            data;
+
+        var _empty = function ( d ) {
+            return !d || d === true || d === '-' ? true : false;
+        };
+
+        return _empty(normalized) ?
+            '' :
+            typeof normalized === 'string' ?
+                normalized.toLowerCase() :
+                ! normalized.toString ?
+                    '' :
+                    normalized.toString();
+    };
+    $.fn.dataTableExt.oSort[ "string-pre" ] = customStringPre;
+
     // Enable datatable
     $('.csis-datatable').DataTable({
             "language": {
