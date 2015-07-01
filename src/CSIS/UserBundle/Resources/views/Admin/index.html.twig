@@ -48,8 +48,10 @@
           </td>
           <td>
             {% if user.enabled %}
+              <span style="display: none;">OK</span>
               <i class='icon icon-ok' data-toggle="tooltip" title="Compte activé"></i>
             {% else %}
+              <span style="display: none;">KO</span>
               <i class='icon icon-ban-circle' data-toggle="tooltip" title="Compte désactivé"></i>
             {% endif %}
           </td>
