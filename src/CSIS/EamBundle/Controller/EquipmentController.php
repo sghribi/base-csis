@@ -35,7 +35,7 @@ class EquipmentController extends Controller
      */
     public function indexAction()
     {
-        $repo = $this->getDoctrine()->getManager()->getRepository('CSISEamBundle:Equipment');
+        $repo = $this->getDoctrine()->getRepository('CSISEamBundle:Equipment');
         $entities = $repo->findAllHydrated();
 
         return array(

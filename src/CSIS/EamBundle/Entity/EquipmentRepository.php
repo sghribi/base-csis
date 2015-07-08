@@ -21,7 +21,7 @@ class EquipmentRepository extends EntityRepository
             ->join('e.laboratory', 'l')
             ->join('l.institution', 'i')
             ->join('e.owners', 'u')
-            ->join('e.tags', 't')
+            ->leftjoin('e.tags', 't')
             ->orderBy('e.designation');
 
         return $qb->getQuery()->getResult();
