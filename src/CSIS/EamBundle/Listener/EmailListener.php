@@ -3,18 +3,20 @@
 namespace CSIS\EamBundle\Listener;
 
 use CSIS\EamBundle\Event\TagEvent;
+use CSIS\EamBundle\Event\UserEvent;
 use CSIS\EamBundle\Events;
 use CSIS\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
+use FOS\UserBundle\Util\TokenGenerator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Swift_Mailer;
 use Twig_Environment;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Class TagListener
+ * Class EmailListener
  */
-class TagListener implements EventSubscriberInterface
+class EmailListener implements EventSubscriberInterface
 {
     /**
      * @var Swift_Mailer
@@ -37,30 +39,45 @@ class TagListener implements EventSubscriberInterface
     private $em;
 
     /**
+     * @var TokenGenerator
+     */
+    private $tokenGenerator;
+
+    /**
      * @var array
      */
-    private $parameters;
+    private $parametersTag;
+
+    /**
+     * @var array
+     */
+    private $parametersWelcome;
 
     /**
      * @param Swift_Mailer      $mailer
      * @param RouterInterface   $router
      * @param Twig_Environment  $twig
      * @param EntityManager     $em
-     * @param array             $parameters
+     * @param array             $parametersTag
+     * @param array             $parametersWelcome
      */
     public function __construct(
         Swift_Mailer $mailer,
         RouterInterface $router,
         Twig_Environment $twig,
         EntityManager $em,
-        array $parameters
+        TokenGenerator $tokenGenerator,
+        array $parametersTag,
+        array $parametersWelcome
     )
     {
         $this->mailer = $mailer;
         $this->router = $router;
         $this->twig = $twig;
         $this->em = $em;
-        $this->parameters = $parameters;
+        $this->tokenGenerator = $tokenGenerator;
+        $this->parametersTag = $parametersTag;
+        $this->parametersWelcome = $parametersWelcome;
     }
 
     /**
@@ -72,13 +89,18 @@ class TagListener implements EventSubscriberInterface
             Events::TAG_CREATED => array(
                 array('sendNewTagMessage')
             ),
+            Events::USER_ENABLED => array(
+                array('sendUserEnabledMessage')
+            ),
         );
     }
 
+    /**
+     * @param TagEvent $tagEvent
+     */
     public function sendNewTagMessage(TagEvent $tagEvent)
     {
         $url = $this->router->generate('tag', array('onglet' => 'edit'), true);
-        $template = $this->parameters['email']['template'];
 
         $context = array(
             'tagCreator'      => $tagEvent->getUser(),
@@ -98,13 +120,47 @@ class TagListener implements EventSubscriberInterface
         }
 
         $this->sendMessage(
-            $template,
+            $this->parametersTag['email']['template'],
             $context,
-            $this->parameters['email']['from_email']['address'],
-            $this->parameters['email']['from_email']['sender_name'],
+            $this->parametersTag['email']['from_email']['address'],
+            $this->parametersTag['email']['from_email']['sender_name'],
             $moderatorsEmails
         );
+
     }
+
+    /**
+     * @param UserEvent $userEvent
+     */
+    public function sendUserEnabledMessage(UserEvent $userEvent)
+    {
+        /** @var User $user */
+        $user = $userEvent->getUser();
+
+        if (null === $user->getConfirmationToken()) {
+            $tokenGenerator = $this->tokenGenerator;
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+        }
+        $user->setPasswordRequestedAt(new \DateTime());
+
+        $url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), true);
+        $baseUrl = $this->router->generate('csis_eam_homepage', array(), true);
+
+        $context = array(
+            'user'      => $user,
+            'url'       => $url,
+            'baseUrl'   => $baseUrl,
+        );
+
+        $this->sendMessage(
+            $this->parametersWelcome['email']['template'],
+            $context,
+            $this->parametersWelcome['email']['from_email']['address'],
+            $this->parametersWelcome['email']['from_email']['sender_name'],
+            $user->getEmailCanonical()
+        );
+    }
+
     /**
      * @param string $templateName
      * @param array  $context

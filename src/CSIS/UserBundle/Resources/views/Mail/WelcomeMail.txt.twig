@@ -1,0 +1,65 @@
+{% block subject %}
+  {% autoescape false %}
+  Utilisation et mise à jour de la base de données "Equipements de recherche"
+  {% endautoescape %}
+{% endblock %}
+{% block body_text %}
+  {% autoescape false %}
+  Bonjour,
+
+  Il y a quelques temps, vous aviez participé au recensement du matériel de votre laboratoire pour constituer une base de données des équipements de la faculté des sciences librement accessible.
+
+  Cette base de données est à présent disponible : {{ baseUrl }}
+
+  A partir du nom de l'équipement et/ou des mots clés associés, le moteur de recherche vous permet de trouver les coordonnées des personnes responsables ainsi que des laboratoires d'hébergement des  équipements recherchés.
+
+  Les laboratoires, en tant que point de contact, ont la possibilité de mettre à jour leurs équipements et mots clés associés. Aussi, un compte identifiant a été attribué à chaque responsable d'équipement : {{ user.username }}.  Dans l'attente d'une personnalisation, merci de cliquer sur le lien suivant pour modifier votre mot de passe.
+
+  Afin d'assurer l'efficacité de cet outil, nous vous invitons à parfaire cette base de données en y ajoutant les équipements nouvellement acquis en y associant les mots clé appropriés. Etant le point d'entrée du moteur de recherche, la pertinence de ces mots clé revêt une importance toute particulière .
+
+  Nous restons à votre disposition pour vous accompagner dans cette démarche (contact : vice-doyen-recherche.sciences@u-psud.fr).
+
+  --
+  Eric SIMONI, Vice-Doyen chargé de la Recherche
+  Directeur de la Division de la Recherche
+  Faculté des Sciences d'Orsay
+  Eve BRUNSWIC, Assistante du Vice-Doyen
+  Bât 301
+  91405 ORSAY
+  Tél : 01 69 15 77 24
+  vice-doyen-recherche.sciences@u-psud.fr
+  http://www.sciences.u-psud.fr/fr/recherche.html
+  {% endautoescape %}
+{% endblock %}
+{% block body_html %}
+  <p>Bonjour,</p>
+
+  <p>Il y a quelques temps, vous aviez participé au recensement du matériel de votre laboratoire pour constituer une base de données des équipements de la faculté des sciences librement accessible.</p>
+
+  <p>Cette base de données est à présent disponible : <a href="{{ baseUrl }}">{{ baseUrl }}</a></p>
+
+  <p>A partir du nom de l'équipement et/ou des mots clés associés, le moteur de recherche vous permet de trouver les coordonnées des personnes responsables ainsi que des laboratoires d'hébergement des  équipements recherchés.</p>
+
+  <p>Les laboratoires, en tant que point de contact, ont la possibilité de mettre à jour leurs équipements et mots clés associés. Aussi, un compte identifiant a été attribué à chaque responsable d'équipement :</p>
+
+  <ul>
+    <li>Identifiant : <strong>{{ user.username }}</strong></li>
+    <li>Dans l'attente d'une personnalisation, merci de cliquer sur le lien suivant pour modifier votre mot de passe : <a href="{{ url }}">{{ url }}</a></li>
+  </ul>
+
+  <p>Afin d'assurer l'efficacité de cet outil, nous vous invitons à parfaire cette base de données en y ajoutant les équipements nouvellement acquis en y associant les mots clé appropriés. Etant le point d'entrée du moteur de recherche, la pertinence de ces mots clé revêt une importance toute particulière .</p>
+
+  <p>Nous restons à votre disposition pour vous accompagner dans cette démarche (contact : vice-doyen-recherche.sciences@u-psud.fr).</p>
+
+  <p>-- <br/>
+  Eric SIMONI, Vice-Doyen chargé de la Recherche<br/>
+  Directeur de la Division de la Recherche<br/>
+  Faculté des Sciences d'Orsay<br/>
+  Eve BRUNSWIC, Assistante du Vice-Doyen<br/>
+  Bât 301<br/>
+  91405 ORSAY<br/>
+  Tél : 01 69 15 77 24<br/>
+  <a href="mailto:vice-doyen-recherche.sciences@u-psud.fr">vice-doyen-recherche.sciences@u-psud.fr</a><br/>
+  <a href="http://www.sciences.u-psud.fr/fr/recherche.html">http://www.sciences.u-psud.fr/fr/recherche.html</a><br/>
+  </p>
+{% endblock %}

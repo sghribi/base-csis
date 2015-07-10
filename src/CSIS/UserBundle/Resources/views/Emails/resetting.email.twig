@@ -2,12 +2,12 @@
 
 {% block body_text %}
     {% autoescape false %}
-    Hello {{ user.username }} !
+    Bonjour {{ user.username }} !
 
-    You can reset your email by accessing {{ confirmationUrl }}
+    Vous pouvez réinitialiser votre mot de passe en cliquant ici : {{ confirmationUrl }}
 
-    Greetings,
-    the CSIS team
+    Cordialement,
+    Base de données équipement
     {% endautoescape %}
 {% endblock %}
 

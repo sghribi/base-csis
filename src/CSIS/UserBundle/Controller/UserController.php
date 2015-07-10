@@ -4,6 +4,8 @@ namespace CSIS\UserBundle\Controller;
 
 use CSIS\EamBundle\Entity\Equipment;
 use CSIS\EamBundle\Entity\Laboratory;
+use CSIS\EamBundle\Event\UserEvent;
+use CSIS\EamBundle\Events;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -68,6 +70,7 @@ class UserController extends Controller
             if ($form->isValid()) {
                 if (!$user->isEnabled()) {
                     $user->setEnabled(true);
+                    $this->get('event_dispatcher')->dispatch(Events::USER_ENABLED, new UserEvent($user));
                 }
 
                 $this->get('fos_user.user_manager')->updateUser($user);

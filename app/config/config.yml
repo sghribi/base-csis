@@ -36,7 +36,7 @@ fos_user:
         email:
             from_email:
                 address:        resetting@csis.com
-                sender_name:    Acme Demo Resetting
+                sender_name:    Base de données équipement
             template: CSISUserBundle:Emails:resetting.email.twig
 
 # DoctrineExtension Configuration
@@ -111,4 +111,10 @@ parameters:
             template: CSISEamBundle:Tag:email.txt.twig
             from_email:
                 address: noreply@csis-saclay.net
-                sender_name: Base de donnée équipement
+                sender_name: Base de donnée équipements
+    welcome:
+        email:
+            template: CSISUserBundle:Mail:WelcomeMail.txt.twig
+            from_email:
+                address: noreply@csis-saclay.net
+                sender_name: Base de donnée équipements

@@ -45,13 +45,15 @@ services:
         - { name: form.type, alias: custom_equipment_tag_collection }
 
     csis.listener.tag:
-        class:      CSIS\EamBundle\Listener\TagListener
+        class:      CSIS\EamBundle\Listener\EmailListener
         arguments:
             - @swiftmailer.mailer
             - @router
             - @twig
             - @doctrine.orm.default_entity_manager
+            - @fos_user.util.token_generator
             - %tag%
+            - %welcome%
         tags:
             - { name: kernel.event_subscriber }
 
