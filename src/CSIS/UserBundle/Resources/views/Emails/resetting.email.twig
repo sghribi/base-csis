@@ -1,16 +1,40 @@
-{% block subject %}Resetting your password{% endblock %}
-
+{% block subject %}
+    {% autoescape false %}
+    Utilisation et mise à jour de la base de données "Equipements de recherche"
+    {% endautoescape %}
+{% endblock %}
 {% block body_text %}
     {% autoescape false %}
-    Bonjour {{ user.username }} !
+    Bonjour {{ user.username }},
 
     Vous pouvez réinitialiser votre mot de passe en cliquant ici : {{ confirmationUrl }}
 
-    Cordialement,
-    Base de données équipement
+    --
+    Eric SIMONI, Vice-Doyen chargé de la Recherche
+    Directeur de la Division de la Recherche
+    Faculté des Sciences d'Orsay
+    Eve BRUNSWIC, Assistante du Vice-Doyen
+    Bât 301
+    91405 ORSAY
+    Tél : 01 69 15 77 24
+    vice-doyen-recherche.sciences@u-psud.fr
+    http://www.sciences.u-psud.fr/fr/recherche.html
     {% endautoescape %}
 {% endblock %}
-
 {% block body_html %}
-    {% include 'CSISUserBundle:Emails:resetting_email.html.twig' %}
+    <p>Bonjour {{ user.username }},</p>
+
+    <p>Vous pouvez réinitialiser votre mot de passe en cliquant ici : <a href="{{ confirmationUrl }}">{{ confirmationUrl }}</a></p>
+
+    <p>-- <br/>
+        Eric SIMONI, Vice-Doyen chargé de la Recherche<br/>
+        Directeur de la Division de la Recherche<br/>
+        Faculté des Sciences d'Orsay<br/>
+        Eve BRUNSWIC, Assistante du Vice-Doyen<br/>
+        Bât 301<br/>
+        91405 ORSAY<br/>
+        Tél : 01 69 15 77 24<br/>
+        <a href="mailto:vice-doyen-recherche.sciences@u-psud.fr">vice-doyen-recherche.sciences@u-psud.fr</a><br/>
+        <a href="http://www.sciences.u-psud.fr/fr/recherche.html">http://www.sciences.u-psud.fr/fr/recherche.html</a><br/>
+    </p>
 {% endblock %}
